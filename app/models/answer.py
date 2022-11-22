@@ -15,4 +15,4 @@ class Answer(db.Model):
   updated_at = db.Column(db.DateTime(), default=datetime.utcnow())
 
   author = db.relationship('User', back_populates="answers")
-  question = db.relationship('User', back_populates="answers")
+  question = db.relationship('Question', back_populates="answers")

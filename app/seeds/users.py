@@ -8,7 +8,7 @@ def seed_users():
     demo2 = User(
         username='Demo2', email='demouser2@email.com', password='password')
     demo3 = User(
-        username='Demo2', email='demouser3@email.com', password='password')
+        username='Demo3', email='demouser3@email.com', password='password')
 
     db.session.add(demo1)
     db.session.add(demo2)
