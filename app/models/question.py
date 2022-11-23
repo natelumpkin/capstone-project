@@ -16,3 +16,24 @@ class Question(db.Model):
 
   author = db.relationship('User', back_populates="questions")
   answers = db.relationship('Answer', back_populates="question", cascade="all, delete")
+
+  def to_dict_single(self):
+      return {
+            "id": self.id,
+            "userId": self.user_id,
+            "title": self.title,
+            "body": self.body,
+            "numAnswers": len(self.answers),
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at
+      }
+
+  def to_dict_all(self):
+      return {
+            "id": self.id,
+            "userId": self.user_id,
+            "title": self.title,
+            "numAnswers": len(self.answers),
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at
+      }

@@ -16,3 +16,13 @@ class Answer(db.Model):
 
   author = db.relationship('User', back_populates="answers")
   question = db.relationship('Question', back_populates="answers")
+
+  def to_dict(self):
+      return {
+            "id": self.id,
+            "userId": self.user_id,
+            "questionId": self.question_id,
+            "answer": self.answer,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at
+      }
