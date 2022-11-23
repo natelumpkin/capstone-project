@@ -25,7 +25,11 @@ class Question(db.Model):
             "body": self.body,
             "numAnswers": len(self.answers),
             "createdAt": self.created_at,
-            "updatedAt": self.updated_at
+            "updatedAt": self.updated_at,
+            "User": {
+                  "id": self.author.id,
+                  "username": self.author.username
+            }
       }
 
   def to_dict_all(self):

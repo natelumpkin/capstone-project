@@ -22,6 +22,16 @@ const getOneQuestion = (question) => ({
   question
 })
 
+const updateQuestion = (updatedQuestion) => ({
+  type: EDIT_QUESTION,
+  updatedQuestion
+})
+
+const removeQuestion = (questionId) => ({
+  type: DELETE_QUESTION,
+  questionId
+})
+
 // Thunks
 
 export const fetchAllQuestions = () => async dispatch => {
@@ -41,6 +51,43 @@ export const fetchSingleQuestion = (questionId) => async dispatch => {
   const data = await response.json()
   if (response.ok) {
     dispatch(getOneQuestion(data))
+  }
+  return data
+}
+
+export const createQuestion = (questionBody) => async dispatch => {
+  const response = await fetch(`/api/questions`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(questionBody)
+  })
+  const data = await response.json()
+  if (response.ok) {
+    dispatch(getOneQuestion(data))
+  }
+  return data
+}
+
+export const editQuestion = (questionId, questionBody) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(questionBody)
+  })
+  const data = await response.json()
+  if (response.ok) {
+    dispatch(updateQuestion(data))
+  }
+  return data
+}
+
+export const deleteQuestion = (questionId) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}`, {
+    method: 'DELETE'
+  })
+  const data = await response.json()
+  if (response.ok) {
+    dispatch(removeQuestion(questionId))
   }
   return data
 }
@@ -78,6 +125,29 @@ const questionsReducer = (state = initialState, action) => {
       const data = action.question;
       newState.singleQuestion = data;
       return newState;
+    }
+    case (EDIT_QUESTION): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {}
+      }
+      const data = action.updatedQuestion
+      newState.singleQuestion = data
+      newState.allQuestions[data.id] = data
+      delete newState.allQuestions[data.id].body
+      return newState;
+    }
+    case (DELETE_QUESTION): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {}
+      }
+      delete newState.allQuestions[action.questionId]
+      return newState
     }
     default: {
       return state
