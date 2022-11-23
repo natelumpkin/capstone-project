@@ -20,6 +20,10 @@ def get_all_questions():
 
   for question in questions:
     dict_question = question.to_dict_all()
+    dict_question['User'] = {
+      "id": question.author.id,
+      "username": question.author.username
+    }
     response['Questions'].append(dict_question)
 
   return response
@@ -34,6 +38,11 @@ def get_single_question(id):
     return { "message": "Question couldn't be found"}, 404
 
   response = question.to_dict_single()
+
+  response['User'] = {
+      "id": question.author.id,
+      "username": question.author.username
+    }
 
   return response
 
@@ -110,14 +119,19 @@ def get_answers_by_question(id):
   except:
     return { "message": "Question couldn't be found"}, 404
 
-  answers = Answer.query.filter(Answer.question_id == id).all()
+  answers = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author)).all()
 
   response = {
     "Answers": []
   }
 
   for answer in answers:
-    response['Answers'].append(answer.to_dict())
+    dict_answer = answer.to_dict()
+    dict_answer['User'] = {
+      "id": answer.author.id,
+      "username": answer.author.username
+    }
+    response['Answers'].append(dict_answer)
 
   return response
 
