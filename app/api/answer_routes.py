@@ -25,6 +25,7 @@ def edit_answer(id):
 
   if form.validate_on_submit():
     answer.answer = form.data['answer']
+    answer.updated_at = datetime.utcnow()
     db.session.commit()
     return answer.to_dict()
   else:
