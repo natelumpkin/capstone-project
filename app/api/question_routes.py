@@ -102,5 +102,45 @@ def delete_question(id):
     return {"message": "Successfully deleted"}
 
 ## Get Answers to a Question
+@question_routes.route('/<int:id>/answers')
+def get_answers_by_question(id):
+
+  try:
+    Question.query.get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  answers = Answer.query.filter(Answer.question_id == id).all()
+
+  response = {
+    "Answers": []
+  }
+
+  for answer in answers:
+    response['Answers'].append(answer.to_dict())
+
+  return response
 
 ## Add Answer to a Question
+@question_routes.route('/<int:id>/answers', methods=['POST'])
+def add_answer_to_question(id):
+  print('hello from post answers route')
+  try:
+    Question.query.get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  form = AnswerForm()
+  form['csrf_token'].data = request.cookies['csrf_token']
+
+  if form.validate_on_submit():
+    new_answer = Answer(
+      user_id=current_user.id,
+      question_id=id,
+      answer=form.data['answer']
+    )
+    db.session.add(new_answer)
+    db.session.commit()
+    return new_answer.to_dict()
+  else:
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
