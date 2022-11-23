@@ -17,21 +17,32 @@ const getQuestions = (questions) => ({
   questions
 })
 
+const getOneQuestion = (question) => ({
+  type: ONE_QUESTION,
+  question
+})
+
 // Thunks
 
 export const fetchAllQuestions = () => async dispatch => {
   const response = await fetch('/api/questions')
-  console.log('Fetching questions')
   if (response.ok) {
     const questions = await response.json()
     dispatch(getQuestions(questions))
-    console.log('questions: ', questions)
     return questions
   } else {
     const errors = await response.json()
-    console.log('errors: ', errors)
     return errors
   }
+}
+
+export const fetchSingleQuestion = (questionId) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}`)
+  const data = await response.json()
+  if (response.ok) {
+    dispatch(getOneQuestion(data))
+  }
+  return data
 }
 
 
@@ -53,10 +64,20 @@ const questionsReducer = (state = initialState, action) => {
           }
         }
       }
-      console.log(action.questions)
       const data = normalizeData(action.questions.Questions)
       newState.allQuestions = data;
       return newState
+    }
+    case (ONE_QUESTION): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {}
+      }
+      const data = action.question;
+      newState.singleQuestion = data;
+      return newState;
     }
     default: {
       return state
