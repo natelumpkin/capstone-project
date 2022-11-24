@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const QuestionCard = ({question}) => {
   return (
     <div>
@@ -6,13 +8,19 @@ const QuestionCard = ({question}) => {
       </div>
       <div className="maindata-container">
         <div className="info-container">
-          <h3>{question.title}</h3>
+          <Link to={`questions/${question.id}`}>
+            <h3>{question.title}</h3>
+          </Link>
           <p>{question.body}</p>
         </div>
         <div className="summary-container">
           <div className="user-data">
             <div>{question.User.username}</div>
-            <div>{question.updatedAt}</div>
+            <div>
+              <Link to={`questions/${question.id}`}>
+                {question.updatedAt}
+              </Link>
+              </div>
           </div>
         </div>
       </div>

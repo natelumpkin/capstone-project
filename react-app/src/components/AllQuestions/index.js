@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import QuestionCard from "../QuestionCard";
 import * as questionActions from '../../store/question'
 
@@ -28,7 +29,9 @@ const AllQuestions = () => {
             <h1>All Questions</h1>
           </div>
           <div>
-            <button>Ask Question</button>
+            <Link to="/questions/ask">
+              <button>Ask Question</button>
+            </Link>
           </div>
         </div>
         <div id="all-questions-header-lower"></div>
