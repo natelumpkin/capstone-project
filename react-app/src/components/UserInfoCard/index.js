@@ -1,4 +1,6 @@
-const UserInfoCard = ({user, responseType}) => {
+import getDateAndTime from "../../utils/getDateAndTime";
+
+const UserInfoCard = ({user, responseType, response}) => {
 
   let responseVerb;
   if (responseType === 'question') {
@@ -8,9 +10,18 @@ const UserInfoCard = ({user, responseType}) => {
     responseType = 'answered'
   }
 
+  let responseTimeString;
+
+  if (response.createdAt) {
+    responseTimeString = responseVerb + ' ' + getDateAndTime(response.createdAt)
+  }
+
+  console.log('user in userinfo card: ', user);
+
+
   return (
     <div className="userinfo-container">
-      <div className="time-holder">Hello from User Info Card</div>
+      <div className="time-holder">{responseTimeString}</div>
       <div className="user-info-holder">
         <div className="profile-img-holder">
           {user.profileImg && (

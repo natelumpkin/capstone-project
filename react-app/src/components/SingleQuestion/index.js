@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import * as questionActions from '../../store/question'
@@ -13,16 +13,18 @@ import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 const SingleQuestion = () => {
   const dispatch = useDispatch()
   const {questionId} = useParams();
+  const [loaded, setLoaded] = useState(false)
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
 
   useEffect(() => {
     dispatch(questionActions.fetchSingleQuestion(questionId))
+    .then(() => setLoaded(true))
   },[dispatch])
 
   console.log(currentUser)
 
-  if (!currentQuestion) {
+  if (!currentQuestion || !loaded) {
     return null;
   }
 
@@ -34,7 +36,7 @@ const SingleQuestion = () => {
           <Link to={`/questions/${currentQuestion.id}`}><h2>{currentQuestion.title}</h2></Link>
         </div>
         <div id="single-question-ask-button">
-          <button>Ask Question</button>
+          <Link to='/questions/new'><button>Ask Question</button></Link>
         </div>
       </div>
       <div id="single-question-header-bottom">
@@ -54,7 +56,7 @@ const SingleQuestion = () => {
           )}
         </div>
         <div id="user-information-holder">
-            <UserInfoCard user={currentQuestion} responseType={'question'}/>
+            <UserInfoCard user={currentUser} response={currentQuestion} responseType={'question'}/>
         </div>
       </div>
     <div id="answers-container"></div>
