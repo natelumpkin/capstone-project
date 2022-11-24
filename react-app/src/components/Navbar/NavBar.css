@@ -1,0 +1,19 @@
+#header-links li {
+  justify-content: space-between;
+}
+
+#header-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 400px;
+  font-size: 25px;
+  list-style-type: none;
+}
+
+#session-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
