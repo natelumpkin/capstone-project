@@ -43,7 +43,12 @@ const getSpecificTimeAgo = (dateString) => {
   return timeAgo + ' ' + unit + ' ago'
 }
 
-let ex1 = "Wed, 19 Jun 2000 23:16:24 GMT"
-let ex2 = "Thurs, 19 Jun 2022 20:25:20 GMT"
-console.log(getSpecificTimeAgo(ex1))
-console.log(getSpecificTimeAgo(ex2))
+// let ex1 = "Wed, 19 Jun 2000 23:16:24 GMT"
+// let ex2 = "Thurs, 19 Jun 2022 20:25:20 GMT"
+// console.log(getSpecificTimeAgo(ex1))
+// console.log(getSpecificTimeAgo(ex2))
+
+// let ex3 =  'Wed, 23 Nov 2022 23:16:24 GMT';
+// console.log(getSpecificTimeAgo(ex3))
+
+export default getSpecificTimeAgo;

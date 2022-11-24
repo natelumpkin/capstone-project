@@ -2,8 +2,13 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import * as questionActions from '../../store/question'
+
 import UserControls from "../UserControls";
+import UserInfoCard from "../UserInfoCard";
+
+import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 
 const SingleQuestion = () => {
   const dispatch = useDispatch()
@@ -15,7 +20,11 @@ const SingleQuestion = () => {
     dispatch(questionActions.fetchSingleQuestion(questionId))
   },[dispatch])
 
-  console.log(currentQuestion)
+  console.log(currentUser)
+
+  if (!currentQuestion) {
+    return null;
+  }
 
   return (
     <div id="single-question-top-container">
@@ -29,11 +38,25 @@ const SingleQuestion = () => {
         </div>
       </div>
       <div id="single-question-header-bottom">
-        <div id="created-time">Asked {currentQuestion.createdAt}</div>
-        <div id="modified-time">Modified {currentQuestion.updatedAt}</div>
+        <div id="created-time">Asked {getSpecificTimeAgo(currentQuestion.createdAt)}</div>
+        <div id="modified-time">Modified {getSpecificTimeAgo(currentQuestion.updatedAt)}</div>
       </div>
     </div>
     <div id="question-content-container"></div>
+      <div className="vote-container"></div>
+      <div id="single-question-content-right">
+        <div id="single-question-body">
+          <p>{currentQuestion.body}</p>
+        </div>
+        <div id="single-question-user-controls-container">
+          {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (
+            <UserControls/>
+          )}
+        </div>
+        <div id="user-information-holder">
+            <UserInfoCard user={currentQuestion} responseType={'question'}/>
+        </div>
+      </div>
     <div id="answers-container"></div>
     </div>
   )
