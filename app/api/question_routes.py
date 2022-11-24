@@ -19,11 +19,11 @@ def get_all_questions():
   }
 
   for question in questions:
-    dict_question = question.to_dict_all()
-    dict_question['User'] = {
-      "id": question.author.id,
-      "username": question.author.username
-    }
+    dict_question = question.to_dict_single()
+    # dict_question['User'] = {
+    #   "id": question.author.id,
+    #   "username": question.author.username
+    # }
     response['Questions'].append(dict_question)
 
   return response

@@ -8,7 +8,6 @@ const InterfaceContainer = () => {
       <div id="left-column">
       </div>
       <div id="content-column">
-        <h1>Hello from Interface Container!</h1>
         <Route path='/questions' exact={true}>
           <AllQuestions/>
         </Route>
