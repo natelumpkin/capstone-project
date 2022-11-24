@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import getTimeAgoFromDate from "../../utils/getTimeAgoFromDate";
 
 const QuestionCard = ({question}) => {
+
+  const timeString = getTimeAgoFromDate(question.createdAt, question.updatedAt)
+
   return (
     <div>
       <div className="metadata-container">
@@ -18,7 +22,7 @@ const QuestionCard = ({question}) => {
             <div>{question.User.username}</div>
             <div>
               <Link to={`questions/${question.id}`}>
-                {question.updatedAt}
+                asked {timeString}
               </Link>
               </div>
           </div>
