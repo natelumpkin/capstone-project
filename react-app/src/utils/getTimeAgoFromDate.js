@@ -54,21 +54,24 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
             month === currentTime.getMonth() &&
             day === currentTime.getDate()) {
               timeAgo = currentTime.getHours() - hour
-              unit = 'hour;'
+              unit = 'hour';
               if (timeAgo > 1) unit = 'hours';
               // console.log('unit', unit, 'time ago', timeAgo)
             }
   // otherwise, return a day
   else {
-    let monthName = new Intl.DateTimeFormat('en-US',{month: 'short', day: 'numeric', year: 'numeric'}).format(postTime)
-    return monthName;
+    let date = new Intl.DateTimeFormat('en-US',{month: 'short', day: 'numeric', year: 'numeric'}).format(postTime)
+    let time = postTime.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: false})
+    return date + ' at ' + time
   }
   return verb + timeAgo + ' ' + unit + ' ago';
 }
 
 // let ex1 = "Wed, 19 Nov 2022 23:16:24 GMT"
-// console.log(getTimeAgoFromDate(ex1))
+// let up1 = "Wed, 19 Nov 2022 23:16:24 GMT"
+// console.log(getTimeAgoFromDate(ex1, up1))
 // let ex2 = "Thurs, 24 Nov 2022 20:25:20 GMT"
-// console.log(getTimeAgoFromDate(ex2))
+// let up2 = "Thurs, 24 Nov 2022 20:25:20 GMT"
+// console.log(getTimeAgoFromDate(ex2, up2))
 
 export default getTimeAgoFromDate;

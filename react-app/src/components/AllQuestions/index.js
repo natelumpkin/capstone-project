@@ -8,6 +8,7 @@ const AllQuestions = () => {
 
   const dispatch = useDispatch()
   const allQuestions = useSelector(state => state.questions.allQuestions)
+  const currentUser = useSelector(state => state.session.user)
 
   useEffect(() => {
     dispatch(questionActions.fetchAllQuestions());
@@ -37,7 +38,7 @@ const AllQuestions = () => {
         <div id="all-questions-header-lower"></div>
       </div>
       {questionsArray.map(question => (
-        <QuestionCard question={question}/>
+        <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
       ))}
     </div>
   )

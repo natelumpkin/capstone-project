@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import getTimeAgoFromDate from "../../utils/getTimeAgoFromDate";
+import UserControls from "../UserControls";
 
-const QuestionCard = ({question}) => {
+const QuestionCard = ({question, currentUser}) => {
 
   const timeString = getTimeAgoFromDate(question.createdAt, question.updatedAt)
 
@@ -18,6 +19,11 @@ const QuestionCard = ({question}) => {
           <p>{question.body}</p>
         </div>
         <div className="summary-container">
+          <div className="user-controls-container">
+            {question.User.id === currentUser.id && (
+              <UserControls/>
+            )}
+          </div>
           <div className="user-data">
             <div>{question.User.username}</div>
             <div>
