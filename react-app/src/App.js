@@ -9,6 +9,7 @@ import UsersList from './components/UserInfo/UsersList';
 import User from './components/UserInfo/User';
 import LandingPage from './components/LandingPage';
 import InterfaceContainer from './components/InterfaceContainer';
+import CreateQuestion from './components/CreateQuestion';
 import { authenticate } from './store/session';
 
 function App() {
@@ -44,6 +45,9 @@ function App() {
         </ProtectedRoute>
         <Route path='/' exact={true} >
           <LandingPage/>
+        </Route>
+        <Route path='/questions/new' exact={true}>
+          <CreateQuestion/>
         </Route>
         <Route path='/questions'>
           <InterfaceContainer/>
