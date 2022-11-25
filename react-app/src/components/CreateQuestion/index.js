@@ -1,7 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import FormEditor from "../FormEditor";
 
 const CreateQuestion = () => {
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+
+
+  console.log(body)
+  // const editor = useRef(null);
+
+  // function focusEditor() {
+  //   editor.current.focus();
+  // }
+
+  // useEffect(() => {
+  //   focusEditor()
+  // }, [])
+
   return (
     <div id="create-question-container">
       <h2>Ask a Public Question</h2>
@@ -18,7 +34,11 @@ const CreateQuestion = () => {
           </ul>
         </div>
         <form>
-
+          <div>
+            <label>Title</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)}></input>
+          </div>
+          <FormEditor value={body} onChange={(e) => setBody(e.target.value)} />
         </form>
       </div>
       <div id="create-question-directions-container"></div>
