@@ -6,16 +6,18 @@ import '../../../node_modules/draft-js/dist/Draft.css'
 class FormEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty()};
+    // this.state = {editorState: EditorState.createEmpty()};
 
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
+    this.onChange = (editorState) => props.setEditorState(editorState);
 
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
   }
+
+  // editorState = this.props.editorState
 
   _handleKeyCommand(command, editorState) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -30,10 +32,10 @@ class FormEditor extends React.Component {
     if (e.keyCode === 9 /* TAB */) {
       const newEditorState = RichUtils.onTab(
         e,
-        this.state.editorState,
+        this.props.editorState,
         4, /* maxDepth */
       );
-      if (newEditorState !== this.state.editorState) {
+      if (newEditorState !== this.props.editorState) {
         this.onChange(newEditorState);
       }
       return;
@@ -44,7 +46,7 @@ class FormEditor extends React.Component {
   _toggleBlockType(blockType) {
     this.onChange(
       RichUtils.toggleBlockType(
-        this.state.editorState,
+        this.props.editorState,
         blockType
       )
     );
@@ -53,14 +55,14 @@ class FormEditor extends React.Component {
   _toggleInlineStyle(inlineStyle) {
     this.onChange(
       RichUtils.toggleInlineStyle(
-        this.state.editorState,
+        this.props.editorState,
         inlineStyle
       )
     );
   }
 
   render() {
-    const {editorState} = this.state;
+    const {editorState, placeHolder} = this.props;
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -90,7 +92,7 @@ class FormEditor extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.mapKeyToEditorCommand}
             onChange={this.onChange}
-            placeholder="Tell a story..."
+            placeholder={placeHolder}
             ref="editor"
             spellCheck={true}
           />

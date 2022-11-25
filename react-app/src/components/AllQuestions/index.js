@@ -30,9 +30,9 @@ const AllQuestions = () => {
             <h1>All Questions</h1>
           </div>
           <div>
-            <Link to="/questions/ask">
+
               <button>Ask Question</button>
-            </Link>
+
           </div>
         </div>
         <div id="all-questions-header-lower"></div>

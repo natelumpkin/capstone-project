@@ -1,22 +1,58 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
+import * as questionActions from '../../store/question'
 
 const CreateQuestion = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [titleErrors, setTitleErrors] = useState([])
+  const [bodyErrors, setBodyErrors] = useState([])
 
 
-  console.log(body)
-  // const editor = useRef(null);
+  console.log(editorState.getCurrentContent().getPlainText().length)
 
-  // function focusEditor() {
-  //   editor.current.focus();
-  // }
+  const handleTitleErrors = () => {
+    let errors = [];
+    if (title.length < 15) errors.push('Title must be more than 15 characters')
+    if (title.length > 150) errors.push('Title must be less than 150 characters')
+    setTitleErrors(errors)
+  }
 
-  // useEffect(() => {
-  //   focusEditor()
-  // }, [])
+  const handleBodyErrors = () => {
+    let errors = [];
+    let bodyLength = editorState.getCurrentContent().getPlainText().length;
+    if (bodyLength < 30) errors.push('Body must be more than 30 characters')
+    if (bodyLength > 10000) errors.push('Body must be less than 10,000 characters')
+    setBodyErrors(errors)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    handleBodyErrors()
+    handleTitleErrors()
+
+    if (!bodyErrors.length && !titleErrors.length) {
+      const content = editorState.getCurrentContent()
+      const bodyToSave = JSON.stringify(convertToRaw(content))
+
+      const newQuestion = {
+        title: title,
+        body: bodyToSave
+      }
+      // dispatch(questionActions.createQuestion(newQuestion))
+      //   .then((res) => console.log(res))
+      // alert('Question submitted')
+      setTitle('')
+      setEditorState(EditorState.createEmpty())
+    }
+
+
+  }
 
   return (
     <div id="create-question-container">
@@ -33,12 +69,23 @@ const CreateQuestion = () => {
             <li>Review your question and post it to the site</li>
           </ul>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <label>Title</label>
-            <input value={title} onChange={(e) => setTitle(e.target.value)}></input>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+              <ul>
+                {titleErrors.map(error => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
           </div>
-          <FormEditor value={body} onChange={(e) => setBody(e.target.value)} />
+          <FormEditor placeHolder={'Type here'} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
+            <ul>
+              {bodyErrors.map(error => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          <button>Submit Question</button>
         </form>
       </div>
       <div id="create-question-directions-container"></div>

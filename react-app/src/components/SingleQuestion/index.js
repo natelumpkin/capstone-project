@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Editor, convertFromRaw, EditorState } from 'draft-js'
 
 import * as questionActions from '../../store/question'
 
@@ -9,6 +10,7 @@ import UserControls from "../UserControls";
 import UserInfoCard from "../UserInfoCard";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
+import convertToEditorState from "../../utils/convertToEditorState";
 
 const SingleQuestion = () => {
   const dispatch = useDispatch()
@@ -27,6 +29,13 @@ const SingleQuestion = () => {
   if (!currentQuestion || !loaded) {
     return null;
   }
+
+  let bodyContent
+  let stateToDisplay
+  // console.log(JSON.parse(currentQuestion.body))
+  if (currentQuestion.body) bodyContent = convertFromRaw(JSON.parse(currentQuestion.body))
+  if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
+  console.log(bodyContent)
 
   return (
     <div id="single-question-top-container">
@@ -48,7 +57,11 @@ const SingleQuestion = () => {
       <div className="vote-container"></div>
       <div id="single-question-content-right">
         <div id="single-question-body">
-          <p>{currentQuestion.body}</p>
+          {/* <p>{currentQuestion.body}</p> */}
+          <Editor
+            editorState={stateToDisplay}
+            readOnly
+          />
         </div>
         <div id="single-question-user-controls-container">
           {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (
