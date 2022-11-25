@@ -65,7 +65,7 @@ const SingleQuestion = () => {
         </div>
         <div id="single-question-user-controls-container">
           {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (
-            <UserControls/>
+            <UserControls question={currentQuestion}/>
           )}
         </div>
         <div id="user-information-holder">

@@ -21,7 +21,7 @@ const QuestionCard = ({question, currentUser}) => {
         <div className="summary-container">
           <div className="user-controls-container">
             {question.User.id === currentUser.id && (
-              <UserControls/>
+              <UserControls question={question}/>
             )}
           </div>
           <div className="user-data">

@@ -1,7 +1,9 @@
-const UserControls = () => {
+import { Link } from "react-router-dom";
+
+const UserControls = ({question}) => {
   return (
     <div>
-      <button>Edit</button>
+      <Link to={`/questions/${question.id}/edit`}><button>Edit</button></Link>
       <button>Delete</button>
     </div>
   )

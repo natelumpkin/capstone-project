@@ -1,18 +1,35 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { EditorState, convertToRaw } from 'draft-js'
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
 
-const CreateQuestion = () => {
+const EditQuestion = () => {
+
+  const {questionId} = useParams();
+
   const dispatch = useDispatch();
   const history = useHistory()
-  const [title, setTitle] = useState('')
+  const question = useSelector(state => state.questions.singleQuestion)
+  const [title, setTitle] = useState('loading' || question.title)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [titleErrors, setTitleErrors] = useState([])
   const [bodyErrors, setBodyErrors] = useState([])
   const [disableButton, setDisableButton] = useState(true)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    dispatch(questionActions.fetchSingleQuestion(questionId))
+      .then(() => setLoaded(true))
+    setTitle(question.title || 'loading')
+
+    let bodyContent
+    let stateToDisplay
+    if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
+    if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
+    if (stateToDisplay) setEditorState(stateToDisplay)
+  }, [dispatch, loaded])
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
@@ -29,6 +46,18 @@ const CreateQuestion = () => {
       handleBodyErrors()
     }
   }, [title, editorState])
+
+  // useEffect(() => {
+  //     let bodyContent;
+  //     let stateToDisplay;
+  //     if (question.title) setTitle(question.title)
+  //   // if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
+  //   // if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
+  //   // if (stateToDisplay) setEditorState(stateToDisplay)
+  // }, [])
+
+  // console.log("title var: ", title)
+  // console.log("loaded var: ", loaded)
 
 
   // console.log(editorState.getCurrentContent().getPlainText().length)
@@ -62,7 +91,7 @@ const CreateQuestion = () => {
         title: title,
         body: bodyToSave
       }
-      dispatch(questionActions.createQuestion(newQuestion))
+      dispatch(questionActions.editQuestion(question.id, newQuestion))
         .then((question) => history.push(`/questions/${question.id}`))
       setTitle('')
       setEditorState(EditorState.createEmpty())
@@ -72,13 +101,13 @@ const CreateQuestion = () => {
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   const bodyPlaceholder = ''
 
+  if (loaded) {
+    console.log('Rendering')
   return (
     <div id="create-question-container">
-      <h2>Ask a Public Question</h2>
+      <h2>Edit Your Question</h2>
       <div id="create-question-form-container">
         <div id="create-question-guidelines-container">
-          <h4>Writing a Good Question</h4>
-          <p>You’re ready to ask a programming-related question and this form will help guide you through the process.</p>
           <ul>
             Steps
             <li>Summarize your problem in a one-line title</li>
@@ -108,12 +137,15 @@ const CreateQuestion = () => {
                 ))}
               </ul>
           </div>
-          <button disabled={disableButton}>Post Your Question</button>
+          <button disabled={disableButton}>Post Your Revision</button>
         </form>
       </div>
       <div id="create-question-directions-container"></div>
     </div>
   )
+                } else {
+                  return null
+                }
 }
 
-export default CreateQuestion;
+export default EditQuestion
