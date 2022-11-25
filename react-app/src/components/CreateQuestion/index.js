@@ -1,16 +1,34 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
 
 const CreateQuestion = () => {
   const dispatch = useDispatch();
+  const history = useHistory()
   const [title, setTitle] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [titleErrors, setTitleErrors] = useState([])
   const [bodyErrors, setBodyErrors] = useState([])
+  const [disableButton, setDisableButton] = useState(true)
+
+  useEffect(() => {
+    let bodyLength = editorState.getCurrentContent().getPlainText().length;
+    if (title.length > 15 && title.length < 150
+      && bodyLength > 30 && bodyLength < 10000) {
+        setDisableButton(false)
+      } else {
+        setDisableButton(true)
+      }
+    if (title.length > 15 && title.length < 150) {
+      handleTitleErrors()
+    }
+    if (bodyLength > 30 && bodyLength < 10000) {
+      handleBodyErrors()
+    }
+  }, [title, editorState])
 
 
   console.log(editorState.getCurrentContent().getPlainText().length)
@@ -44,9 +62,8 @@ const CreateQuestion = () => {
         title: title,
         body: bodyToSave
       }
-      // dispatch(questionActions.createQuestion(newQuestion))
-      //   .then((res) => console.log(res))
-      // alert('Question submitted')
+      dispatch(questionActions.createQuestion(newQuestion))
+        .then((question) => history.push(`/questions/${question.id}`))
       setTitle('')
       setEditorState(EditorState.createEmpty())
     }
@@ -79,13 +96,15 @@ const CreateQuestion = () => {
                 ))}
               </ul>
           </div>
-          <FormEditor placeHolder={'Type here'} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
-            <ul>
-              {bodyErrors.map(error => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          <button>Submit Question</button>
+          <div onBlur={handleBodyErrors}>
+            <FormEditor placeHolder={'Type here'} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
+              <ul>
+                {bodyErrors.map(error => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+          </div>
+          <button disabled={disableButton}>Submit Question</button>
         </form>
       </div>
       <div id="create-question-directions-container"></div>
