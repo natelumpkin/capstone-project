@@ -9,7 +9,10 @@ const AnswerUserControls = ({answer}) => {
   return (
     <div>
       <Link to={`/answers/${answer.id}/edit`}><button>Edit</button></Link>
-      <button onClick={() => setShowDelete(true)}>Delete</button>
+      <button onClick={() => {
+        setShowDelete(true)
+        window.scrollTo(0,0)
+        }}>Delete</button>
       {showDelete && (
         <DeleteAnswer answer={answer} setShowDelete={setShowDelete}/>
       )}
