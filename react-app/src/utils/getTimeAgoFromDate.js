@@ -3,6 +3,9 @@
 const getTimeAgoFromDate = (dateString, updatedString) => {
   let postTime = new Date(dateString)
   const updatedTime = new Date(updatedString)
+  console.log('getTimeAgo postTime: ', dateString)
+  console.log('getTimeAgo updatedTime ', updatedString)
+
   const currentTime = new Date()
   const year = postTime.getFullYear()
   const month = postTime.getMonth()
@@ -20,7 +23,7 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
   let timeAgo;
   let verb = 'Asked '
 
-  if (postTime !== updatedTime) {
+  if (dateString !== updatedString) {
     verb = 'Modified '
     postTime = updatedTime
   }
@@ -62,7 +65,7 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
   else {
     let date = new Intl.DateTimeFormat('en-US',{month: 'short', day: 'numeric', year: 'numeric'}).format(postTime)
     let time = postTime.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: false})
-    return date + ' at ' + time
+    return verb + date + ' at ' + time
   }
   return verb + timeAgo + ' ' + unit + ' ago';
 }
@@ -73,5 +76,9 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
 // let ex2 = "Thurs, 24 Nov 2022 20:25:20 GMT"
 // let up2 = "Thurs, 24 Nov 2022 20:25:20 GMT"
 // console.log(getTimeAgoFromDate(ex2, up2))
+
+let ex2 = "Sat, 20 Nov 2022 02:10:20 GMT"
+let up2 = "Sat, 22 Nov 2022 02:10:20 GMT"
+console.log(getTimeAgoFromDate(ex2, up2))
 
 export default getTimeAgoFromDate;
