@@ -11,7 +11,6 @@ import UserInfoCard from "../UserInfoCard";
 import QuestionAnswers from "../QuestionAnswers";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
-import convertToEditorState from "../../utils/convertToEditorState";
 
 const SingleQuestion = () => {
   const dispatch = useDispatch()

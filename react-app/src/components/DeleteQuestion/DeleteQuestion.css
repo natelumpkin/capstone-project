@@ -1,4 +1,11 @@
 .delete-modal {
   position: absolute;
   top: 100px;
+  background-color: white;
+  border: 1px solid red;
+}
+
+dialog::backdrop {
+  background-color: white;
+  border: 1px solid blue;
 }
