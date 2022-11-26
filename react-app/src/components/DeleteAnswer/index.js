@@ -16,13 +16,13 @@ const DeleteAnswer = ({answer, setShowDelete}) => {
   }
 
   return (
-    <dialog open className="delete-modal">
+    <div>
       <p>Are you sure you want to delete this answer?</p>
       <form>
         <button type="button" onClick={() => setShowDelete(false)}>Cancel</button>
         <button type="button" onClick={(alert)}>Yes</button>
       </form>
-    </dialog>
+    </div>
   )
 }
 
