@@ -82,7 +82,7 @@ const SingleQuestion = () => {
           )}
         </div>
         <div id="user-information-holder">
-            <UserInfoCard user={currentUser} response={currentQuestion} responseType={'question'}/>
+            <UserInfoCard user={currentQuestion.User} response={currentQuestion} responseType={'question'}/>
         </div>
       </div>
     <div id="answers-container"></div>
