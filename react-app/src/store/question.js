@@ -51,8 +51,9 @@ export const fetchSingleQuestion = (questionId) => async dispatch => {
   const data = await response.json()
   if (response.ok) {
     dispatch(getOneQuestion(data))
+    return data
   }
-  return data
+  throw new Error();
 }
 
 export const createQuestion = (questionBody) => async dispatch => {

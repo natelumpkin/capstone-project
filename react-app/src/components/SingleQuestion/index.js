@@ -16,26 +16,39 @@ const SingleQuestion = () => {
   const dispatch = useDispatch()
   const {questionId} = useParams();
   const [loaded, setLoaded] = useState(false)
+  const [notFound, setNotFound] = useState(false)
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
 
   useEffect(() => {
     dispatch(questionActions.fetchSingleQuestion(questionId))
-    .then(() => setLoaded(true))
+      .then(() => setLoaded(true))
+      .catch(() => {
+        setLoaded(false)
+        setNotFound(true)
+      });
   },[dispatch])
 
-  console.log(currentUser)
+  console.log(notFound)
+  console.log(loaded)
 
-  if (!currentQuestion || !loaded) {
-    return null;
-  }
-
+  if ((!loaded) && (notFound)) {
+    return (
+      <h1>404 Not Found</h1>
+      )
+    }
+  if (!loaded) {
+    return null
+}
   let bodyContent
   let stateToDisplay
   // console.log(JSON.parse(currentQuestion.body))
   if (currentQuestion.body) bodyContent = convertFromRaw(JSON.parse(currentQuestion.body))
   if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
-  console.log(bodyContent)
+
+
+  if (currentQuestion) {
+    console.log('currentQuestion in singleQuestion component: ', currentQuestion)
 
   return (
     <div id="single-question-top-container">
@@ -75,6 +88,11 @@ const SingleQuestion = () => {
     <div id="answers-container"></div>
     </div>
   )
+          } else {
+            return (
+              <h1>Hey can't find this question! Are you sure you have the right URL?</h1>
+            )
+          }
 }
 
 export default SingleQuestion;
