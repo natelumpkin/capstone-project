@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as answerActions from '../../store/answer'
+import './CreateAnswer.css'
 
 
 const CreateAnswer = ({questionId}) => {
@@ -13,6 +14,11 @@ const CreateAnswer = ({questionId}) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [answerErrors, setAnswerErrors] = useState([])
   const [disableButton, setDisableButton] = useState(true)
+  const [showTips, setShowTips] = useState(false)
+  const [disableTips, setDisableTips] = useState(false)
+
+  // console.log('showTips: ', showTips)
+  // console.log('disableTips: ', disableTips)
 
   useEffect(() => {
     let answerLength = editorState.getCurrentContent().getPlainText().length;
@@ -23,6 +29,11 @@ const CreateAnswer = ({questionId}) => {
       setDisableButton(true)
     }
   },[editorState])
+
+  const closeTips = () => {
+    setShowTips(false)
+    setDisableTips(true)
+  }
 
   const handleAnswerErrors = () => {
     let errors = [];
@@ -56,14 +67,28 @@ const CreateAnswer = ({questionId}) => {
     <div>
       <h4>Your Answer</h4>
       <form onSubmit={handleSubmit}>
-      <div onBlur={handleAnswerErrors}>
+      <div onBlur={handleAnswerErrors} onFocus={() => setShowTips(true)}>
         <FormEditor placeHolder={''} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
-        <ul>
+      </div>
+      <ul className="answer-errors">
           {answerErrors.map(error => (
             <li key={error}>{error}</li>
           ))}
         </ul>
-      </div>
+      {showTips && !disableTips && (
+        <div>
+          <button onClick={closeTips}>X</button>
+          <p>Thanks for contributing an answer to CRUD Overgrowth!</p>
+          <ul>
+            <li>Please be sure to answer the question! Provide details and share your research!</li>
+          </ul>
+          <p>But avoid...</p>
+          <ul>
+            <li>Asking for help, clarification, or responding to other answers</li>
+            <li>Making statements based on opinion; back them up with references or personal experience</li>
+          </ul>
+        </div>
+      )}
       <button disabled={disableButton}>Post Your Answer</button>
       </form>
     </div>
