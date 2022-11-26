@@ -102,7 +102,7 @@ const EditQuestion = () => {
   const bodyPlaceholder = ''
 
   if (loaded) {
-    console.log('Rendering')
+    // console.log('Rendering')
   return (
     <div id="create-question-container">
       <h2>Edit Your Question</h2>

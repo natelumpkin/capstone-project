@@ -7,7 +7,7 @@ const UserInfoCard = ({user, responseType, response}) => {
     responseVerb = 'asked'
   }
   if (responseType === 'answer') {
-    responseType = 'answered'
+    responseVerb = 'answered'
   }
 
   let responseTimeString;
@@ -17,6 +17,8 @@ const UserInfoCard = ({user, responseType, response}) => {
   }
 
   console.log('user in userinfo card: ', user);
+  console.log('response in userInfo card: ', response)
+  console.log('responseType in userInfo card: ', responseType)
 
 
   return (

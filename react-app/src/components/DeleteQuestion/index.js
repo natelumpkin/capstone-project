@@ -9,7 +9,7 @@ const DeleteQuestion = ({question, setShowDelete}) => {
   const history = useHistory()
 
   const alert = (e) => {
-    console.log(e)
+    // console.log(e)
     dispatch(questionActions.deleteQuestion(question.id))
     setShowDelete(false)
     history.push('/questions')

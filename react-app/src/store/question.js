@@ -99,7 +99,7 @@ const initialState = {
 }
 
 const questionsReducer = (state = initialState, action) => {
-  console.log('Hello from questionsReducer')
+  // console.log('Hello from questionsReducer')
   switch (action.type) {
     case (LOAD_QUESTIONS): {
       const newState = {

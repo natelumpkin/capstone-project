@@ -3,8 +3,8 @@
 const getTimeAgoFromDate = (dateString, updatedString) => {
   let postTime = new Date(dateString)
   const updatedTime = new Date(updatedString)
-  console.log('getTimeAgo postTime: ', dateString)
-  console.log('getTimeAgo updatedTime ', updatedString)
+  // console.log('getTimeAgo postTime: ', dateString)
+  // console.log('getTimeAgo updatedTime ', updatedString)
 
   const currentTime = new Date()
 
