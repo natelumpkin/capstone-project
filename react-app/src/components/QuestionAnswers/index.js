@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as answerActions from '../../store/answer'
 
 import AnswerCard from "../AnswerCard";
+import CreateAnswer from "../CreateAnswer";
 
 const QuestionAnswers = ({question, currentUser}) => {
 
@@ -37,6 +38,9 @@ const QuestionAnswers = ({question, currentUser}) => {
       {answersArr.map(answer => (
         <AnswerCard answer={answer} currentUser={currentUser}/>
       ))}
+    </div>
+    <div>
+        <CreateAnswer questionId={question.id}/>
     </div>
     </>
   )
