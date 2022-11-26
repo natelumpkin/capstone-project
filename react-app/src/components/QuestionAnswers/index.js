@@ -32,7 +32,7 @@ const QuestionAnswers = ({question, currentUser}) => {
   return (
     <>
     <div>
-      <h4>{question.numAnswers} answers</h4>
+      <h4>{answersArr.length} answers</h4>
     </div>
     <div>
       {answersArr.map(answer => (

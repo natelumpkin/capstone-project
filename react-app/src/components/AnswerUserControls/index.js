@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import DeleteAnswer from "../DeleteAnswer";
 
 
 const AnswerUserControls = ({answer}) => {
@@ -10,9 +10,9 @@ const AnswerUserControls = ({answer}) => {
     <div>
       <Link to={`/answers/${answer.id}/edit`}><button>Edit</button></Link>
       <button onClick={() => setShowDelete(true)}>Delete</button>
-      {/* {showDelete && (
-        <DeleteQuestion question={question} setShowDelete={setShowDelete}/>
-      )} */}
+      {showDelete && (
+        <DeleteAnswer answer={answer} setShowDelete={setShowDelete}/>
+      )}
     </div>
   )
 }
