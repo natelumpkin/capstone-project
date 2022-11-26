@@ -2,6 +2,8 @@ import { useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
 import * as questionActions from '../../store/question'
 
+import './DeleteQuestion.css'
+
 const DeleteQuestion = ({question, setShowDelete}) => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -14,7 +16,7 @@ const DeleteQuestion = ({question, setShowDelete}) => {
   }
 
   return (
-    <dialog open>
+    <dialog open className="delete-modal">
       <p>Are you sure you want to delete this question?</p>
       <form>
         <button type="button" onClick={() => setShowDelete(false)}>Cancel</button>
