@@ -28,7 +28,7 @@ const QuestionCard = ({question, currentUser}) => {
             <div>{question.User.username}</div>
             <div>
               <Link to={`questions/${question.id}`}>
-                asked {timeString}
+                {timeString}
               </Link>
               </div>
           </div>
