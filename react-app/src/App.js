@@ -3,10 +3,14 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import LoginForm from './components/auth/LoginForm';
 import SignUpForm from './components/auth/SignUpForm';
-import NavBar from './components/NavBar';
+import Header from './components/Header';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import UsersList from './components/UsersList';
-import User from './components/User';
+import UsersList from './components/UserInfo/UsersList';
+import User from './components/UserInfo/User';
+import LandingPage from './components/LandingPage';
+import InterfaceContainer from './components/InterfaceContainer';
+import CreateQuestion from './components/CreateQuestion';
+import EditQuestion from './components/EditQuestion';
 import { authenticate } from './store/session';
 
 function App() {
@@ -26,7 +30,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
+      <Header />
       <Switch>
         <Route path='/login' exact={true}>
           <LoginForm />
@@ -41,7 +45,19 @@ function App() {
           <User />
         </ProtectedRoute>
         <Route path='/' exact={true} >
-          <h1>My Home Page</h1>
+          <LandingPage/>
+        </Route>
+        <Route path={`/questions/:questionId/edit`}>
+          <EditQuestion/>
+        </Route>
+        <Route path='/questions/new' exact={true}>
+          <CreateQuestion/>
+        </Route>
+        <Route path='/questions'>
+          <InterfaceContainer/>
+        </Route>
+        <Route>
+          <h1>Hey this page wasn't found, sorry!</h1>
         </Route>
       </Switch>
     </BrowserRouter>
