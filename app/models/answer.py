@@ -24,5 +24,9 @@ class Answer(db.Model):
             "questionId": self.question_id,
             "answer": self.answer,
             "createdAt": self.created_at,
-            "updatedAt": self.updated_at
+            "updatedAt": self.updated_at,
+            "User": {
+                  "id": self.author.id,
+                  "username": self.author.username
+            }
       }

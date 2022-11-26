@@ -7,7 +7,7 @@ const UserInfoCard = ({user, responseType, response}) => {
     responseVerb = 'asked'
   }
   if (responseType === 'answer') {
-    responseType = 'answered'
+    responseVerb = 'answered'
   }
 
   let responseTimeString;
@@ -16,7 +16,9 @@ const UserInfoCard = ({user, responseType, response}) => {
     responseTimeString = responseVerb + ' ' + getDateAndTime(response.createdAt)
   }
 
-  // console.log('user in userinfo card: ', user);
+  console.log('user in userinfo card: ', user);
+  console.log('response in userInfo card: ', response)
+  console.log('responseType in userInfo card: ', responseType)
 
 
   return (
@@ -24,7 +26,7 @@ const UserInfoCard = ({user, responseType, response}) => {
       <div className="time-holder">{responseTimeString}</div>
       <div className="user-info-holder">
         <div className="profile-img-holder">
-          {user.profileImg && (
+          {user && user.profileImg && (
             <img src={user.profileImg}/>
           )}
           {!user.profileImg && (

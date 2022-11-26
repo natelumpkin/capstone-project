@@ -7,8 +7,7 @@ const ONE_QUESTION = 'questions/one'
 const EDIT_QUESTION = 'questions/edit'
 const ADD_QUESTION = 'questions/create'
 const DELETE_QUESTION = 'questions/delete'
-const LOAD_ANSWERS = 'questions/answers'
-const ADD_ANSWER = 'questions/answers/create'
+
 
 // Actions
 
@@ -100,7 +99,7 @@ const initialState = {
 }
 
 const questionsReducer = (state = initialState, action) => {
-  console.log('Hello from questionsReducer')
+  // console.log('Hello from questionsReducer')
   switch (action.type) {
     case (LOAD_QUESTIONS): {
       const newState = {

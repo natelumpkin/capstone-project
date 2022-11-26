@@ -3,16 +3,11 @@
 const getTimeAgoFromDate = (dateString, updatedString) => {
   let postTime = new Date(dateString)
   const updatedTime = new Date(updatedString)
-  console.log('getTimeAgo postTime: ', dateString)
-  console.log('getTimeAgo updatedTime ', updatedString)
+  // console.log('getTimeAgo postTime: ', dateString)
+  // console.log('getTimeAgo updatedTime ', updatedString)
 
   const currentTime = new Date()
-  const year = postTime.getFullYear()
-  const month = postTime.getMonth()
-  const day = postTime.getDate()
-  const hour = postTime.getHours()
-  const minutes = postTime.getMinutes()
-  const seconds = postTime.getSeconds()
+
   // if within the minute, tell seconds ago
   // if within the hour, tell minutes ago
   // if within the day, tell hours ago
@@ -28,6 +23,13 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
     postTime = updatedTime
   }
 
+  const year = postTime.getFullYear()
+  const month = postTime.getMonth()
+  const day = postTime.getDate()
+  const hour = postTime.getHours()
+  const minutes = postTime.getMinutes()
+  const seconds = postTime.getSeconds()
+
   // console.log(year === currentTime.getFullYear())
   // console.log(month === currentTime.getMonth())
   // console.log(day === currentTime.getDate())
@@ -39,6 +41,8 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
           day === currentTime.getDate() &&
           hour === currentTime.getHours() &&
           minutes === currentTime.getMinutes()) {
+            // console.log('postTime: ', postTime)
+            // console.log('updatedTime: ', updatedTime)
             timeAgo = currentTime.getSeconds() - seconds;
             unit = 'second'
             if (timeAgo > 1) unit = 'seconds'
@@ -48,6 +52,8 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
             month === currentTime.getMonth() &&
             day === currentTime.getDate() &&
             hour === currentTime.getHours()) {
+            //   console.log('postTime: ', postTime)
+            // console.log('updatedTime: ', updatedTime)
               timeAgo = currentTime.getMinutes() - minutes;
               unit = 'minute';
               if (timeAgo > 1) unit = 'minutes'
@@ -56,6 +62,8 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
   else if (year === currentTime.getFullYear() &&
             month === currentTime.getMonth() &&
             day === currentTime.getDate()) {
+              // console.log('postTime: ', postTime)
+              // console.log('updatedTime: ', updatedTime)
               timeAgo = currentTime.getHours() - hour
               unit = 'hour';
               if (timeAgo > 1) unit = 'hours';
@@ -77,8 +85,8 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
 // let up2 = "Thurs, 24 Nov 2022 20:25:20 GMT"
 // console.log(getTimeAgoFromDate(ex2, up2))
 
-let ex2 = "Sat, 20 Nov 2022 02:10:20 GMT"
-let up2 = "Sat, 22 Nov 2022 02:10:20 GMT"
-console.log(getTimeAgoFromDate(ex2, up2))
+// let ex2 = "Sat, 20 Nov 2022 02:10:20 GMT"
+// let up2 = "Sat, 22 Nov 2022 02:10:20 GMT"
+// console.log(getTimeAgoFromDate(ex2, up2))
 
 export default getTimeAgoFromDate;

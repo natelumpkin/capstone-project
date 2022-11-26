@@ -1,23 +1,23 @@
 import { useDispatch } from "react-redux"
-import { useHistory } from "react-router-dom"
+import * as answerActions from '../../store/answer'
 import * as questionActions from '../../store/question'
 
-import './DeleteQuestion.css'
+import './DeleteAnswer.css'
 
-const DeleteQuestion = ({question, setShowDelete}) => {
+const DeleteAnswer = ({answer, setShowDelete}) => {
   const dispatch = useDispatch()
-  const history = useHistory()
+
 
   const alert = (e) => {
     // console.log(e)
-    dispatch(questionActions.deleteQuestion(question.id))
+    dispatch(answerActions.deleteAnswer(answer.id))
+      // .then(dispatch(questionActions.fetchSingleQuestion(answer.questionId)))
     setShowDelete(false)
-    history.push('/questions')
   }
 
   return (
     <div>
-      <p>Are you sure you want to delete this question?</p>
+      <p>Are you sure you want to delete this answer?</p>
       <form>
         <button type="button" onClick={() => setShowDelete(false)}>Cancel</button>
         <button type="button" onClick={(alert)}>Yes</button>
@@ -26,4 +26,4 @@ const DeleteQuestion = ({question, setShowDelete}) => {
   )
 }
 
-export default DeleteQuestion;
+export default DeleteAnswer;

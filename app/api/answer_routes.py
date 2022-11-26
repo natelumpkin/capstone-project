@@ -18,7 +18,7 @@ def edit_answer(id):
     return { "message": "Answer couldn't be found"}, 404
 
   if answer.user_id != current_user.id:
-    return {"message": "Forbidden"}
+    return {"message": "Forbidden"}, 403
 
   form = AnswerForm()
   form['csrf_token'].data = request.cookies['csrf_token']
@@ -40,7 +40,7 @@ def delete_answer(id):
     return { "message": "Answer couldn't be found"}, 404
 
   if answer.user_id != current_user.id:
-    return {"message": "Forbidden"}
+    return {"message": "Forbidden"}, 403
 
   db.session.delete(answer)
   db.session.commit()

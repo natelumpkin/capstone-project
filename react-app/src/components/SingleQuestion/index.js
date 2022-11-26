@@ -8,9 +8,9 @@ import * as questionActions from '../../store/question'
 
 import UserControls from "../UserControls";
 import UserInfoCard from "../UserInfoCard";
+import QuestionAnswers from "../QuestionAnswers";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
-import convertToEditorState from "../../utils/convertToEditorState";
 
 const SingleQuestion = () => {
   const dispatch = useDispatch()
@@ -29,8 +29,8 @@ const SingleQuestion = () => {
       });
   },[dispatch])
 
-  console.log(notFound)
-  console.log(loaded)
+  // console.log(notFound)
+  // console.log(loaded)
 
   if ((!loaded) && (notFound)) {
     return (
@@ -48,7 +48,7 @@ const SingleQuestion = () => {
 
 
   if (currentQuestion) {
-    console.log('currentQuestion in singleQuestion component: ', currentQuestion)
+    // console.log('currentQuestion in singleQuestion component: ', currentQuestion)
 
   return (
     <div id="single-question-top-container">
@@ -82,10 +82,12 @@ const SingleQuestion = () => {
           )}
         </div>
         <div id="user-information-holder">
-            <UserInfoCard user={currentUser} response={currentQuestion} responseType={'question'}/>
+            <UserInfoCard user={currentQuestion.User} response={currentQuestion} responseType={'question'}/>
         </div>
       </div>
-    <div id="answers-container"></div>
+    <div id="answers-container">
+      <QuestionAnswers question={currentQuestion} currentUser={currentUser}/>
+    </div>
     </div>
   )
           } else {
