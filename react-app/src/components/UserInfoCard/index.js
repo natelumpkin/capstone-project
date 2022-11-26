@@ -16,7 +16,7 @@ const UserInfoCard = ({user, responseType, response}) => {
     responseTimeString = responseVerb + ' ' + getDateAndTime(response.createdAt)
   }
 
-  console.log('user in userinfo card: ', user);
+  // console.log('user in userinfo card: ', user);
 
 
   return (
