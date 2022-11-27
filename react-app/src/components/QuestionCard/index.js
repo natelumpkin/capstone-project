@@ -1,22 +1,34 @@
 import { Link } from "react-router-dom";
+import { convertFromRaw } from 'draft-js'
 import getTimeAgoFromDate from "../../utils/getTimeAgoFromDate";
 import UserControls from "../UserControls";
+
+
+import './QuestionCard.css'
 
 const QuestionCard = ({question, currentUser}) => {
 
   const timeString = getTimeAgoFromDate(question.createdAt, question.updatedAt)
 
+  let bodyContent
+  let plainBody
+  if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
+  if (bodyContent) plainBody = bodyContent.getPlainText()
+
+
   return (
-    <div>
+    <div className="questioncard-container">
       <div className="metadata-container">
-        <div className="numAnswers"><p>{question.numAnswers} answers</p></div>
+        <div className="num-answers"><p>{question.numAnswers} answers</p></div>
       </div>
       <div className="maindata-container">
         <div className="info-container">
           <Link to={`questions/${question.id}`}>
             <h3>{question.title}</h3>
           </Link>
-          {/* <p>{question.body}</p> */}
+          <div className="body-container">
+          <p>{plainBody}</p>
+          </div>
         </div>
         <div className="summary-container">
           <div className="user-controls-container">
@@ -25,8 +37,8 @@ const QuestionCard = ({question, currentUser}) => {
             )}
           </div>
           <div className="user-data">
-            <div>{question.User.username}</div>
-            <div>
+            <div className="questioncard-author-name">{question.User.username}</div>
+            <div className="questioncard-asked-time">
               <Link to={`questions/${question.id}`}>
                 {timeString}
               </Link>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../../context/Modal';
+import { Link } from 'react-router-dom';
 
 import DeleteQuestion from '.';
 import './DeleteQuestionModal.css';
@@ -23,9 +24,9 @@ const DeleteQuestionModal = ({question}) => {
 
   return (
     <>
-      <button onClick={(e) => {
+      <Link onClick={(e) => {
         setShowModal(true)
-      }}>Delete</button>
+      }}>Delete</Link>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <DeleteQuestion question={question} setShowDelete={setShowModal}/>

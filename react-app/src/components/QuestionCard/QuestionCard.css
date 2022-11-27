@@ -1,0 +1,60 @@
+.questioncard-container {
+  border-bottom: 1px solid black;
+  display: flex;
+  height: 120px;
+}
+
+.metadata-container {
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.num-answers p {
+  font-size: 13px;
+}
+
+.maindata-container {
+  width: 100%;
+  padding-left: 10px;
+}
+
+.info-container h3 {
+  color: black;
+  font-size: 16px;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.body-container p {
+  font-size: 12px;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.body-container {
+  overflow: hidden;
+  word-break: break-word;
+  text-overflow: ellipsis;
+}
+
+.summary-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.user-data {
+  display: flex;
+  font-size: 13px;
+}
+
+.user-data a {
+  color: black;
+}
+
+.user-data div {
+  padding-right: 5px;
+}

@@ -16,10 +16,10 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
   // console.log('current time: ', currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds())
   let unit;
   let timeAgo;
-  let verb = 'Asked '
+  let verb = 'asked '
 
   if (dateString !== updatedString) {
-    verb = 'Modified '
+    verb = 'modified '
     postTime = updatedTime
   }
 
