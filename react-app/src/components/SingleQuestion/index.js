@@ -12,6 +12,8 @@ import QuestionAnswers from "../QuestionAnswers";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 
+import './SingleQuestion.css'
+
 const SingleQuestion = () => {
   const dispatch = useDispatch()
   const {questionId} = useParams();
@@ -52,42 +54,50 @@ const SingleQuestion = () => {
 
   return (
     <div id="single-question-top-container">
-    <div id="single-question-header">
-      <div id="single-question-header-top">
-        <div id="single-question-title">
-          <Link to={`/questions/${currentQuestion.id}`}><h2>{currentQuestion.title}</h2></Link>
+      <div id="single-question-header">
+        <div id="single-question-header-top">
+          <div id="single-question-title">
+            <Link to={`/questions/${currentQuestion.id}`}><h2>{currentQuestion.title}</h2></Link>
+          </div>
+          <div id="single-question-ask-button">
+            <Link to='/questions/new'><button>Ask Question</button></Link>
+          </div>
         </div>
-        <div id="single-question-ask-button">
-          <Link to='/questions/new'><button>Ask Question</button></Link>
+        <div id="single-question-header-bottom">
+          <div id="created-time">Asked {getSpecificTimeAgo(currentQuestion.createdAt)}</div>
+          <div id="modified-time">Modified {getSpecificTimeAgo(currentQuestion.updatedAt)}</div>
+        </div>
+        <div id="header-bottom-border-div"></div>
+      </div>
+      <div id="content-column">
+        <div id="question-content-container">
+          <div className="vote-container">
+
+          </div>
+          <div id="single-question-content-right">
+            <div id="single-question-body">
+                {/* <p>{currentQuestion.body}</p> */}
+                <Editor
+                  editorState={stateToDisplay}
+                  readOnly
+                />
+            </div>
+            <div id="single-question-bottom-container">
+              <div id="single-question-user-controls-container">
+                {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (
+                  <UserControls question={currentQuestion}/>
+                )}
+              </div>
+              <div id="user-information-holder">
+                  <UserInfoCard user={currentQuestion.User} response={currentQuestion} responseType={'question'}/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="answers-container">
+          <QuestionAnswers question={currentQuestion} currentUser={currentUser}/>
         </div>
       </div>
-      <div id="single-question-header-bottom">
-        <div id="created-time">Asked {getSpecificTimeAgo(currentQuestion.createdAt)}</div>
-        <div id="modified-time">Modified {getSpecificTimeAgo(currentQuestion.updatedAt)}</div>
-      </div>
-    </div>
-    <div id="question-content-container"></div>
-      <div className="vote-container"></div>
-      <div id="single-question-content-right">
-        <div id="single-question-body">
-          {/* <p>{currentQuestion.body}</p> */}
-          <Editor
-            editorState={stateToDisplay}
-            readOnly
-          />
-        </div>
-        <div id="single-question-user-controls-container">
-          {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (
-            <UserControls question={currentQuestion}/>
-          )}
-        </div>
-        <div id="user-information-holder">
-            <UserInfoCard user={currentQuestion.User} response={currentQuestion} responseType={'question'}/>
-        </div>
-      </div>
-    <div id="answers-container">
-      <QuestionAnswers question={currentQuestion} currentUser={currentUser}/>
-    </div>
     </div>
   )
           } else {

@@ -24,6 +24,7 @@ const AllQuestions = () => {
 
 
   return (
+    <div id="content-column">
     <div id="all-questions-container">
       <div id="all-questions-header">
         <div id="all-questions-header-upper">
@@ -41,6 +42,7 @@ const AllQuestions = () => {
       {questionsArray.map(question => (
         <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
       ))}
+    </div>
     </div>
   )
 }
