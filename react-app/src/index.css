@@ -3,3 +3,15 @@
 body {
   margin: 0;
 }
+
+* {
+  font-family: "Open Sans";
+}
+
+h1 {
+  font-size: 28px;
+}
+
+.pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,21 @@
+#all-questions-header {
+  padding-left: 20px;
+  border-bottom: 1px solid black;
+}
+
+#all-questions-header-upper {
+  display: flex;
+  width: 100%;
+  height: 135px;
+  justify-content: space-between;
+}
+
+.ask-question-button {
+  height: 38px;
+  width: 103px;
+  margin-top: 18px;
+  background-color: #004880;
+  color: white;
+  border: transparent;
+  text-decoration: none;
+}

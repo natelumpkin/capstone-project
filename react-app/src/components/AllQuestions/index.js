@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import QuestionCard from "../QuestionCard";
 import * as questionActions from '../../store/question'
+import './AllQuestions.css'
 
 const AllQuestions = () => {
 
@@ -30,9 +31,9 @@ const AllQuestions = () => {
             <h1>All Questions</h1>
           </div>
           <div>
-
-              <Link to="questions/new"><button>Ask Question</button></Link>
-
+              <Link to="questions/new">
+                <button className="ask-question-button pointer">Ask Question</button>
+              </Link>
           </div>
         </div>
         <div id="all-questions-header-lower"></div>
