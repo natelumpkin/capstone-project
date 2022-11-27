@@ -57,7 +57,9 @@ const SingleQuestion = () => {
       <div id="single-question-header">
         <div id="single-question-header-top">
           <div id="single-question-title">
-            <Link to={`/questions/${currentQuestion.id}`}><h2>{currentQuestion.title}</h2></Link>
+            {/* <Link to={`/questions/${currentQuestion.id}`}> */}
+              <h2>{currentQuestion.title}</h2>
+              {/* </Link> */}
           </div>
           <div id="single-question-ask-button">
             <Link to='/questions/new'><button>Ask Question</button></Link>

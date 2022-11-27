@@ -1,0 +1,86 @@
+#create-question-container {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 20px;
+}
+
+#create-question-container h2 {
+  font-weight: bold;
+}
+
+#create-question-form-container {
+  margin-top: 50px;
+}
+
+#create-question-guidelines-container {
+  border: 1px solid black;
+  padding: 25px;
+  background-color: #d6ecff;
+}
+
+#create-question-guidelines-container h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+}
+
+#create-question-guidelines-container p {
+  font-size: 14px;
+}
+
+#create-question-guidelines-container h5 {
+  margin: 0;
+  font-weight: bold;
+}
+
+#create-question-guidelines-container ul {
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+#create-question-guidelines-container li {
+  font-size: 14px;
+}
+
+.form-container {
+  border: 1px solid black;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 25px;
+}
+
+.form-container label {
+  font-weight: bold;
+}
+
+.form-container p {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+#title-input {
+  width: 98%;
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#title-input::placeholder {
+  color: black;
+}
+
+.list-errors-parent {
+  margin: 0;
+  padding-left: 0;
+  padding-top: 5px;
+}
+
+.list-errors {
+  color: #940006;
+  font-size: 12px;
+  list-style: none;
+}
+
+#post-question-button:disabled {
+  background-color: #84a1bd;
+}

@@ -1,5 +1,7 @@
 import getDateAndTime from "../../utils/getDateAndTime";
 
+import './UserInfoCard.css'
+
 const UserInfoCard = ({user, responseType, response}) => {
 
   let responseVerb;
