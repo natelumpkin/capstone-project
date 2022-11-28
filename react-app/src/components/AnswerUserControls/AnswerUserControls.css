@@ -1,6 +1,7 @@
 .answercard-user-controls {
   display: flex;
   justify-content: space-between;
+  padding-top: 8px;
   width: 80px;
 }
 
