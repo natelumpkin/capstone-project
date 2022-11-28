@@ -5,6 +5,7 @@ import * as answerActions from '../../store/answer'
 
 import AnswerCard from "../AnswerCard";
 import CreateAnswer from "../CreateAnswer";
+import './QuestionAnswers.css'
 
 const QuestionAnswers = ({question, currentUser}) => {
 
@@ -30,19 +31,19 @@ const QuestionAnswers = ({question, currentUser}) => {
 
 
   return (
-    <>
-    <div>
-      <h4>{answersArr.length} answers</h4>
+    <div id="answers-container">
+      <div id="num-answers-container">
+        <h4>{answersArr.length} {answersArr.length === 1 ? "Answer" : "Answers"}</h4>
+      </div>
+      <div id="answers-card-container">
+        {answersArr.map(answer => (
+          <AnswerCard answer={answer} currentUser={currentUser}/>
+        ))}
+      </div>
+      <div>
+          <CreateAnswer questionId={question.id}/>
+      </div>
     </div>
-    <div>
-      {answersArr.map(answer => (
-        <AnswerCard answer={answer} currentUser={currentUser}/>
-      ))}
-    </div>
-    <div>
-        <CreateAnswer questionId={question.id}/>
-    </div>
-    </>
   )
 }
 

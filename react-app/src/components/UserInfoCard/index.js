@@ -24,7 +24,7 @@ const UserInfoCard = ({user, responseType, response}) => {
 
 
   return (
-    <div className="userinfo-container">
+    <div className={`userinfo-container ${responseType}`}>
       <div className="time-holder">{responseTimeString}</div>
       <div className="user-info-holder">
         <div className="profile-img-holder">

@@ -59,7 +59,9 @@ def post_question():
     new_question = Question(
       user_id=current_user.id,
       title=form.data['title'],
-      body=form.data['body']
+      body=form.data['body'],
+      created_at=datetime.utcnow(),
+      updated_at=datetime.utcnow()
     )
     db.session.add(new_question)
     db.session.commit()
@@ -151,7 +153,9 @@ def add_answer_to_question(id):
     new_answer = Answer(
       user_id=current_user.id,
       question_id=id,
-      answer=form.data['answer']
+      answer=form.data['answer'],
+      created_at=datetime.utcnow(),
+      updated_at=datetime.utcnow()
     )
     db.session.add(new_answer)
     db.session.commit()

@@ -57,8 +57,8 @@ function App() {
         <Route path='/questions'>
           <InterfaceContainer/>
         </Route>
-        <Route path='/answers/:answerId/edit'>
-          <EditAnswer/>
+        <Route path='/answers'>
+          <InterfaceContainer/>
         </Route>
         <Route>
           <h1>Hey this page wasn't found, sorry!</h1>

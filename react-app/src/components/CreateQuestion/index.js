@@ -8,12 +8,12 @@ import './CreateQuestion.css'
 
 const CreateQuestion = () => {
   const dispatch = useDispatch();
-  const history = useHistory()
-  const [title, setTitle] = useState('')
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [titleErrors, setTitleErrors] = useState([])
-  const [bodyErrors, setBodyErrors] = useState([])
-  const [disableButton, setDisableButton] = useState(true)
+  const history = useHistory();
+  const [title, setTitle] = useState('');
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [titleErrors, setTitleErrors] = useState([]);
+  const [bodyErrors, setBodyErrors] = useState([]);
+  const [disableButton, setDisableButton] = useState(true);
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
