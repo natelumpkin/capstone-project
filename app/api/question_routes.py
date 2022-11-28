@@ -59,7 +59,9 @@ def post_question():
     new_question = Question(
       user_id=current_user.id,
       title=form.data['title'],
-      body=form.data['body']
+      body=form.data['body'],
+      created_at=datetime.utcnow(),
+      updated_at=datetime.utcnow()
     )
     db.session.add(new_question)
     db.session.commit()

@@ -1,6 +1,8 @@
 
 
 const getTimeAgoFromDate = (dateString, updatedString) => {
+  console.log(dateString)
+  console.log(updatedString)
   let postTime = new Date(dateString)
   const updatedTime = new Date(updatedString)
   // console.log('getTimeAgo postTime: ', dateString)
@@ -33,6 +35,10 @@ const getTimeAgoFromDate = (dateString, updatedString) => {
   // console.log(year === currentTime.getFullYear())
   // console.log(month === currentTime.getMonth())
   // console.log(day === currentTime.getDate())
+  console.log('posttime hour', hour)
+  console.log('current hour', currentTime.getHours())
+  console.log('posttime minute', minutes)
+  console.log('current minutes ', currentTime.getMinutes())
 
 
   // if year, month, day, hour, and minutes are the same, tell seconds ago
