@@ -1,3 +1,58 @@
 .answer-errors {
   height: 50px;
 }
+
+#create-answers-frame {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#create-answers-container {
+  width: 100%;
+  padding-left: 20px;
+}
+
+#create-answers-container h4 {
+  font-size: 18px;
+}
+
+#answer-tips-popup {
+  background-color: #fdecaa;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#answer-tips-content {
+  padding-left: 10px;
+}
+
+#answer-tips-content p,
+#answer-tips-content li {
+  font-size: 13px;
+}
+
+#close-tips-button {
+  background-color: #fdecaa;
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#close-tips-button:hover {
+  cursor: pointer;
+  background-color: #f8f9f9;
+}
+
+#create-question-button-container.create-answer-buttons {
+  margin-top: 30px;
+}
