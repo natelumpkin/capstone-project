@@ -110,8 +110,10 @@ const CreateQuestion = () => {
                 ))}
               </ul>
           </div>
-          <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Question</button>
-          <button onClick={() => history.push('/questions')}>Discard Draft</button>
+          <div id="create-question-button-container">
+            <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Question</button>
+            <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Discard Draft</button>
+          </div>
         </form>
       </div>
       <div id="create-question-directions-container"></div>

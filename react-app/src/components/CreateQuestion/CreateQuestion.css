@@ -1,7 +1,14 @@
+/* to do: add border radius */
+
 #create-question-container {
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 20px;
+}
+
+#create-question-container div,
+#create-question-container input {
+  border-radius: 2px;
 }
 
 #create-question-container h2 {
@@ -81,6 +88,28 @@
   list-style: none;
 }
 
+#post-question-button.ask-question-button {
+  margin-top: 0;
+  width: 160px;
+}
+
+#create-question-button-container {
+  display: flex;
+}
+
 #post-question-button:disabled {
   background-color: #84a1bd;
+}
+
+#discard-draft-button {
+  border: 1px solid #940006;
+  background-color: white;
+  color: #940006;
+  margin-top: 0;
+  margin-left: 20px;
+}
+
+#discard-draft-button:hover {
+  background-color: rgba(255, 192, 203, 0.535);
+  cursor: pointer;
 }
