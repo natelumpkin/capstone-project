@@ -2,4 +2,17 @@
 
 body {
   margin: 0;
+  margin-bottom: 100px;
+}
+
+* {
+  font-family: "Open Sans";
+}
+
+h1 {
+  font-size: 28px;
+}
+
+.pointer {
+  cursor: pointer;
 }

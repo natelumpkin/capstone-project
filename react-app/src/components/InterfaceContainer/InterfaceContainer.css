@@ -1,0 +1,13 @@
+#content-container {
+  display: flex;
+  height: 100%;
+}
+
+#left-column {
+  width: 18%;
+  border-right: 1px solid black;
+}
+
+#content-column {
+  width: 75%;
+}

@@ -16,12 +16,13 @@ const DeleteQuestion = ({question, setShowDelete}) => {
   }
 
   return (
-    <div>
-      <p>Are you sure you want to delete this question?</p>
-      <form>
-        <button type="button" onClick={() => setShowDelete(false)}>Cancel</button>
-        <button type="button" onClick={(alert)}>Yes</button>
-      </form>
+    <div className="delete-modal">
+      <h2>crudovergrowth.com says</h2>
+      <p>Delete this post?</p>
+      <div className="delete-button-container">
+        <button id="cancel-delete" type="button" onClick={() => setShowDelete(false)}>Cancel</button>
+        <button id="confirm-delete" type="button" onClick={(alert)}>OK</button>
+      </div>
     </div>
   )
 }

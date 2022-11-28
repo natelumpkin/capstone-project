@@ -7,7 +7,7 @@ import './NavBar.css'
 
 const NavBar = () => {
   return (
-    <nav>
+    <nav id="header">
       <ul id="header-links">
         <li>
           <NavLink to='/' exact={true} activeClassName='active'>

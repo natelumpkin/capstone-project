@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
+import './CreateQuestion.css'
 
 const CreateQuestion = () => {
   const dispatch = useDispatch();
@@ -77,38 +78,42 @@ const CreateQuestion = () => {
       <h2>Ask a Public Question</h2>
       <div id="create-question-form-container">
         <div id="create-question-guidelines-container">
-          <h4>Writing a Good Question</h4>
+          <h4>Writing a good question</h4>
           <p>You’re ready to ask a programming-related question and this form will help guide you through the process.</p>
-          <ul>
-            Steps
+
+            <h5>Steps</h5>
+            <ul>
             <li>Summarize your problem in a one-line title</li>
             <li>Describe your problem in more detail.</li>
             <li>Describe what you tried and what you expected to happen.</li>
             <li>Review your question and post it to the site</li>
-          </ul>
+            </ul>
         </div>
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
-              <ul>
+            <input id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+              <ul className="list-errors-parent">
                 {titleErrors.map(error => (
-                  <li key={error}>{error}</li>
+                  <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
           </div>
-          <div onBlur={handleBodyErrors}>
+          <div className="form-container" onBlur={handleBodyErrors}>
             <label>Body</label>
             <p>The body of your question contains your problem details and results. Minimum 30 characters.</p>
             <FormEditor placeHolder={''} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
-              <ul>
+              <ul className="list-errors-parent">
                 {bodyErrors.map(error => (
-                  <li key={error}>{error}</li>
+                  <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
           </div>
-          <button disabled={disableButton}>Post Your Question</button>
+          <div id="create-question-button-container">
+            <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Question</button>
+            <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Discard Draft</button>
+          </div>
         </form>
       </div>
       <div id="create-question-directions-container"></div>

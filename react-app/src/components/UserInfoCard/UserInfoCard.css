@@ -1,0 +1,30 @@
+
+.userinfo-container {
+  background-color: #e0f1ff;
+  padding: 8px;
+}
+
+.time-holder {
+  font-size: 12px;
+  color: #282b2f;
+}
+
+.user-info-holder {
+  display: flex;
+}
+
+.profile-img-holder i {
+  font-size: 25px;
+  margin-top: 3px;
+}
+
+/* .username-holder {
+  display: flex;
+  align-items: flex-end;
+} */
+
+.username-holder p {
+  margin: 0;
+  margin-left: 5px;
+  font-size: 14px;
+}

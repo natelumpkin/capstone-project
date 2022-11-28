@@ -2,6 +2,8 @@ import { Route, Switch, Link } from "react-router-dom";
 import AllQuestions from "../AllQuestions";
 import SingleQuestion from "../SingleQuestion";
 
+import './InterfaceContainer.css'
+
 const InterfaceContainer = () => {
   return (
     <div id="content-container">
