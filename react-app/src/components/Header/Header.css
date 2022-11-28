@@ -4,6 +4,7 @@
   background-color: #f8f9f9;
   display: flex;
   justify-content: center;
+  z-index: 2;
   position: sticky;
   top: 0px;
 }

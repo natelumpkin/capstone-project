@@ -5,6 +5,8 @@ import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
 
+import './EditQuestion.css'
+
 const EditQuestion = () => {
 
   const {questionId} = useParams();
@@ -107,37 +109,32 @@ const EditQuestion = () => {
     <div id="create-question-container">
       <h2>Edit Your Question</h2>
       <div id="create-question-form-container">
-        <div id="create-question-guidelines-container">
-          <ul>
-            Steps
-            <li>Summarize your problem in a one-line title</li>
-            <li>Describe your problem in more detail.</li>
-            <li>Describe what you tried and what you expected to happen.</li>
-            <li>Review your question and post it to the site</li>
-          </ul>
-        </div>
+
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
-              <ul>
+            <input id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+              <ul className="list-errors-parent">
                 {titleErrors.map(error => (
-                  <li key={error}>{error}</li>
+                  <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
           </div>
-          <div onBlur={handleBodyErrors}>
+          <div className="form-container" onBlur={handleBodyErrors}>
             <label>Body</label>
             <p>The body of your question contains your problem details and results. Minimum 30 characters.</p>
             <FormEditor placeHolder={''} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
-              <ul>
+              <ul className="list-errors-parent">
                 {bodyErrors.map(error => (
-                  <li key={error}>{error}</li>
+                  <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
           </div>
-          <button disabled={disableButton}>Post Your Revision</button>
+          <div id="create-question-button-container">
+            <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Revision</button>
+            <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Cancel</button>
+          </div>
         </form>
       </div>
       <div id="create-question-directions-container"></div>
