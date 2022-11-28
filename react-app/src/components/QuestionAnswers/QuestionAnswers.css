@@ -1,0 +1,14 @@
+#num-answers-container {
+  margin-left: 20px;
+}
+
+#num-answers-container h4 {
+  font-size: 20px;
+}
+
+#answers-card-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}

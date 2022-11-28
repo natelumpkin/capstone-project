@@ -1,0 +1,23 @@
+
+
+.answer-card-holder {
+  width: 88%;
+  padding-bottom: 28px;
+  padding-top: 28px;
+}
+
+.answercard-bottom-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.answercard-userinfo-holder {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.answer-bottom-border-div {
+  height: 0;
+  width: 95%;
+  border-bottom: 1px solid black;
+}
