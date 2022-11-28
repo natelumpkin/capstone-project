@@ -102,6 +102,10 @@
   background-color: #84a1bd;
 }
 
+#post-question-button:disabled:hover {
+  cursor: default;
+}
+
 #discard-draft-button {
   border: 1px solid #940006;
   background-color: white;

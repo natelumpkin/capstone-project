@@ -24,7 +24,7 @@ const QuestionCard = ({question, currentUser}) => {
       <div className="maindata-container">
         <div className="info-container">
           <Link to={`questions/${question.id}`}>
-            <h3>{question.title}</h3>
+            {question.title}
           </Link>
           <div className="body-container">
           <p>{plainBody}</p>

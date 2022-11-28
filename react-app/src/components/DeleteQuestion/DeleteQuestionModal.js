@@ -8,17 +8,20 @@ import './DeleteQuestionModal.css';
 const DeleteQuestionModal = ({question}) => {
   const [showModal, setShowModal] = useState(false);
 
-  if (showModal) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = 'unset'
-  }
+  // if (showModal) {
+  //   document.body.style.overflow = 'hidden'
+  // } else {
+  //   document.body.style.overflow = 'unset'
+  // }
 
   useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden'
+    }
     return () => {
       document.body.style.overflow = 'unset';
     }
-  })
+  }, [showModal])
 
   console.log('ShowModal: ', showModal)
 
