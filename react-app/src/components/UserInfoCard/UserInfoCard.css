@@ -4,6 +4,10 @@
   padding: 8px;
 }
 
+.userinfo-container.answer {
+  background-color: white;
+}
+
 .time-holder {
   font-size: 12px;
   color: #282b2f;
