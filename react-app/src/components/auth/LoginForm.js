@@ -26,7 +26,7 @@ const LoginForm = () => {
     e.preventDefault();
     const data = await dispatch(login(email, password));
     if (data) {
-      console.log(data)
+      // console.log('data: ', data)
       setEmailErrors([])
       setPasswordErrors([])
       data.forEach(error => errorMap(error));
