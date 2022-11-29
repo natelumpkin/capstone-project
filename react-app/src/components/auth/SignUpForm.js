@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
@@ -11,6 +11,14 @@ const SignUpForm = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const body = window.document.body;
+    body.classList.add('grey')
+    return () => {
+      body.classList.remove('grey')
+    }
+  },[])
 
   const onSignUp = async (e) => {
     e.preventDefault();
@@ -43,13 +51,14 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={onSignUp}>
+    <div className='login-container'>
+    <form id="login-form" onSubmit={onSignUp}>
       <div>
         {errors.map((error, ind) => (
           <div key={ind}>{error}</div>
         ))}
       </div>
-      <div>
+      <div id="login-div-top" className='login-div'>
         <label>User Name</label>
         <input
           type='text'
@@ -58,7 +67,7 @@ const SignUpForm = () => {
           value={username}
         ></input>
       </div>
-      <div>
+      <div className='login-div'>
         <label>Email</label>
         <input
           type='text'
@@ -67,7 +76,7 @@ const SignUpForm = () => {
           value={email}
         ></input>
       </div>
-      <div>
+      <div className='login-div'>
         <label>Password</label>
         <input
           type='password'
@@ -76,8 +85,8 @@ const SignUpForm = () => {
           value={password}
         ></input>
       </div>
-      <div>
-        <label>Repeat Password</label>
+      <div className='login-div'>
+        <label>Confirm Password</label>
         <input
           type='password'
           name='repeat_password'
@@ -86,8 +95,9 @@ const SignUpForm = () => {
           required={true}
         ></input>
       </div>
-      <button type='submit'>Sign Up</button>
+      <button className='signup' type='submit'>Sign Up</button>
     </form>
+    </div>
   );
 };
 

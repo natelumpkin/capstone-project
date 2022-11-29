@@ -82,6 +82,7 @@ const LoginForm = () => {
             name='email'
             type='text'
             value={email}
+            maxLength={255}
             onChange={updateEmail}
           />
         </div>
@@ -96,6 +97,7 @@ const LoginForm = () => {
             name='password'
             type='password'
             value={password}
+            maxLength={255}
             onChange={updatePassword}
           />
         </div>
