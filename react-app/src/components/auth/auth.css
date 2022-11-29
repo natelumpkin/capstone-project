@@ -1,0 +1,16 @@
+.login-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login-form {
+  margin-top: 150px;
+  background-color: white;
+}
+
+.grey {
+  background-color: #f1f2f3;
+}
