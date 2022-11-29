@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { login } from '../../store/session';
 
 import './auth.css'
@@ -42,7 +42,7 @@ const LoginForm = () => {
   };
 
   if (user) {
-    return <Redirect to='/' />;
+    return <Redirect to='/questions' />;
   }
 
   const errorMap = (errorItem) => {
@@ -108,6 +108,9 @@ const LoginForm = () => {
         </div>
         <button className='signup' type='submit'>Log In</button>
       </form>
+      <div className='auth-otherlinks-container'>
+      <p>Don't have an account? <Link className='auth-otherlinks' to="/sign-up">Sign up</Link></p>
+    </div>
     </div>
   );
 };

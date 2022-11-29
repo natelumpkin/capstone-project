@@ -11,11 +11,16 @@
 
 #header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 45px;
   align-items: center;
-  padding-left: 50px;
-  padding-right: 50px;
-  max-width: 1024px;
+  padding-left: 4%;
+  padding-right: 4%;
   width: 100%;
+}
+
+#logo-container {
+  display: flex;
+  width: 18%;
+
 }

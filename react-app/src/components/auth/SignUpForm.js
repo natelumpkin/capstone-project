@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
@@ -76,12 +76,12 @@ const SignUpForm = () => {
   }
 
   if (user) {
-    return <Redirect to='/' />;
+    return <Redirect to='/questions' />;
   }
 
   return (
     <div className='login-container'>
-    <form id="login-form" onSubmit={onSignUp}>
+    <form id="login-form" className='signup-form' onSubmit={onSignUp}>
       <div id="login-div-top" className='login-div'>
         <label>Display Name</label>
         <input
@@ -144,6 +144,9 @@ const SignUpForm = () => {
         </div>
       <button className='signup' type='submit'>Sign Up</button>
     </form>
+    <div className='auth-otherlinks-container'>
+      <p>Already have an account? <Link className='auth-otherlinks' to="/login">Log in</Link></p>
+    </div>
     </div>
   );
 };
