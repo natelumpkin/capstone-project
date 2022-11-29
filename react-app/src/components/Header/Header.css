@@ -1,5 +1,5 @@
 #header-container {
-  border-bottom: 1px solid #212121;
+  border-bottom: 1px solid black;
   border-top: 3px solid #ad4e01;
   background-color: #f8f9f9;
   display: flex;
@@ -14,8 +14,13 @@
   justify-content: space-between;
   height: 45px;
   align-items: center;
-  padding-left: 50px;
-  padding-right: 50px;
-  max-width: 1024px;
+  padding-left: 4%;
+  padding-right: 4%;
   width: 100%;
+}
+
+#logo-container {
+  display: flex;
+  width: 18%;
+
 }

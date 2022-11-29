@@ -1,0 +1,25 @@
+#left-navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 19px;
+}
+
+.left-navlink {
+  width: 60%;
+  color: #373a3d;
+  font-size: 14px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
+
+.leftnav-active {
+  background-color: #f1f2f3;
+  border-right: 3px solid #ad4e01;
+  font-weight: bold;
+  color: black;
+}

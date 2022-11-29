@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
+  const [usernameErrors, setusernameErrors] = useState([])
+  const [emailErrors, setEmailErrors] = useState([])
+  const [passwordErrors, setPasswordErrors] = useState([])
+  const [confirmPasswordErrors, setConfirmPasswordErrors] = useState([])
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,13 +16,28 @@ const SignUpForm = () => {
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const body = window.document.body;
+    body.classList.add('grey')
+    return () => {
+      body.classList.remove('grey')
+    }
+  },[])
+
   const onSignUp = async (e) => {
     e.preventDefault();
     if (password === repeatPassword) {
+      setConfirmPasswordErrors([])
       const data = await dispatch(signUp(username, email, password));
       if (data) {
-        setErrors(data)
+        console.log(data)
+        data.forEach(error => errorMap(error))
       }
+    } else {
+      setEmailErrors([])
+      setPasswordErrors([])
+      setusernameErrors([])
+      setConfirmPasswordErrors(['Passwords do not match'])
     }
   };
 
@@ -38,56 +57,97 @@ const SignUpForm = () => {
     setRepeatPassword(e.target.value);
   };
 
+  const errorMap = (errorItem) => {
+
+    let errorArr = errorItem.split(":")
+
+    if (errorArr[0] === 'username ') {
+      setusernameErrors([errorArr[1]])
+    }
+    if (errorArr[0] === "email ") {
+
+      setEmailErrors([errorArr[1]])
+    }
+    if (errorArr[0] === "password ") {
+
+      setPasswordErrors([errorArr[1]])
+    }
+
+  }
+
   if (user) {
-    return <Redirect to='/' />;
+    return <Redirect to='/questions' />;
   }
 
   return (
-    <form onSubmit={onSignUp}>
-      <div>
-        {errors.map((error, ind) => (
-          <div key={ind}>{error}</div>
-        ))}
-      </div>
-      <div>
-        <label>User Name</label>
+    <div className='login-container'>
+    <form id="login-form" className='signup-form' onSubmit={onSignUp}>
+      <div id="login-div-top" className='login-div'>
+        <label>Display Name</label>
         <input
           type='text'
           name='username'
           onChange={updateUsername}
           value={username}
+          maxLength={40}
         ></input>
       </div>
-      <div>
+      <div className='list-errors-parent auth-errors'>
+          {usernameErrors.map((error, ind) => (
+            <div className='list-errors' key={ind}>{error}</div>
+          ))}
+        </div>
+      <div className='login-div'>
         <label>Email</label>
         <input
           type='text'
           name='email'
           onChange={updateEmail}
           value={email}
+          maxLength={255}
         ></input>
       </div>
-      <div>
+      <div className='list-errors-parent auth-errors'>
+          {emailErrors.map((error, ind) => (
+            <div className='list-errors' key={ind}>{error}</div>
+          ))}
+        </div>
+      <div className='login-div'>
         <label>Password</label>
         <input
           type='password'
           name='password'
           onChange={updatePassword}
           value={password}
+          maxLength={60}
         ></input>
       </div>
-      <div>
-        <label>Repeat Password</label>
+      <div className='list-errors-parent auth-errors'>
+          {passwordErrors.map((error, ind) => (
+            <div className='list-errors' key={ind}>{error}</div>
+          ))}
+        </div>
+      <div className='login-div'>
+        <label>Confirm Password</label>
         <input
           type='password'
           name='repeat_password'
           onChange={updateRepeatPassword}
           value={repeatPassword}
-          required={true}
+          maxLength={60}
         ></input>
       </div>
-      <button type='submit'>Sign Up</button>
+      <div className='list-errors-parent auth-errors'>
+          {confirmPasswordErrors.map((error, ind) => (
+            <div className='list-errors' key={ind}>{error}</div>
+          ))}
+        </div>
+      <button className='signup' type='submit'>Sign Up</button>
     </form>
+    <div className='auth-otherlinks-container'>
+      <p>Already have an account? <Link className='auth-otherlinks' to="/login">Log in</Link></p>
+    </div>
+    </div>
   );
 };
 

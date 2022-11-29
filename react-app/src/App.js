@@ -11,7 +11,8 @@ import LandingPage from './components/LandingPage';
 import InterfaceContainer from './components/InterfaceContainer';
 import CreateQuestion from './components/CreateQuestion';
 import EditQuestion from './components/EditQuestion';
-import EditAnswer from './components/EditAnswer';
+import Footer from './components/Footer';
+
 import { authenticate } from './store/session';
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           <h1>Hey this page wasn't found, sorry!</h1>
         </Route>
       </Switch>
+      <Footer/>
     </BrowserRouter>
   );
 }
