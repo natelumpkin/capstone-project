@@ -1,0 +1,29 @@
+.signature-container{
+  position: fixed;
+  bottom:0px;
+  display: flex;
+  flex-direction: row nowrap;
+  justify-content: flex-start;
+  color: #babfc3;
+  background-color: #242629;
+  z-index: 10;
+  margin: 0;
+  max-height: 22px;
+  width: 100%;
+  }
+
+  .signature-content {
+    margin-left: 50px;
+  }
+
+  .signature-content a{
+    color: #babfc3;
+    font-size: 14px;
+  }
+
+  .signature-content span{
+    display: flex;
+    width: 150px;
+    justify-content: space-around;
+    font-size: 14px;
+  }

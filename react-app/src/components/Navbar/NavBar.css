@@ -1,3 +1,16 @@
+.logo {
+  height: 30px;
+  width: 30px;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
 #header-links-holder {
   width: 100%;
   display: flex;

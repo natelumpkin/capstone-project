@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import LogoutButton from '../auth/LogoutButton'
 import * as sessionActions from '../../store/session'
+import logo from '../../images/logo.png'
 
 import './NavBar.css'
 
@@ -19,8 +20,9 @@ const NavBar = () => {
 
   return (
     <nav id="header-links-holder">
-      <NavLink to='/' exact={true}>
-        <button className='session-button'>Home</button>
+      <NavLink className={'logo-link'} to='/' exact={true}>
+        <img className='logo' src={logo}/>
+        crud <strong>overgrowth</strong>
       </NavLink>
 
         {!currentUser && (
