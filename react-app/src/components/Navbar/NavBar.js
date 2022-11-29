@@ -22,9 +22,9 @@ const NavBar = () => {
       <NavLink to='/' exact={true}>
         <button className='session-button'>Home</button>
       </NavLink>
-      <ul id="header-links">
+
         {!currentUser && (
-          <>
+          <ul id="header-links">
             <li>
               <NavLink to='/login' exact={true} activeClassName='active'>
                 <button className='login session-button'>Login</button>
@@ -38,14 +38,13 @@ const NavBar = () => {
             <li>
               <button onClick={signInDemoUser} className='demo session-button'>Demo</button>
             </li>
-          </>
+          </ul>
         )}
         {currentUser && (
-        <li>
+        <li id="logout-button">
           <LogoutButton />
         </li>
         )}
-      </ul>
     </nav>
   );
 }
