@@ -76,3 +76,7 @@
 .demo:hover {
   background-color: #003f75;
 }
+
+#logout-button {
+  margin-left: 75%;
+}
