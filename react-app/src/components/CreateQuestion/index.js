@@ -71,10 +71,6 @@ const CreateQuestion = () => {
     }
   }
 
-  console.log(editorState)
-  console.log(editorState.getCurrentContent())
-  console.log(convertToRaw(editorState.getCurrentContent()))
-
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   const bodyPlaceholder = ''
 

@@ -19,7 +19,7 @@ const AllQuestions = () => {
   const questionsArray = [];
   for (let questionId in allQuestions) {
     let question = allQuestions[questionId]
-    questionsArray.push(question)
+    questionsArray.unshift(question)
   }
 
 
