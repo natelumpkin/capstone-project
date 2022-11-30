@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
@@ -9,6 +9,7 @@ import './CreateQuestion.css'
 const CreateQuestion = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = useSelector(state => state.session.user)
   const [title, setTitle] = useState('');
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [titleErrors, setTitleErrors] = useState([]);
@@ -76,6 +77,12 @@ const CreateQuestion = () => {
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   const bodyPlaceholder = ''
+
+  if (!user) {
+    return (
+      <Redirect to="/questions"/>
+    )
+  }
 
   return (
     <div id="create-question-container">

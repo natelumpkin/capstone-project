@@ -7,8 +7,8 @@ import './AnswerCard.css'
 
 const AnswerCard = ({answer, currentUser}) => {
 
-  console.log('answer in AnswerCard: ', answer)
-  console.log('currentUser in AnswerCard: ', currentUser)
+  // console.log('answer in AnswerCard: ', answer)
+  // console.log('currentUser in AnswerCard: ', currentUser)
 
   let answerContent
   let stateToDisplay

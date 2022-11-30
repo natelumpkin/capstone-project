@@ -32,7 +32,7 @@ const AllQuestions = () => {
             <h1>All Questions</h1>
           </div>
           <div>
-              <Link to="questions/new">
+              <Link to={currentUser ? "questions/new" : "/login"}>
                 <button className="ask-question-button pointer">Ask Question</button>
               </Link>
           </div>

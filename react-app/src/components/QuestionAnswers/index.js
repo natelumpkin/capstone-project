@@ -40,9 +40,11 @@ const QuestionAnswers = ({question, currentUser}) => {
           <AnswerCard answer={answer} currentUser={currentUser}/>
         ))}
       </div>
+      {currentUser && (
       <div>
           <CreateAnswer questionId={question.id}/>
       </div>
+      )}
     </div>
   )
 }

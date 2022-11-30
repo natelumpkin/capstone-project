@@ -62,7 +62,7 @@ const SingleQuestion = () => {
               {/* </Link> */}
           </div>
           <div id="single-question-ask-button">
-            <Link to='/questions/new'><button>Ask Question</button></Link>
+            <Link to={currentUser ? "/questions/new" : "/login"}><button>Ask Question</button></Link>
           </div>
         </div>
         <div id="single-question-header-bottom">
