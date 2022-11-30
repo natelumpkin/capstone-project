@@ -9,9 +9,8 @@ class Tag(db.Model):
     __table_args__ = {'schema': SCHEMA}
 
   id = db.Column(db.Integer, primary_key=True)
-  question_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("questions.id")))
-  tag = db.Column(db.String(30))
-  description = db.Column(db.String(100))
+  tag = db.Column(db.String(30), nullable=False)
+  description = db.Column(db.String())
 
   questions = db.relationship('Question', secondary=question_tags, back_populates='tags')
 
