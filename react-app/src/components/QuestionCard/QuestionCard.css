@@ -2,6 +2,8 @@
   border-bottom: 1px solid black;
   display: flex;
   height: fit-content;
+  max-width: 100%;
+  word-break: break-all;
 }
 
 .metadata-container {
@@ -23,6 +25,7 @@
 
 .info-container {
   padding-top: 16px;
+  max-width: 100%;
 }
 
 .info-container a {
@@ -54,6 +57,7 @@
 .user-data {
   display: flex;
   font-size: 13px;
+  justify-content: flex-end;
 }
 
 .user-data a {
@@ -62,4 +66,14 @@
 
 .user-data div {
   padding-right: 5px;
+}
+
+.questioncard-author-name {
+  word-break: break-all;
+  max-width: 40%;
+}
+
+.questioncard-asked-time {
+  display: flex;
+  justify-content: flex-end;
 }

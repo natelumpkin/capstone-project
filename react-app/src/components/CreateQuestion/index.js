@@ -18,7 +18,7 @@ const CreateQuestion = () => {
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (title.length > 15 && title.length < 150
+    if (title.length >= 15 && title.length <= 150
       && bodyLength > 30 && bodyLength < 10000) {
         setDisableButton(false)
       } else {

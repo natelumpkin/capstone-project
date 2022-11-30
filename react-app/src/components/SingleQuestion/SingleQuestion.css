@@ -13,6 +13,11 @@
   font-size: 18px;
 } */
 
+#single-question-title {
+  max-width: 100%;
+  word-break: break-all;
+}
+
 #single-question-title h2 {
   margin-bottom: 10px;
   color: black;
