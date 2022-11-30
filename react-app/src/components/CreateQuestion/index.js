@@ -100,7 +100,7 @@ const CreateQuestion = () => {
           <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+            <input maxLength={150} id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
               <ul className="list-errors-parent">
                 {titleErrors.map(error => (
                   <li className="list-errors" key={error}>{error}</li>
