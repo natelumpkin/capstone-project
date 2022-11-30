@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
@@ -37,8 +37,8 @@ const CreateQuestion = () => {
 
   const handleTitleErrors = () => {
     let errors = [];
-    if (title.length < 15) errors.push('Title must be more than 15 characters')
-    if (title.length > 150) errors.push('Title must be less than 150 characters')
+    if (title.length < 15) errors.push('Title must be at least 15 characters')
+    if (title.length > 150) errors.push('Title must be no more than 150 characters')
     setTitleErrors(errors)
   }
 
