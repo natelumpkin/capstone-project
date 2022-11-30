@@ -20,7 +20,7 @@ const DeleteAnswerModal = ({answer}) => {
     }
   })
 
-  console.log('ShowModal: ', showModal)
+  // console.log('ShowModal: ', showModal)
 
   return (
     <>
