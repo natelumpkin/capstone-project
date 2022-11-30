@@ -22,8 +22,6 @@ const NavBar = () => {
 
   return (
     <nav id="header-links-holder">
-
-
         {!currentUser && (
           <ul id="header-links">
             <li>

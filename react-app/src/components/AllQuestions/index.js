@@ -22,9 +22,11 @@ const AllQuestions = () => {
     questionsArray.unshift(question)
   }
 
+  const numQuestions = questionsArray.length;
+
 
   return (
-    <div id="content-column">
+    <div id="content-column-two">
     <div id="all-questions-container">
       <div id="all-questions-header">
         <div id="all-questions-header-upper">
@@ -37,7 +39,9 @@ const AllQuestions = () => {
               </Link>
           </div>
         </div>
-        <div id="all-questions-header-lower"></div>
+        <div id="all-questions-header-lower">
+          <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
+        </div>
       </div>
       {questionsArray.map(question => (
         <QuestionCard key={question.id} question={question} currentUser={currentUser}/>

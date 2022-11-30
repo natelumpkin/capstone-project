@@ -4,6 +4,7 @@ import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
+import convertFromEditorToJson from "../../utils/convertFromEditorToJSON";
 import './CreateQuestion.css'
 
 const CreateQuestion = () => {
@@ -18,7 +19,7 @@ const CreateQuestion = () => {
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (title.length > 15 && title.length < 150
+    if (title.length >= 15 && title.length <= 150
       && bodyLength > 30 && bodyLength < 10000) {
         setDisableButton(false)
       } else {
@@ -32,8 +33,7 @@ const CreateQuestion = () => {
     }
   }, [title, editorState])
 
-
-  // console.log(editorState.getCurrentContent().getPlainText().length)
+  // console.log(convertFromEditorToJson(editorState))
 
   const handleTitleErrors = () => {
     let errors = [];
