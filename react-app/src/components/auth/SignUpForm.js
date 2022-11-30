@@ -30,14 +30,23 @@ const SignUpForm = () => {
       setConfirmPasswordErrors([])
       const data = await dispatch(signUp(username, email, password));
       if (data) {
-        console.log(data)
+        if (!repeatPassword) {
+          setConfirmPasswordErrors(['This field is required.'])
+        }
         data.forEach(error => errorMap(error))
       }
     } else {
       setEmailErrors([])
       setPasswordErrors([])
+      setConfirmPasswordErrors([])
       setusernameErrors([])
-      setConfirmPasswordErrors(['Passwords do not match'])
+      if (!email) setEmailErrors(['This field is required.'])
+      if (!password) setPasswordErrors(['This field is required.'])
+      if (!username) setusernameErrors(['This field is required'])
+      let errors = [];
+      errors.push('Passwords do not match')
+      if (!repeatPassword) errors.push('This field is required')
+      setConfirmPasswordErrors(errors)
     }
   };
 

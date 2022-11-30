@@ -3,6 +3,7 @@ import AllQuestions from "../AllQuestions";
 import SingleQuestion from "../SingleQuestion";
 import EditAnswer from "../EditAnswer";
 import LeftNavBar from "../LeftNavbar";
+import AboutPage from "../AboutPage";
 
 import './InterfaceContainer.css'
 
@@ -21,6 +22,9 @@ const InterfaceContainer = () => {
         </Route>
         <Route path='/answers/:answerId/edit'>
           <EditAnswer/>
+        </Route>
+        <Route path='/about'>
+          <AboutPage/>
         </Route>
       </div>
     </div>

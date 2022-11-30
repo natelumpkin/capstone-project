@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -12,38 +13,23 @@ import QuestionAnswers from "../QuestionAnswers";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 
-import './SingleQuestion.css'
+import './AboutPage.css'
 
-const SingleQuestion = () => {
-  const dispatch = useDispatch()
-  const {questionId} = useParams();
+const AboutPage = () => {
   const [loaded, setLoaded] = useState(false)
   const [notFound, setNotFound] = useState(false)
   const currentUser = useSelector(state => state.session.user)
-  const currentQuestion = useSelector(state => state.questions.singleQuestion)
+  const currentQuestion = {
+    title: "Welcome to Crud Overgrowth!",
+    body: JSON.stringify({"blocks":[{"key":"9rnaf","text":"Thanks for checking out Crud Overgrowth!","type":"header-one","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"4nitd","text":"This is a simple clone of a well known question asking site, designed to show off my skills as a developer. Feel free to browse through the questions using the links on the left, or use the demo user at the top to log in and try asking and answering questions. This site has a few features in progress, so check back soon and there may be more to discover!","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}),
+    User: {
+      id: 'A',
+      username: 'Nate'
+    },
+    createdAt: "2022-11-29 02:51:30.000000",
+    updatedAt: "2022-11-29 02:51:30.000000"
+  }
 
-  useEffect(() => {
-    dispatch(questionActions.fetchSingleQuestion(questionId))
-      .then(() => setLoaded(true))
-      .catch(() => {
-        setLoaded(false)
-        setNotFound(true)
-      });
-  },[dispatch])
-
-  // console.log(notFound)
-  // console.log(loaded)
-
-
-
-  if ((!loaded) && (notFound)) {
-    return (
-      <h1>404 Not Found</h1>
-      )
-    }
-  if (!loaded) {
-    return null
-}
   let bodyContent
   let stateToDisplay
   // console.log(JSON.parse(currentQuestion.body))
@@ -100,9 +86,6 @@ const SingleQuestion = () => {
             </div>
           </div>
         </div>
-        <div id="answers-container">
-          <QuestionAnswers question={currentQuestion} currentUser={currentUser}/>
-        </div>
       </div>
     </div>
   )
@@ -113,4 +96,4 @@ const SingleQuestion = () => {
           }
 }
 
-export default SingleQuestion;
+export default AboutPage;

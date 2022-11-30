@@ -61,6 +61,9 @@ function App() {
         <Route path='/answers'>
           <InterfaceContainer/>
         </Route>
+        <Route path='/about'>
+          <InterfaceContainer/>
+        </Route>
         <Route>
           <h1>Hey this page wasn't found, sorry!</h1>
         </Route>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
@@ -9,6 +9,7 @@ import './CreateQuestion.css'
 const CreateQuestion = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = useSelector(state => state.session.user)
   const [title, setTitle] = useState('');
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [titleErrors, setTitleErrors] = useState([]);
@@ -70,12 +71,14 @@ const CreateQuestion = () => {
     }
   }
 
-  console.log(editorState)
-  console.log(editorState.getCurrentContent())
-  console.log(convertToRaw(editorState.getCurrentContent()))
-
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   const bodyPlaceholder = ''
+
+  if (!user) {
+    return (
+      <Redirect to="/questions"/>
+    )
+  }
 
   return (
     <div id="create-question-container">
@@ -97,7 +100,7 @@ const CreateQuestion = () => {
           <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+            <input maxLength={150} id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
               <ul className="list-errors-parent">
                 {titleErrors.map(error => (
                   <li className="list-errors" key={error}>{error}</li>
