@@ -4,6 +4,7 @@ import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
+import convertFromEditorToJson from "../../utils/convertFromEditorToJSON";
 import './CreateQuestion.css'
 
 const CreateQuestion = () => {
@@ -32,8 +33,7 @@ const CreateQuestion = () => {
     }
   }, [title, editorState])
 
-
-  // console.log(editorState.getCurrentContent().getPlainText().length)
+  console.log(convertFromEditorToJson(editorState))
 
   const handleTitleErrors = () => {
     let errors = [];
