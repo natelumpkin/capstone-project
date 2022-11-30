@@ -12,7 +12,7 @@ def seed_questions():
 
   question1 = Question(user_id=user1.id, title="What's the best way to integrate a z function in a mongodb backend database?", body=body1)
   question2 = Question(user_id=user2.id, title="What do I do if my computer won't run my scripts?", body=body2)
-  question3 = Question(user_id=user3.id, title="I'm making $175,000 a year but I think I'm work 300k. What gives?", body=body3)
+  question3 = Question(user_id=user3.id, title="I'm making $175,000 a year but I think I'm worth 300k. What gives?", body=body3)
 
   db.session.add(question1)
   db.session.add(question2)
