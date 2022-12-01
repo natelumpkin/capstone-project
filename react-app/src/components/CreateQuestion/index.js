@@ -16,6 +16,8 @@ const CreateQuestion = () => {
   const [titleErrors, setTitleErrors] = useState([]);
   const [bodyErrors, setBodyErrors] = useState([]);
   const [disableButton, setDisableButton] = useState(true);
+  const [showTitleTips, setShowTitleTips] = useState(false)
+  const [showBodyTips, setShowBodyTips] = useState(false)
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
@@ -74,6 +76,9 @@ const CreateQuestion = () => {
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   const bodyPlaceholder = ''
 
+  // console.log('title tips: ', showTitleTips)
+  // console.log('body tips: ', showBodyTips)
+
   if (!user) {
     return (
       <Redirect to="/questions"/>
@@ -96,18 +101,39 @@ const CreateQuestion = () => {
             <li>Review your question and post it to the site</li>
             </ul>
         </div>
-        <form onSubmit={handleSubmit}>
+        <div id="form-and-tips-container">
+        <form id="create-question-form" onSubmit={handleSubmit}>
           <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input maxLength={150} id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+            <input
+              maxLength={150}
+              id="title-input"
+              value={title}
+              placeholder={titlePlaceholder}
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={() => {
+                handleTitleErrors()
+                setShowTitleTips(false)
+              }}
+              onFocus={() => setShowTitleTips(true)}
+              >
+            </input>
               <ul className="list-errors-parent">
                 {titleErrors.map(error => (
                   <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
           </div>
-          <div className="form-container" onBlur={handleBodyErrors}>
+          <div
+            className="form-container"
+            onClick={() => setShowBodyTips(true)}
+            onBlur={() => {
+              handleBodyErrors()
+              setShowBodyTips(false)
+            }}
+            >
+
             <label>Body</label>
             <p>The body of your question contains your problem details and results. Minimum 30 characters.</p>
             <FormEditor placeHolder={''} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
@@ -122,8 +148,40 @@ const CreateQuestion = () => {
             <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Discard Draft</button>
           </div>
         </form>
+        <div id="tips-container">
+        {showTitleTips && (
+          <div id="answer-tips-popup" className="question-tips title-tips">
+            <div className="question-tips-header">
+              <h4>Writing a good title</h4>
+            </div>
+            <div className="question-tips-content">
+              <div className="question-tips-pencil"><i class="fa-solid fa-pencil"></i></div>
+              <div className="question-tips-list">
+                <p>Your title should summarize the problem</p>
+                <p>You might find that you have a better idea of your title after writing out the rest of the question.</p>
+              </div>
+            </div>
+          </div>
+        )}
+        {showBodyTips && (
+          <div id="answer-tips-popup" className="question-tips">
+            <div className="question-tips-header">
+              <h4>Writing a good body</h4>
+            </div>
+            <div className="question-tips-content">
+              <div className="question-tips-pencil"><i class="fa-solid fa-pencil"></i></div>
+              <div className="question-tips-list">
+                <p>Explain how you encountered the problem you’re trying to solve, and any difficulties that have prevented you from solving it yourself.</p>
+                <p>Show what you’ve tried, tell us what happened, and why it didn’t meet your needs.</p>
+                <p>Not all questions benefit from including code, but if your problem is better understood with code you’ve written, you should include a minimal, reproducible example.</p>
+                <p>Please make sure to post code and errors as text directly to the question, and format them appropriately.</p>
+              </div>
+            </div>
+          </div>
+        )}
+        </div>
+        </div>
       </div>
-      <div id="create-question-directions-container"></div>
     </div>
   )
 }
