@@ -33,7 +33,6 @@ class Tag(db.Model):
   def to_dict(self):
     return {
       "id": self.id,
-      "question_id": self.question_id,
       "tag": self.tag,
       "description": self.description
     }

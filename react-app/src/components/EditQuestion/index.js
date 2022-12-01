@@ -36,16 +36,16 @@ const EditQuestion = () => {
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (title.length > 15 && title.length < 150
-      && bodyLength > 30 && bodyLength < 10000) {
+    if (title.length >= 15 && title.length <= 150
+      && bodyLength >= 30 && bodyLength <= 10000) {
         setDisableButton(false)
       } else {
         setDisableButton(true)
       }
-    if (title.length > 15 && title.length < 150) {
+    if (title.length >= 15 && title.length <= 150) {
       handleTitleErrors()
     }
-    if (bodyLength > 30 && bodyLength < 10000) {
+    if (bodyLength >= 30 && bodyLength <= 10000) {
       handleBodyErrors()
     }
   }, [title, editorState])
@@ -67,16 +67,16 @@ const EditQuestion = () => {
 
   const handleTitleErrors = () => {
     let errors = [];
-    if (title.length < 15) errors.push('Title must be more than 15 characters')
-    if (title.length > 150) errors.push('Title must be less than 150 characters')
+    if (title.length < 15) errors.push('Title must be at least 15 characters')
+    if (title.length > 150) errors.push('Title must be no more than 150 characters')
     setTitleErrors(errors)
   }
 
   const handleBodyErrors = () => {
     let errors = [];
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (bodyLength < 30) errors.push('Body must be more than 30 characters')
-    if (bodyLength > 10000) errors.push('Body must be less than 10,000 characters')
+    if (bodyLength < 30) errors.push('Body must be at least 30 characters')
+    if (bodyLength > 10000) errors.push('Body must be no more than 10,000 characters')
     setBodyErrors(errors)
   }
 
