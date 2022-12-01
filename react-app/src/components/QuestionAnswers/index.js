@@ -29,8 +29,8 @@ const QuestionAnswers = ({question, currentUser}) => {
     if (answers[answerId]) userList.push(answers[answerId].userId)
   }
 
-  console.log(userList)
-  console.log(userList.includes(currentUser?.id))
+  // console.log(userList)
+  // console.log(userList.includes(currentUser?.id))
 
   useEffect(() => {
     if (userList.includes(currentUser?.id)) {
@@ -49,11 +49,11 @@ const QuestionAnswers = ({question, currentUser}) => {
     if (alreadyAnswered && !wantsToAddAnotherAnswer) setDisplayForm(false)
   }, [alreadyAnswered, wantsToAddAnotherAnswer])
 
-  console.log(displayForm)
+  // console.log(displayForm)
 
-  const addAnotherAnswer = (e) => {
-    setWantsToAddAnotherAnswer(true)
-  }
+  // const addAnotherAnswer = (e) => {
+  //   setWantsToAddAnotherAnswer(true)
+  // }
 
   if (!loaded) {
     return null
