@@ -32,12 +32,14 @@
   background-color: #1a73e7;
   color: white;
   border: none;
+  border-radius: 3px;
 }
 
 #cancel-delete {
   background-color: white;
   color: #1a73e7;
   border: 1px solid #1a73e7;
+  border-radius: 3px;
 }
 
 #cancel-delete:hover {
