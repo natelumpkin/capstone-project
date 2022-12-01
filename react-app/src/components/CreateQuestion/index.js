@@ -127,7 +127,7 @@ const CreateQuestion = () => {
           </div>
           <div
             className="form-container"
-            onClick={() => setShowBodyTips(true)}
+            // onClick={() => setShowBodyTips(true)}
             onBlur={() => {
               handleBodyErrors()
               setShowBodyTips(false)
@@ -136,7 +136,12 @@ const CreateQuestion = () => {
 
             <label>Body</label>
             <p>The body of your question contains your problem details and results. Minimum 30 characters.</p>
-            <FormEditor placeHolder={''} editorState={editorState} setEditorState={setEditorState} onChange={(e) => setEditorState(e.target.value)} />
+            <FormEditor
+              placeHolder={''}
+              editorState={editorState}
+              setEditorState={setEditorState}
+              setShowBodyTips={setShowBodyTips}
+              onChange={(e) => setEditorState(e.target.value)} />
               <ul className="list-errors-parent">
                 {bodyErrors.map(error => (
                   <li className="list-errors" key={error}>{error}</li>
