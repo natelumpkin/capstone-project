@@ -8,7 +8,12 @@ class FormEditor extends React.Component {
     super(props);
     // this.state = {editorState: EditorState.createEmpty()};
 
-    this.focus = () => this.refs.editor.focus();
+    this.focus = () => {
+      this.refs.editor.focus();
+      if (props.setShowBodyTips) {
+        props.setShowBodyTips(true);
+      }
+    }
     this.onChange = (editorState) => props.setEditorState(editorState);
 
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
