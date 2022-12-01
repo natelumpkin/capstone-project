@@ -5,6 +5,7 @@ import * as answerActions from '../../store/answer'
 
 import AnswerCard from "../AnswerCard";
 import CreateAnswer from "../CreateAnswer";
+import CreateAnotherAnswerModal from "../CreateAnotherAnswerModal";
 import './QuestionAnswers.css'
 
 const QuestionAnswers = ({question, currentUser}) => {
@@ -80,7 +81,7 @@ const QuestionAnswers = ({question, currentUser}) => {
       {
         currentUser && !displayForm && (
           <div id="create-question-button-container" className="add-another-answer-div">
-            <button id="post-question-button" className="ask-question-button" onClick={addAnotherAnswer}>Add Another Answer</button>
+            <CreateAnotherAnswerModal setWantsToAddAnotherAnswer={setWantsToAddAnotherAnswer}/>
           </div>
         )
       }
