@@ -22,7 +22,7 @@ const CreateAnswer = ({questionId}) => {
 
   useEffect(() => {
     let answerLength = editorState.getCurrentContent().getPlainText().length;
-    if (answerLength > 30 && answerLength < 10000) {
+    if (answerLength >= 30 && answerLength <= 10000) {
       setDisableButton(false);
       handleAnswerErrors();
     } else {
@@ -38,7 +38,7 @@ const CreateAnswer = ({questionId}) => {
   const handleAnswerErrors = () => {
     let errors = [];
     let answerLength = editorState.getCurrentContent().getPlainText().length;
-    if (answerLength < 30) errors.push('Answer must be more than 30 characters')
+    if (answerLength < 30) errors.push('Answer must be at least 30 characters')
     if (answerLength > 10000) errors.push('Answer must be less than 10,000 characters')
     setAnswerErrors(errors)
   }

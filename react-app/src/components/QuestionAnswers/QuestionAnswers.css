@@ -12,3 +12,7 @@
   flex-direction: column;
   align-items: flex-end;
 }
+
+.add-another-answer-div {
+  margin: 40px;
+}
