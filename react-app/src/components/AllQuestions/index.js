@@ -9,6 +9,7 @@ const AllQuestions = () => {
 
   const dispatch = useDispatch()
   const allQuestions = useSelector(state => state.questions.allQuestions)
+  const numQuestions = useSelector(state => state.questions.numQuestions)
   const currentUser = useSelector(state => state.session.user)
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const AllQuestions = () => {
     questionsArray.unshift(question)
   }
 
-  const numQuestions = questionsArray.length;
+  // const numQuestions = questionsArray.length;
 
 
   return (

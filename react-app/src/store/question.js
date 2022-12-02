@@ -95,7 +95,8 @@ export const deleteQuestion = (questionId) => async dispatch => {
 
 const initialState = {
   allQuestions: {},
-  singleQuestion: {}
+  singleQuestion: {},
+  numQuestions: 0
 }
 
 const questionsReducer = (state = initialState, action) => {
@@ -113,6 +114,7 @@ const questionsReducer = (state = initialState, action) => {
       }
       const data = normalizeData(action.questions.Questions)
       newState.allQuestions = data;
+      newState.numQuestions = action.questions.numQuestions;
       return newState
     }
     case (ONE_QUESTION): {
@@ -120,7 +122,8 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions
       }
       const data = action.question;
       newState.singleQuestion = data;
@@ -131,7 +134,8 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions
       }
       const data = action.updatedQuestion
       newState.singleQuestion = data
@@ -144,7 +148,8 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions - 1
       }
       delete newState.allQuestions[action.questionId]
       return newState
