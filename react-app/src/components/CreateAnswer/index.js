@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { EditorState, convertToRaw, Editor } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as answerActions from '../../store/answer'
+import * as questionActions from '../../store/question'
 import './CreateAnswer.css'
 
 
@@ -57,7 +58,8 @@ const CreateAnswer = ({questionId}) => {
       }
 
       dispatch(answerActions.createNewAnswer(questionId, newAnswer))
-        .then(dispatch(answerActions.getAnswersToQuestion(questionId)))
+        .then(() => dispatch(answerActions.getAnswersToQuestion(questionId)))
+        .then(() => dispatch(questionActions.fetchSingleQuestion(questionId)))
       setEditorState(EditorState.createEmpty())
     }
 

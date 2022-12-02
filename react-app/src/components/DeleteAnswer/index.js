@@ -11,7 +11,7 @@ const DeleteAnswer = ({answer, setShowDelete}) => {
   const alert = (e) => {
     // console.log(e)
     dispatch(answerActions.deleteAnswer(answer.id))
-      // .then(dispatch(questionActions.fetchSingleQuestion(answer.questionId)))
+       .then(() => dispatch(questionActions.fetchSingleQuestion(answer.questionId)))
     setShowDelete(false)
   }
 
