@@ -2,6 +2,7 @@
 
 import normalizeData from "../utils/normalizeData"
 
+const ONE_ANSWER = 'answers/one'
 const LOAD_ANSWERS = 'answers/load'
 const ADD_ANSWER = 'answers/create'
 const EDIT_ANSWER = 'answers/edit'
@@ -9,6 +10,11 @@ const DELETE_ANSWER = 'answers/delete'
 const CLEAR_ANSWERS = 'answers/clear'
 
 // Actions
+
+const addOneAnswer = (answer) => ({
+  type: ONE_ANSWER,
+  answer
+})
 
 const loadAnswers = (answers) => ({
   type: LOAD_ANSWERS,
@@ -35,6 +41,19 @@ export const clearAnswers = () => ({
 })
 
 // Thunks
+
+export const getOneAnswer = (answerId) => async dispatch => {
+  // console.log(answerId)
+  const response = await fetch(`/api/answers/${answerId}`)
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addOneAnswer(data))
+  }
+  else {
+    const errors = await response.json()
+    return errors;
+  }
+}
 
 export const getAnswersToQuestion = (questionId) => async dispatch => {
   const response = await fetch(`/api/questions/${questionId}/answers`)
@@ -86,6 +105,11 @@ const initialState = {}
 
 const answersReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ONE_ANSWER: {
+      const newState = { ...state}
+      newState[action.answer.id] = action.answer
+      return newState
+    }
     case LOAD_ANSWERS: {
       const data = normalizeData(action.answers.Answers)
       // data.numAnswers = action.numAnswers;

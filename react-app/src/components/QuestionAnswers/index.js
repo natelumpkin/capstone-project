@@ -21,9 +21,9 @@ const QuestionAnswers = ({question, currentUser}) => {
     // console.log(loaded)
     dispatch(answerActions.getAnswersToQuestion(question.id))
       .then(setLoaded(true))
-    return () => {
-      dispatch(answerActions.clearAnswers())
-    }
+    // return () => {
+    //   dispatch(answerActions.clearAnswers())
+    // }
   },[dispatch])
 
   const userList = [];

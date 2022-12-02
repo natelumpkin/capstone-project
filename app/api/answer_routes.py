@@ -8,6 +8,17 @@ from datetime import datetime
 
 answer_routes = Blueprint("answers", __name__)
 
+## Get a single answer
+
+@answer_routes.route('/<int:id>')
+def get_answer(id):
+  try:
+    answer = Answer.query.get_or_404(id)
+  except:
+    return {"message": "Answer couldn't be found"}, 404
+
+  return answer.to_dict()
+
 ## Edit an Answer
 @answer_routes.route('/<int:id>', methods=['PUT'])
 def edit_answer(id):
