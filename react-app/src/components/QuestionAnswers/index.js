@@ -17,13 +17,13 @@ const QuestionAnswers = ({question, currentUser}) => {
   const [displayForm, setDisplayForm] = useState(true)
   const answers = useSelector(state => state.answers)
 
-  useEffect(() => {
+  useEffect(async () => {
     // console.log(loaded)
-    dispatch(answerActions.getAnswersToQuestion(question.id))
-      .then(setLoaded(true))
-    // return () => {
-    //   dispatch(answerActions.clearAnswers())
-    // }
+    await dispatch(answerActions.getAnswersToQuestion(question.id))
+    setLoaded(true)
+    return () => {
+      dispatch(answerActions.clearAnswers())
+    }
   },[dispatch])
 
   const userList = [];
