@@ -51,7 +51,7 @@ export const fetchAllQuestions = () => async dispatch => {
 }
 
 export const fetchSingleQuestion = (questionId) => async dispatch => {
-  console.log(questionId)
+  // console.log(questionId)
   const response = await fetch(`/api/questions/${questionId}`)
   const data = await response.json()
   if (response.ok) {
@@ -106,7 +106,7 @@ export const deleteQuestion = (questionId) => async dispatch => {
 const initialState = {
   allQuestions: {},
   singleQuestion: {},
-  numQuestions: 0
+  numQuestions: null
 }
 
 const questionsReducer = (state = initialState, action) => {

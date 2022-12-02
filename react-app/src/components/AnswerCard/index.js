@@ -17,7 +17,7 @@ const AnswerCard = ({answer, currentUser}) => {
 
   return (
     <>
-    <div class="answer-card-holder">
+    <div className="answer-card-holder">
       <div>
       <Editor
         editorState={stateToDisplay}

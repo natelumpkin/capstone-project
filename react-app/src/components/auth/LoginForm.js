@@ -6,7 +6,7 @@ import { login } from '../../store/session';
 import './auth.css'
 
 const LoginForm = () => {
-  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState([]);
   const [emailErrors, setEmailErrors] = useState([])
   const [passwordErrors, setPasswordErrors] = useState([])
   const [email, setEmail] = useState('');

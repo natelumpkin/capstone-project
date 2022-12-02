@@ -1,4 +1,4 @@
-import { EditorState, convertToRaw } from "draft-js";
+import { convertToRaw } from "draft-js";
 
 const convertFromEditorToJson = (editorState) => {
   const content = editorState.getCurrentContent();

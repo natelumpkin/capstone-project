@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as answerActions from '../../store/answer'
@@ -18,13 +18,16 @@ const QuestionAnswers = ({question, currentUser}) => {
   const answers = useSelector(state => state.answers)
 
   useEffect(() => {
+    return () => {
+      dispatch(answerActions.clearAnswers())
+    }
+  },[])
+
+  useEffect(async () => {
     // console.log(loaded)
-    dispatch(answerActions.getAnswersToQuestion(question.id))
-      .then(setLoaded(true))
-    // return () => {
-    //   dispatch(answerActions.clearAnswers())
-    // }
-  },[dispatch])
+    await dispatch(answerActions.getAnswersToQuestion(question.id))
+    setLoaded(true)
+  },[dispatch, question.id])
 
   const userList = [];
   const answersArr = [];
@@ -42,7 +45,7 @@ const QuestionAnswers = ({question, currentUser}) => {
     } else {
       setAlreadyAnswered(false)
     }
-  }, [userList])
+  }, [userList, currentUser?.id])
 
   useEffect(() => {
     // if alreadyAnswered is False, then show the create form no matter what
@@ -76,7 +79,7 @@ const QuestionAnswers = ({question, currentUser}) => {
       </div>
       <div id="answers-card-container">
         {answersArr.map(answer => (
-          <AnswerCard answer={answer} currentUser={currentUser}/>
+          <AnswerCard key={answer.id} answer={answer} currentUser={currentUser}/>
         ))}
       </div>
 

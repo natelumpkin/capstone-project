@@ -29,7 +29,7 @@ const UserInfoCard = ({user, responseType, response}) => {
       <div className="user-info-holder">
         <div className="profile-img-holder">
           {user && user.profileImg && (
-            <img src={user.profileImg}/>
+            <img alt={'profile'} src={user.profileImg}/>
           )}
           {!user.profileImg && (
             <i className="fa-solid fa-user"></i>

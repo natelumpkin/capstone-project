@@ -1,23 +1,23 @@
 
-import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+// import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Editor, convertFromRaw, EditorState } from 'draft-js'
 
-import * as questionActions from '../../store/question'
+// import * as questionActions from '../../store/question'
 
 import UserControls from "../UserControls";
 import UserInfoCard from "../UserInfoCard";
-import QuestionAnswers from "../QuestionAnswers";
+// import QuestionAnswers from "../QuestionAnswers";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 
 import './AboutPage.css'
 
 const AboutPage = () => {
-  const [loaded, setLoaded] = useState(false)
-  const [notFound, setNotFound] = useState(false)
+  // const [loaded, setLoaded] = useState(false)
+  // const [notFound, setNotFound] = useState(false)
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = {
     title: "Welcome to Crud Overgrowth!",

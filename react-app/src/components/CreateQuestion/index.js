@@ -74,7 +74,7 @@ const CreateQuestion = () => {
   }
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
-  const bodyPlaceholder = ''
+  // const bodyPlaceholder = ''
 
   // console.log('title tips: ', showTitleTips)
   // console.log('body tips: ', showBodyTips)
@@ -160,7 +160,7 @@ const CreateQuestion = () => {
               <h4>Writing a good title</h4>
             </div>
             <div className="question-tips-content">
-              <div className="question-tips-pencil"><i class="fa-solid fa-pencil"></i></div>
+              <div className="question-tips-pencil"><i className="fa-solid fa-pencil"></i></div>
               <div className="question-tips-list">
                 <p>Your title should summarize the problem</p>
                 <p>You might find that you have a better idea of your title after writing out the rest of the question.</p>
@@ -174,7 +174,7 @@ const CreateQuestion = () => {
               <h4>Writing a good body</h4>
             </div>
             <div className="question-tips-content">
-              <div className="question-tips-pencil"><i class="fa-solid fa-pencil"></i></div>
+              <div className="question-tips-pencil"><i className="fa-solid fa-pencil"></i></div>
               <div className="question-tips-list">
                 <p>Explain how you encountered the problem you’re trying to solve, and any difficulties that have prevented you from solving it yourself.</p>
                 <p>Show what you’ve tried, tell us what happened, and why it didn’t meet your needs.</p>

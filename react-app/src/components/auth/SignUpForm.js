@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
-  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState([]);
   const [usernameErrors, setusernameErrors] = useState([])
   const [emailErrors, setEmailErrors] = useState([])
   const [passwordErrors, setPasswordErrors] = useState([])
