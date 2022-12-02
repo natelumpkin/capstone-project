@@ -21,13 +21,13 @@ const CreateQuestion = () => {
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (title.length >= 15 && title.length <= 150
+    if (title.length >= 15 && title.length <= 100
       && bodyLength >= 30 && bodyLength <= 10000) {
         setDisableButton(false)
       } else {
         setDisableButton(true)
       }
-    if (title.length >= 15 && title.length <= 150) {
+    if (title.length >= 15 && title.length <= 100) {
       handleTitleErrors()
     }
     if (bodyLength >= 30 && bodyLength <= 10000) {
@@ -40,7 +40,7 @@ const CreateQuestion = () => {
   const handleTitleErrors = () => {
     let errors = [];
     if (title.length < 15) errors.push('Title must be at least 15 characters')
-    if (title.length > 150) errors.push('Title cannot be more than 150 characters')
+    if (title.length > 100) errors.push('Title cannot be more than 100 characters')
     setTitleErrors(errors)
   }
 
@@ -107,7 +107,7 @@ const CreateQuestion = () => {
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
             <input
-              maxLength={150}
+              maxLength={100}
               id="title-input"
               value={title}
               placeholder={titlePlaceholder}
