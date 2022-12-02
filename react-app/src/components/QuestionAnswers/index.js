@@ -59,7 +59,7 @@ const QuestionAnswers = ({question, currentUser}) => {
   //   setWantsToAddAnotherAnswer(true)
   // }
 
-  console.log(loaded)
+  // console.log(loaded)
 
   if (!loaded) {
     return null
