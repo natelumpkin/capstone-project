@@ -30,9 +30,13 @@ const SignUpForm = () => {
       setConfirmPasswordErrors([])
       const data = await dispatch(signUp(username, email, password));
       if (data) {
+        setConfirmPasswordErrors([])
         if (!repeatPassword) {
           setConfirmPasswordErrors(['This field is required.'])
         }
+        setEmailErrors([])
+        setPasswordErrors([])
+        setusernameErrors([])
         data.forEach(error => errorMap(error))
       }
     } else {
