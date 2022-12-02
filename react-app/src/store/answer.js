@@ -6,6 +6,7 @@ const LOAD_ANSWERS = 'answers/load'
 const ADD_ANSWER = 'answers/create'
 const EDIT_ANSWER = 'answers/edit'
 const DELETE_ANSWER = 'answers/delete'
+const CLEAR_ANSWERS = 'answers/clear'
 
 // Actions
 
@@ -27,6 +28,10 @@ const editAnswer = (answer) => ({
 const removeAnswer = (answerId) => ({
   type: DELETE_ANSWER,
   answerId
+})
+
+export const clearAnswers = () => ({
+  type: CLEAR_ANSWERS
 })
 
 // Thunks
@@ -83,6 +88,7 @@ const answersReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_ANSWERS: {
       const data = normalizeData(action.answers.Answers)
+      // data.numAnswers = action.numAnswers;
       const newState = data;
       return newState;
     }
@@ -105,6 +111,10 @@ const answersReducer = (state = initialState, action) => {
     }
     default: {
       return state
+    }
+    case CLEAR_ANSWERS: {
+      const newState = {};
+      return newState;
     }
   }
 }

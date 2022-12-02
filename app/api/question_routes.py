@@ -13,9 +13,11 @@ question_routes = Blueprint('questions', __name__)
 @question_routes.route('')
 def get_all_questions():
   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers)).all()
+  numQuestions = Question.query.count()
 
   response = {
-    "Questions": []
+    "Questions": [],
+    "numQuestions": numQuestions
   }
 
   for question in questions:
@@ -122,9 +124,11 @@ def get_answers_by_question(id):
     return { "message": "Question couldn't be found"}, 404
 
   answers = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author)).all()
+  # answerCount = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author)).count()
 
   response = {
-    "Answers": []
+    "Answers": [],
+
   }
 
   for answer in answers:

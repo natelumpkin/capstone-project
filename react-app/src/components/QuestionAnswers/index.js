@@ -18,8 +18,12 @@ const QuestionAnswers = ({question, currentUser}) => {
   const answers = useSelector(state => state.answers)
 
   useEffect(() => {
+    // console.log(loaded)
     dispatch(answerActions.getAnswersToQuestion(question.id))
       .then(setLoaded(true))
+    return () => {
+      dispatch(answerActions.clearAnswers())
+    }
   },[dispatch])
 
   const userList = [];
@@ -55,17 +59,20 @@ const QuestionAnswers = ({question, currentUser}) => {
   //   setWantsToAddAnotherAnswer(true)
   // }
 
+  console.log(loaded)
+
   if (!loaded) {
     return null
   }
 
   // console.log('question in QuestionAnswers: ', question)
+  // console.log(loaded)
 
 
   return (
     <div id="answers-container">
       <div id="num-answers-container">
-        <h4>{answersArr.length} {answersArr.length === 1 ? "Answer" : "Answers"}</h4>
+        <h4>{question.numAnswers} {question.numAnswers === 1 ? "Answer" : "Answers"}</h4>
       </div>
       <div id="answers-card-container">
         {answersArr.map(answer => (

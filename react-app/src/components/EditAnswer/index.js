@@ -1,4 +1,4 @@
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -31,6 +31,8 @@ const EditAnswer = () => {
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
   const currentAnswer = useSelector(state => state.answers[answerId])
 
+  // console.log(window.screenY)
+
   let questionId;
   if (currentAnswer) questionId = currentAnswer.questionId
 
@@ -48,7 +50,14 @@ const EditAnswer = () => {
     if (currentAnswer && currentAnswer.answer) bodyContent = convertFromRaw(JSON.parse(currentAnswer.answer))
     if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
     if (stateToDisplay) setEditorState(stateToDisplay)
+
+    window.scrollTo(0, document.body.scrollHeight)
   },[dispatch, loaded])
+
+  // useEffect(() => {
+  //   console.log('Hello from use effect')
+  //   window.scrollTo(0, document.body.scrollHeight)
+  // },[])
 
   useEffect(() => {
     let answerLength = editorState.getCurrentContent().getPlainText().length;
@@ -105,6 +114,10 @@ const EditAnswer = () => {
   const goBack = () => {
     setEditorState(EditorState.createEmpty())
     history.push(`/questions/${questionId}`)
+  }
+
+  if (!currentUser || (currentUser?.id !== currentAnswer?.userId)) {
+    return <Redirect to='/questions'/>
   }
 
 

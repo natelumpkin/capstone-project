@@ -1,7 +1,7 @@
 #left-navbar {
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  height: fit-content;
   align-items: flex-end;
   margin-top: 19px;
 }
