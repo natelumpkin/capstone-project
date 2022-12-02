@@ -1,44 +1,88 @@
 # CRUD OVERGROWTH
 
+## Table of Contents
+1. [Project Summary]
+2. [Technologies Used]
+3. [App Screenshots]
+4. [Local Run Instructions]
+5. [Future Features]
+
 ## Project Summary
 
-Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers two key features of interaction: questions and answers. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to a programming problem they might have.
+Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers two key features of interaction: questions and answers. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to any programming-related problem they might have.
 
-## Getting started
-1. Clone this repository (only this branch)
+[Check out the live site!](https://crud-overgrowth.onrender.com/)
 
-2. Install dependencies
+## **Technologies Used**
 
-      ```bash
-      pipenv install -r requirements.txt
-      ```
+### Backend:
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 
-3. Create a **.env** file based on the example with proper settings for your
-   development environment
+**| [WTForms](https://wtforms.readthedocs.io/en/3.0.x/) | [SQLAlchemy](https://www.sqlalchemy.org/) | [Alembic](https://alembic.sqlalchemy.org/en/latest/) |**
 
-4. Make sure the SQLite3 database connection URL is in the **.env** file
+### Frontend:
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-5. This starter organizes all tables inside the `flask_schema` schema, defined
-   by the `SCHEMA` environment variable.  Replace the value for
-   `SCHEMA` with a unique name, **making sure you use the snake_case
-   convention**.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
 
-6. Get into your pipenv, migrate your database, seed your database, and run your Flask app
+**| [Draft JS](https://www.npmjs.com/package/draft-js) |**
 
-   ```bash
-   pipenv shell
-   ```
+## App Screenshots
 
-   ```bash
-   flask db upgrade
-   ```
+### Splash Page (![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.05%20PM.png))
 
-   ```bash
-   flask seed all
-   ```
+### Questions Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.27%20PM.png)
 
-   ```bash
-   flask run
-   ```
+### Single Question Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.43%20PM.png)
 
-7. To run the React App in development, checkout the [README](./react-app/README.md) inside the `react-app` directory.
+### Create Question Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.13.57%20PM.png)
+
+### Create Answer Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.15.30%20PM.png)
+
+### Sign Up Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.15.54%20PM.png)
+
+### Log In Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.16.04%20PM.png)
+
+## Local Run Instructions
+1. Clone the repository to a local directory.
+2. In the root directory, copy the contents of the `.env.example` to a `.env` file.
+    - Assign `DATABASE_URL` to `sqlite:///dev.db`
+    - Assign `SECRET_KEY` to anything (but keep it a secret!)
+    - `SCHEMA` is only used for live deployments and can be set to anything
+3. In `./app`, install the backend dependencies:
+```
+pipenv install
+pipenv install email_validator
+```
+4. Still in `./app`, activate the virtual shell:
+
+```
+pipenv shell
+```
+
+5. run the Alembic migration:
+```
+flask db upgrade
+```
+6. Then, seed the database:
+```
+flask seed all
+```
+7. Start the backend server:
+```
+flask run
+```
+8. In a separate terminal, navigate to `./react-app` and install the frontend dependencies:
+```
+npm install
+```
+9. Start the frontend server:
+```
+npm start
+```
+---
