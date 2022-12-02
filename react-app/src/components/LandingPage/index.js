@@ -7,7 +7,7 @@ const LandingPage = () => {
     <div id="landing-page-container">
       <div id="landing-page-inner-box">
         <div id="landing-page-orange-quote">
-          <i class="fa-solid fa-magnifying-glass orange"></i>
+          <i className="fa-solid fa-magnifying-glass orange"></i>
           <h2>Find the best answer to your technical question, help others answer theirs</h2>
           <Link to="/sign-up"><button className="orange-button">Join the community</button></Link>
           <p>Or browse <Link to="/questions">questions</Link></p>

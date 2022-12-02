@@ -41,7 +41,9 @@ const AllQuestions = () => {
           </div>
         </div>
         <div id="all-questions-header-lower">
+          {numQuestions && (
           <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
+          )}
         </div>
       </div>
       {questionsArray.map(question => (

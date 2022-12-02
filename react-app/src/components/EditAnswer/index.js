@@ -51,7 +51,7 @@ const EditAnswer = () => {
       //   setNotFound(true)
       // });
 
-    console.log(loaded)
+    // console.log(loaded)
 
     let bodyContent
     let stateToDisplay
@@ -111,7 +111,7 @@ const EditAnswer = () => {
       )
   }
   if (!loaded) {
-    console.log('not loaded')
+    // console.log('not loaded')
     return null
   }
 
