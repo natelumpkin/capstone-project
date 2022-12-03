@@ -70,7 +70,7 @@ Users can answer each other's questions and are guided through the process of re
 3. In `./app`, install the backend dependencies:
 ```
 pipenv install
-pipenv install email_validator
+
 ```
 4. Still in `./app`, activate the virtual shell:
 
