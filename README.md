@@ -1,17 +1,30 @@
 # CRUD OVERGROWTH
 
 ## Table of Contents
-1. [Project Summary]
-2. [Technologies Used]
-3. [App Screenshots]
-4. [Local Run Instructions]
-5. [Future Features]
+1. [Project Summary](#project-summary)
+2. [Core Features](#core-features)
+3. [Technologies Used](#technologies-used)
+4. [App Screenshots](#app-screenshots)
+5. [Local Run Instructions](#local-run-instructions)
+6. [Future Features](#future-features)
 
 ## Project Summary
 
 Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers two key features of interaction: questions and answers. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to any programming-related problem they might have.
 
 [Check out the live site!](https://crud-overgrowth.onrender.com/)
+
+## Core Features
+
+### Questions
+
+Users can post programming-related questions for other users to read and respond to. Users are guided through the process of asking a good question with a dynamic form. Posting has rich-text support. Questions can be editted and deleted by the user who created them.
+
+### Answers
+
+Users can answer each other's questions and are guided through the process of responding with a dynamic form. Answers also have rich-text support. Answers can be editted and deleted by the user who created them.
+
+
 
 ## **Technologies Used**
 
@@ -34,7 +47,7 @@ Crud Overgrowth is a full-stack, stateful web app that draws functionality and d
 
 ## App Screenshots
 
-### Splash Page (![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.05%20PM.png))
+### Splash Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.05%20PM.png)
 
 ### Questions Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.27%20PM.png)
 
@@ -86,3 +99,13 @@ npm install
 npm start
 ```
 ---
+
+## Future Features
+
+* Ability to add up and down votes to both questions and answers, to help users find helpful questions and answers and give feedback to each other
+
+* Ability to tag questions and search by tags, to help users find topics related to their interests
+
+* Search functionality by question title, question and answer contents, and tag
+
+* Customizable user profile with profile image and links to personal websites
