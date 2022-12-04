@@ -12,7 +12,7 @@
 
 Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers two key features of interaction: questions and answers. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to any programming-related problem they might have.
 
-[Check out the live site!](https://crud-overgrowth.onrender.com/)
+[Check out the live site!](https://crud-overgrowth-t1wy.onrender.com/)
 
 ## Core Features
 
