@@ -34,6 +34,26 @@ def get_one_tag(id):
 
   return tag.to_dict()
 
+## Get all questions with this tag
+
+@tag_routes.route('/<int:id>/questions')
+def get_questions_for_tags(id):
+  try:
+    tag = Tag.query.get_or_404(id)
+  except:
+    return {"message": "Couldn't find tag"}, 404
+
+  response = {
+    'Questions': []
+  }
+
+  for question in tag.questions:
+    response['Questions'].append(question.to_dict_single())
+
+  ## to-do: load the tags in with this response
+
+  return response
+
 ## Post a new tag
 
 @tag_routes.route('/', methods=['POST'])
