@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.models import Question, Answer, User, db
+from app.models import Question, Answer, User, db, Tag
 from app.forms import AnswerForm, QuestionForm
 from sqlalchemy.orm import joinedload
 from flask_login import current_user, login_required
@@ -12,7 +12,7 @@ question_routes = Blueprint('questions', __name__)
 
 @question_routes.route('')
 def get_all_questions():
-  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers)).all()
+  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags)).all()
   numQuestions = Question.query.count()
 
   response = {
@@ -22,10 +22,11 @@ def get_all_questions():
 
   for question in questions:
     dict_question = question.to_dict_single()
-    # dict_question['User'] = {
-    #   "id": question.author.id,
-    #   "username": question.author.username
-    # }
+    dict_question['Tags'] = []
+
+    for tag in question.tags:
+      dict_question['Tags'].append(tag.to_dict())
+
     response['Questions'].append(dict_question)
 
   return response
@@ -40,6 +41,11 @@ def get_single_question(id):
     return { "message": "Question couldn't be found"}, 404
 
   response = question.to_dict_single()
+
+  response['Tags'] = []
+
+  for tag in question.tags:
+    response['Tags'].append(tag.to_dict())
 
   response['User'] = {
       "id": question.author.id,
@@ -144,7 +150,7 @@ def get_answers_by_question(id):
 ## Add Answer to a Question
 @question_routes.route('/<int:id>/answers', methods=['POST'])
 def add_answer_to_question(id):
-  print('hello from post answers route')
+  # print('hello from post answers route')
   try:
     Question.query.get_or_404(id)
   except:
@@ -166,3 +172,55 @@ def add_answer_to_question(id):
     return new_answer.to_dict()
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
+
+## Add tag to a question
+
+@question_routes.route('/<int:id>/tags', methods=['POST'])
+@login_required
+def add_tag_to_question(id):
+  try:
+    question = Question.query.get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  if current_user.id != question.user_id:
+    return {"message": "Not authorized to modify this question"}, 403
+
+  tagId = request.get_json()['tagId']
+
+  try:
+    tag = Tag.query.get_or_404(tagId)
+  except:
+    return { "message": "Tag couldn't be found"}, 404
+
+  if not tag in question.tags:
+    question.tags.append(tag)
+    db.session.commit()
+    return {"message": f"tag {tag.tag} added to question {question.id}"}
+  else:
+    return {"message": "Question already has this tag"}, 400
+
+## Remove a tag from a question
+
+@question_routes.route('<int:questionId>/tags/<int:tagId>', methods=['DELETE'])
+@login_required
+def remove_tag(questionId, tagId):
+  try:
+    question = Question.query.get_or_404(questionId)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  if current_user.id != question.user_id:
+    return {"message": "Not authorized to modify this question"}, 403
+
+  try:
+    tag = Tag.query.get_or_404(tagId)
+  except:
+    return { "message": "Tag couldn't be found"}, 404
+
+  if tag in question.tags:
+    question.tags.remove(tag)
+    db.session.commit()
+    return {"message": f"tag {tag.tag} removed from question {question.id}"}
+  else:
+    return {"message": "Question does not have this tag"}, 400
