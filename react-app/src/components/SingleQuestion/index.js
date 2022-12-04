@@ -29,7 +29,7 @@ const SingleQuestion = () => {
         setLoaded(false)
         setNotFound(true)
       });
-  },[dispatch])
+  },[dispatch, questionId])
 
   // console.log(notFound)
   // console.log(loaded)

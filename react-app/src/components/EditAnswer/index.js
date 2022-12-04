@@ -1,4 +1,4 @@
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -26,29 +26,47 @@ const EditAnswer = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [answerErrors, setAnswerErrors] = useState([])
   const [disableButton, setDisableButton] = useState(true)
+  // const [questionId, setQuestionId] = useState()
 
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
+  // const allAnswers = useSelector(state => state.answers)
   const currentAnswer = useSelector(state => state.answers[answerId])
 
-  let questionId;
-  if (currentAnswer) questionId = currentAnswer.questionId
 
-  useEffect(() => {
-    dispatch(questionActions.fetchSingleQuestion(questionId))
-      .then(() => answerActions.getAnswersToQuestion(questionId))
-      .then(() => setLoaded(true))
-      .catch(() => {
-        setLoaded(false)
-        setNotFound(true)
-      });
+  // console.log(allAnswers)
+
+
+
+  let questionId;
+  if (currentAnswer) questionId = currentAnswer.id
+
+  useEffect(async () => {
+    await dispatch(answerActions.getOneAnswer(answerId))
+    if (currentAnswer) questionId = currentAnswer.questionId
+    await dispatch(questionActions.fetchSingleQuestion(questionId))
+    setLoaded(true)
+      // .catch(() => {
+      //   setLoaded(false)
+      //   setNotFound(true)
+      // });
+
+    // console.log(loaded)
 
     let bodyContent
     let stateToDisplay
     if (currentAnswer && currentAnswer.answer) bodyContent = convertFromRaw(JSON.parse(currentAnswer.answer))
+    // if (currentAnswer) console.log('answers userId: ', currentAnswer.userId)
     if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
     if (stateToDisplay) setEditorState(stateToDisplay)
-  },[dispatch, loaded])
+
+    window.scrollTo(0, document.body.scrollHeight)
+  },[dispatch, loaded, questionId])
+
+  // useEffect(() => {
+  //   console.log('Hello from use effect')
+  //   window.scrollTo(0, document.body.scrollHeight)
+  // },[])
 
   useEffect(() => {
     let answerLength = editorState.getCurrentContent().getPlainText().length;
@@ -93,6 +111,7 @@ const EditAnswer = () => {
       )
   }
   if (!loaded) {
+    // console.log('not loaded')
     return null
   }
 
@@ -104,8 +123,17 @@ const EditAnswer = () => {
 
   const goBack = () => {
     setEditorState(EditorState.createEmpty())
-    history.push(`/questions/${questionId}`)
+    history.push(`/questions/${currentQuestion.id}`)
   }
+
+  // console.log(currentUser?.id)
+
+
+    if (!currentUser) {
+      return <Redirect to='/questions'/>
+    }
+
+
 
 
   return (

@@ -36,13 +36,13 @@ const EditQuestion = () => {
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
-    if (title.length >= 15 && title.length <= 150
+    if (title.length >= 15 && title.length <= 100
       && bodyLength >= 30 && bodyLength <= 10000) {
         setDisableButton(false)
       } else {
         setDisableButton(true)
       }
-    if (title.length >= 15 && title.length <= 150) {
+    if (title.length >= 15 && title.length <= 100) {
       handleTitleErrors()
     }
     if (bodyLength >= 30 && bodyLength <= 10000) {
@@ -68,7 +68,7 @@ const EditQuestion = () => {
   const handleTitleErrors = () => {
     let errors = [];
     if (title.length < 15) errors.push('Title must be at least 15 characters')
-    if (title.length > 150) errors.push('Title must be no more than 150 characters')
+    if (title.length > 100) errors.push('Title cannot be more than 100 characters')
     setTitleErrors(errors)
   }
 
@@ -76,7 +76,7 @@ const EditQuestion = () => {
     let errors = [];
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
     if (bodyLength < 30) errors.push('Body must be at least 30 characters')
-    if (bodyLength > 10000) errors.push('Body must be no more than 10,000 characters')
+    if (bodyLength > 10000) errors.push('Body cannot be more than 10,000 characters')
     setBodyErrors(errors)
   }
 
@@ -129,7 +129,13 @@ const EditQuestion = () => {
           <div className="form-container">
             <label>Title</label>
             <p>Be specific and imagine you’re asking a question to another person.</p>
-            <input id="title-input" value={title} placeholder={titlePlaceholder}  onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleErrors}></input>
+            <input
+              maxLength={100}
+              id="title-input"
+              value={title}
+              placeholder={titlePlaceholder}
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={handleTitleErrors}></input>
               <ul className="list-errors-parent">
                 {titleErrors.map(error => (
                   <li className="list-errors" key={error}>{error}</li>

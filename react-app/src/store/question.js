@@ -21,6 +21,11 @@ const getOneQuestion = (question) => ({
   question
 })
 
+const addQuestion = (question) => ({
+  type: ADD_QUESTION,
+  question
+})
+
 const updateQuestion = (updatedQuestion) => ({
   type: EDIT_QUESTION,
   updatedQuestion
@@ -46,13 +51,17 @@ export const fetchAllQuestions = () => async dispatch => {
 }
 
 export const fetchSingleQuestion = (questionId) => async dispatch => {
+  // console.log(questionId)
   const response = await fetch(`/api/questions/${questionId}`)
   const data = await response.json()
   if (response.ok) {
     dispatch(getOneQuestion(data))
     return data
   }
-  throw new Error();
+  // throw new Error();
+  else {
+    return data;
+  }
 }
 
 export const createQuestion = (questionBody) => async dispatch => {
@@ -64,6 +73,7 @@ export const createQuestion = (questionBody) => async dispatch => {
   const data = await response.json()
   if (response.ok) {
     dispatch(getOneQuestion(data))
+    dispatch(addQuestion(data))
   }
   return data
 }
@@ -95,7 +105,8 @@ export const deleteQuestion = (questionId) => async dispatch => {
 
 const initialState = {
   allQuestions: {},
-  singleQuestion: {}
+  singleQuestion: {},
+  numQuestions: null
 }
 
 const questionsReducer = (state = initialState, action) => {
@@ -113,6 +124,7 @@ const questionsReducer = (state = initialState, action) => {
       }
       const data = normalizeData(action.questions.Questions)
       newState.allQuestions = data;
+      newState.numQuestions = action.questions.numQuestions;
       return newState
     }
     case (ONE_QUESTION): {
@@ -120,10 +132,24 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions
       }
       const data = action.question;
       newState.singleQuestion = data;
+      return newState;
+    }
+    case (ADD_QUESTION): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {
+          ...state.singleQuestion
+        },
+        numQuestions: state.numQuestions + 1
+      }
+      newState.allQuestions[action.question.id] = action.question
       return newState;
     }
     case (EDIT_QUESTION): {
@@ -131,7 +157,8 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions
       }
       const data = action.updatedQuestion
       newState.singleQuestion = data
@@ -144,7 +171,8 @@ const questionsReducer = (state = initialState, action) => {
         allQuestions: {
           ...state.allQuestions
         },
-        singleQuestion: {}
+        singleQuestion: {},
+        numQuestions: state.numQuestions - 1
       }
       delete newState.allQuestions[action.questionId]
       return newState

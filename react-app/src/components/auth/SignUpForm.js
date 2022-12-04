@@ -4,7 +4,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
-  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState([]);
   const [usernameErrors, setusernameErrors] = useState([])
   const [emailErrors, setEmailErrors] = useState([])
   const [passwordErrors, setPasswordErrors] = useState([])
@@ -30,9 +30,13 @@ const SignUpForm = () => {
       setConfirmPasswordErrors([])
       const data = await dispatch(signUp(username, email, password));
       if (data) {
+        setConfirmPasswordErrors([])
         if (!repeatPassword) {
           setConfirmPasswordErrors(['This field is required.'])
         }
+        setEmailErrors([])
+        setPasswordErrors([])
+        setusernameErrors([])
         data.forEach(error => errorMap(error))
       }
     } else {

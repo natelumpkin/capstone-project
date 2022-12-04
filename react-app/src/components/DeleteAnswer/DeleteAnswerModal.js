@@ -24,7 +24,8 @@ const DeleteAnswerModal = ({answer}) => {
 
   return (
     <>
-      <Link onClick={(e) => {
+      <Link to={''} onClick={(e) => {
+        e.preventDefault()
         setShowModal(true)
       }}>Delete</Link>
       {showModal && (
