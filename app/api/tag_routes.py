@@ -12,7 +12,17 @@ tag_routes = Blueprint('tags', __name__)
 
 @tag_routes.route('/')
 def get_all_tags():
-  tags = Tag.query.all()
+  # tags = Tag.query.all()
+
+  # print(request.args.get('tag'))
+
+  if request.args.get('tag'):
+    search_word = request.args.get('tag')
+    print(search_word)
+
+    tags = Tag.query.filter(Tag.tag.ilike(f'%{search_word}%')).all()
+  else:
+    tags = Tag.query.all()
 
   response = {
     "Tags": []
