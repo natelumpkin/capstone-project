@@ -7,6 +7,7 @@ import App from './App';
 import configureStore from './store';
 import * as questionActions from './store/question'
 import * as answerActions from './store/answer'
+import * as tagActions from './store/tag'
 
 const store = configureStore();
 
@@ -14,6 +15,7 @@ if (process.env !== 'production') {
   window.store = store;
   window.questionActions = questionActions;
   window.answerActions = answerActions;
+  window.tagActions = tagActions;
 }
 
 ReactDOM.render(
