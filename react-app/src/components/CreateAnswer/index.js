@@ -40,7 +40,7 @@ const CreateAnswer = ({questionId}) => {
     let errors = [];
     let answerLength = editorState.getCurrentContent().getPlainText().length;
     if (answerLength < 30) errors.push('Answer must be at least 30 characters')
-    if (answerLength > 10000) errors.push('Answer must be less than 10,000 characters')
+    if (answerLength > 10000) errors.push('Answer cannot be more than 10,000 characters')
     setAnswerErrors(errors)
   }
 
