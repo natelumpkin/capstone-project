@@ -196,7 +196,10 @@ def add_tag_to_question(id):
   if not tag in question.tags:
     question.tags.append(tag)
     db.session.commit()
-    return {"message": f"tag {tag.tag} added to question {question.id}"}
+    return {
+      "message": f"tag {tag.tag} added to question {question.id}",
+      "Tag": tag.to_dict()
+      }
   else:
     return {"message": "Question already has this tag"}, 400
 
