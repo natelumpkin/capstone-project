@@ -1,0 +1,16 @@
+.tag-name-card {
+  background-color: #deeffc;
+  border: 1px solid #0a2e47;
+  border-radius: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.tag-name-card a {
+  color: #0a2e47;
+  font-size: 12px;
+}
+
+.tag-name-card a:hover {
+  text-decoration: none;
+}
