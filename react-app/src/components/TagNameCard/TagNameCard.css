@@ -2,8 +2,13 @@
   background-color: #deeffc;
   border: 1px solid #0a2e47;
   border-radius: 2px;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tag-name-card a {

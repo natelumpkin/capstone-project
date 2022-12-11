@@ -39,7 +39,8 @@ const TagQuestionsPage = () => {
       <div id="all-questions-header">
         <div id="all-questions-header-upper">
           <div>
-            <h1>Questions tagged [{tag.tag}]</h1>
+            {tag && (
+            <h1>Questions tagged [{tag.tag}]</h1>)}
           </div>
           <div>
               <Link to={currentUser ? "questions/new" : "/login"}>
@@ -48,7 +49,8 @@ const TagQuestionsPage = () => {
           </div>
         </div>
         <div>
-          <p className="tag-description">{tag.description}</p>
+          {tag && (
+          <p className="tag-description">{tag.description}</p>)}
         </div>
         <div id="all-questions-header-lower">
           {numQuestions && (
