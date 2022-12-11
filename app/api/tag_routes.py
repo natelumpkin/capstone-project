@@ -54,11 +54,23 @@ def get_questions_for_tags(id):
     return {"message": "Couldn't find tag"}, 404
 
   response = {
-    'Questions': []
+    'Tag': tag.to_dict(),
+    'Questions': [],
+    'numQuestions': 0
   }
 
+
+
   for question in tag.questions:
-    response['Questions'].append(question.to_dict_single())
+    dict_question = question.to_dict_single()
+    dict_question['Tags'] = []
+    for tag in question.tags:
+      dict_question['Tags'].append(tag.to_dict())
+    response['numQuestions'] += 1
+
+    response['Questions'].append(dict_question)
+
+
 
   ## to-do: load the tags in with this response
 

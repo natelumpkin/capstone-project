@@ -45,8 +45,16 @@ const addTag = (questionId, tag) => ({
 
 // Thunks
 
-export const fetchAllQuestions = () => async dispatch => {
-  const response = await fetch('/api/questions')
+export const fetchAllQuestions = (tagId) => async dispatch => {
+  let response
+  console.log(tagId)
+  if (tagId) {
+    console.log('fetching tags')
+    response = await fetch(`/api/tags/${tagId}/questions`)
+  } else {
+    console.log('fetching all questions')
+    response = await fetch('/api/questions')
+  }
   if (response.ok) {
     const questions = await response.json()
     dispatch(getQuestions(questions))
