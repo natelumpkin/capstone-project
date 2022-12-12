@@ -75,6 +75,7 @@ const CreateQuestion = () => {
 
     handleBodyErrors()
     handleTitleErrors()
+    let questionId;
 
     if (!bodyErrors.length && !titleErrors.length) {
       const content = editorState.getCurrentContent()
@@ -85,7 +86,15 @@ const CreateQuestion = () => {
         body: bodyToSave
       }
       dispatch(questionActions.createQuestion(newQuestion))
-        .then((question) => history.push(`/questions/${question.id}`))
+        .then(question => {
+          questionId = question.id
+          if (tag1) dispatch(questionActions.addTagToQuestion(question.id, tag1.id))
+          if (tag2) dispatch(questionActions.addTagToQuestion(question.id, tag2.id))
+          if (tag3) dispatch(questionActions.addTagToQuestion(question.id, tag3.id))
+          if (tag4) dispatch(questionActions.addTagToQuestion(question.id, tag4.id))
+          if (tag5) dispatch(questionActions.addTagToQuestion(question.id, tag5.id))
+        })
+        .then(() => history.push(`/questions/${questionId}`))
       setTitle('')
       setEditorState(EditorState.createEmpty())
     }
@@ -205,7 +214,7 @@ const CreateQuestion = () => {
             <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
                   <option value="">Add up to 5 tags</option>
                   {tags.map(tag => (
-                    <option>{tag.tag}</option>
+                    <option key={tag.id}>{tag.tag}</option>
                   ))}
             </select>
             <button type="button" onClick={addTag}>Add Tag</button>

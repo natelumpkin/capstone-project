@@ -73,7 +73,9 @@ def post_question():
     )
     db.session.add(new_question)
     db.session.commit()
-    return new_question.to_dict_single(), 201
+    dict_question = new_question.to_dict_single()
+    dict_question['Tags'] = []
+    return dict_question, 201
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
