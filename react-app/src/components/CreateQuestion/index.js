@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
+import AddTagCard from "../AddTagCard";
 import * as questionActions from '../../store/question'
+import * as tagActions from '../../store/tag'
 import convertFromEditorToJson from "../../utils/convertFromEditorToJSON";
 import './CreateQuestion.css'
 
@@ -11,6 +13,7 @@ const CreateQuestion = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(state => state.session.user)
+  const tags = useSelector(state => state.tags)
   const [title, setTitle] = useState('');
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [titleErrors, setTitleErrors] = useState([]);
@@ -18,6 +21,21 @@ const CreateQuestion = () => {
   const [disableButton, setDisableButton] = useState(true);
   const [showTitleTips, setShowTitleTips] = useState(false)
   const [showBodyTips, setShowBodyTips] = useState(false)
+  const [tagSearch, setTagSearch] = useState('')
+  const [tagChoice, setTagChoice] = useState('')
+  const [tag1, setTag1] = useState()
+  const [tag2, setTag2] = useState()
+  const [tag3, setTag3] = useState()
+  const [tag4, setTag4] = useState()
+  const [tag5, setTag5] = useState()
+
+  // save the tag object to state
+  // display the tagCard to the user, displaying its name, with a button to remove
+  // when remove button is clicked, setstate to undefined
+  // on submit, for each state that is defined, addTagToQuestion with its id
+
+
+  console.log(tagChoice)
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
@@ -70,6 +88,39 @@ const CreateQuestion = () => {
         .then((question) => history.push(`/questions/${question.id}`))
       setTitle('')
       setEditorState(EditorState.createEmpty())
+    }
+  }
+
+  const searchTags = () => {
+    dispatch(tagActions.getTags(tagSearch))
+    // const tagChooser = document.body.getElementById('tag-chooser')
+    // const tagChooser = document.getElementById('tag-chooser')
+    // setTagChoice(tagChooser.value)
+  }
+
+
+  const addTag = () => {
+    const tagArray = [tag1, tag2, tag3, tag4, tag5]
+    // console.log('tagChoice: ', tagChoice)
+    const tagToSave = tags.find(tag => tag.tag === tagChoice)
+    // console.log('tag to save: ', tagToSave)
+    for (let i = 0; i < tagArray.length; i++) {
+      let tag = tagArray[i]
+      if (tag?.id === tagToSave.id) {
+        console.log('You already have this tag, sorry')
+        return
+      }
+    }
+    if (!tag1) {
+      setTag1(tagToSave)
+    } else if (!tag2) {
+      setTag2(tagToSave)
+    } else if (!tag3) {
+      setTag3(tagToSave)
+    } else if (!tag4) {
+      setTag4(tagToSave)
+    } else if (!tag5) {
+      setTag5(tagToSave)
     }
   }
 
@@ -147,6 +198,34 @@ const CreateQuestion = () => {
                   <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
+          </div>
+          <div className="form-container">
+            <input type="text" value={tagSearch} onChange={(e) => setTagSearch(e.target.value)}></input>
+            <button type="button" onClick={searchTags}>Search Tags</button>
+            <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
+                  <option value="">Add up to 5 tags</option>
+                  {tags.map(tag => (
+                    <option>{tag.tag}</option>
+                  ))}
+            </select>
+            <button type="button" onClick={addTag}>Add Tag</button>
+            <div>
+              {tag1 && (
+                <AddTagCard tag={tag1} setTag={setTag1}/>
+              )}
+              {tag2 && (
+                <AddTagCard tag={tag2} setTag={setTag2}/>
+              )}
+              {tag3 && (
+                <AddTagCard tag={tag3} setTag={setTag3}/>
+              )}
+              {tag4 && (
+                <AddTagCard tag={tag4} setTag={setTag4}/>
+              )}
+              {tag5 && (
+                <AddTagCard tag={tag5} setTag={setTag5}/>
+              )}
+            </div>
           </div>
           <div id="create-question-button-container">
             <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Question</button>

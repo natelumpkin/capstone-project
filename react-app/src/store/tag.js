@@ -44,17 +44,17 @@ export const createNewTag = (tagName) => async dispatch => {
   return data
 }
 
-const initialState = {}
+const initialState = []
 
 const tagReducer = (state = initialState, action) => {
   switch (action.type) {
     case (LOAD_TAGS): {
       const tags = action.tags;
-      const newState = tags;
+      const newState = tags.Tags;
       return newState;
     }
     case (CLEAR_TAGS): {
-      const newState = {};
+      const newState = [];
       return newState;
     }
     default:
