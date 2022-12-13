@@ -35,7 +35,7 @@ const CreateQuestion = () => {
   // on submit, for each state that is defined, addTagToQuestion with its id
 
 
-  console.log(tagChoice)
+  // console.log(tagChoice)
 
   useEffect(() => {
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
@@ -77,6 +77,8 @@ const CreateQuestion = () => {
     handleTitleErrors()
     let questionId;
 
+
+
     if (!bodyErrors.length && !titleErrors.length) {
       const content = editorState.getCurrentContent()
       const bodyToSave = JSON.stringify(convertToRaw(content))
@@ -105,17 +107,41 @@ const CreateQuestion = () => {
     // const tagChooser = document.body.getElementById('tag-chooser')
     // const tagChooser = document.getElementById('tag-chooser')
     // setTagChoice(tagChooser.value)
+
+
   }
 
 
-  const addTag = () => {
+  const addTag = async () => {
+
+    // if tag doesn't exist in database, then create new tag object
+
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
     // console.log('tagChoice: ', tagChoice)
-    const tagToSave = tags.find(tag => tag.tag === tagChoice)
+    let tagToSave = tags.find(tag => tag.tag === tagChoice)
+    // if tagToSave is undefined, create a new tag Object from the searchbar?
+    if (!tagToSave) {
+      // check to see if that exact tag is in the database
+      let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
+      if (response.ok) {
+        let data = await response.json()
+        tagToSave = data
+      }
+      // if it is, set tagToSave to that tag
+       else {
+        tagToSave = {
+          tag: tagSearch.toLowerCase(),
+          description: '',
+          newTag: true
+        }
+      }
+    }
+    console.log(tagToSave)
     // console.log('tag to save: ', tagToSave)
+    // console.log(tagArray)
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
-      if (tag?.id === tagToSave.id) {
+      if (tagToSave.id && (tag?.tag === tagToSave.tag)) {
         console.log('You already have this tag, sorry')
         return
       }
@@ -131,6 +157,18 @@ const CreateQuestion = () => {
     } else if (!tag5) {
       setTag5(tagToSave)
     }
+  }
+
+  const tagArray = [tag1, tag2, tag3, tag4, tag5]
+  console.log(tagArray)
+
+  const createTag = () => {
+    // check to see if tagname is already in the database
+    // if it is, add that tag to database
+    // otherwise, create a new tag and add it
+    // add contents of searchbar to tag object
+    // display name as the relevant tag (call addTag?)
+
   }
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'

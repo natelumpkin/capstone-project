@@ -5,7 +5,7 @@ from app.models import Tag
 
 def tag_exists(form, field):
   # Check if exact tag already exists
-  tagName = field.data
+  tagName = field.data.lower()
   tag = Tag.query.filter(Tag.tag == tagName).first()
   if tag:
     raise ValidationError('This tag already exists')

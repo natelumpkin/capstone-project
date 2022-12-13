@@ -18,11 +18,24 @@ def get_all_tags():
 
   if request.args.get('tag'):
     search_word = request.args.get('tag')
-    print(search_word)
+    # print(search_word)
 
     tags = Tag.query.filter(Tag.tag.ilike(f'%{search_word}%')).all()
   else:
     tags = Tag.query.all()
+
+  if request.args.get('exactTag'):
+    search_word = request.args.get('exactTag').lower()
+
+    print(search_word)
+
+    try:
+      tag = Tag.query.filter(Tag.tag == search_word).one()
+    except:
+      # print(e)
+      return {"message": "Tag with this name does not exist"}, 404
+    else:
+      return tag.to_dict()
 
   response = {
     "Tags": []
@@ -43,6 +56,8 @@ def get_one_tag(id):
     return {"message": "Couldn't find tag"}, 404
 
   return tag.to_dict()
+
+
 
 ## Get all questions with this tag
 
@@ -85,7 +100,7 @@ def post_tag():
 
   if form.validate_on_submit():
     new_tag = Tag(
-      tag=form.data['tag'],
+      tag=form.data['tag'].lower(),
       description=form.data['description']
     )
     db.session.add(new_tag)

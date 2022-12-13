@@ -43,7 +43,7 @@ const TagQuestionsPage = () => {
             <h1>Questions tagged [{tag.tag}]</h1>)}
           </div>
           <div>
-              <Link to={currentUser ? "questions/new" : "/login"}>
+              <Link to={currentUser ? "/questions/new" : "/login"}>
                 <button className="ask-question-button pointer">Ask Question</button>
               </Link>
           </div>
