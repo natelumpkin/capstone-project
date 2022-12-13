@@ -6,9 +6,9 @@ def seed_tags():
   question2 = Question.query.filter(Question.title == "What do I do if my computer won't run my scripts?").one()
 
 
-  tag1 = Tag(tag="Python", description="Python is a multi-paradigm, dynamically typed, multi-purpose programming language. It is designed to be quick to learn, understand, and use, and enforces a clean and uniform syntax.")
-  tag2 = Tag(tag="Javascript", description="For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Keep in mind that JavaScript is NOT the same as Java!")
-  tag3 = Tag(tag="ReactJS", description="React is a JavaScript library for building user interfaces. It uses a declarative, component-based paradigm and aims to be efficient and flexible.")
+  tag1 = Tag(tag="python", description="Python is a multi-paradigm, dynamically typed, multi-purpose programming language. It is designed to be quick to learn, understand, and use, and enforces a clean and uniform syntax.")
+  tag2 = Tag(tag="javascript", description="For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Keep in mind that JavaScript is NOT the same as Java!")
+  tag3 = Tag(tag="reactjs", description="React is a JavaScript library for building user interfaces. It uses a declarative, component-based paradigm and aims to be efficient and flexible.")
   tag4 = Tag(tag="react-router", description="React Router - A complete routing library for React inspired by Ember's routing system")
 
   db.session.add(tag1)

@@ -16,7 +16,7 @@ const QuestionCard = ({question, currentUser}) => {
   if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
   if (bodyContent) plainBody = bodyContent.getPlainText()
 
-  console.log(question.Tags)
+  // console.log(question.Tags)
 
   return (
     <div className="questioncard-container">

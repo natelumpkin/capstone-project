@@ -114,21 +114,23 @@ const CreateQuestion = () => {
 
   const addTag = async () => {
 
-    // if tag doesn't exist in database, then create new tag object
-
+    // look at the existing tags set to this question
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
-    // console.log('tagChoice: ', tagChoice)
+    // check to see if the tag you want is in state already
     let tagToSave = tags.find(tag => tag.tag === tagChoice)
-    // if tagToSave is undefined, create a new tag Object from the searchbar?
     if (!tagToSave) {
-      // check to see if that exact tag is in the database
+    // if it's not, then
+    // check to see if that exact tag is in the database
       let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
       if (response.ok) {
         let data = await response.json()
+        // set tagToSave to that tag in database
         tagToSave = data
       }
-      // if it is, set tagToSave to that tag
+      //
        else {
+        // otherwise, construct a NEW tag from your input in the searchbar,
+        // but don't add it to the database yet
         tagToSave = {
           tag: tagSearch.toLowerCase(),
           description: '',
@@ -139,13 +141,15 @@ const CreateQuestion = () => {
     console.log(tagToSave)
     // console.log('tag to save: ', tagToSave)
     // console.log(tagArray)
+    // check to see if you already have this tag on the question, and refuse to add if so
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
-      if (tagToSave.id && (tag?.tag === tagToSave.tag)) {
+      if (tag?.tag === tagToSave.tag) {
         console.log('You already have this tag, sorry')
         return
       }
     }
+    // go through all the current adds, and set the tag to the first state that's unoccupied
     if (!tag1) {
       setTag1(tagToSave)
     } else if (!tag2) {
@@ -157,6 +161,7 @@ const CreateQuestion = () => {
     } else if (!tag5) {
       setTag5(tagToSave)
     }
+    // ta da!
   }
 
   const tagArray = [tag1, tag2, tag3, tag4, tag5]
