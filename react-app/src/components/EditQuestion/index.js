@@ -4,6 +4,7 @@ import { useHistory, useParams, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import * as questionActions from '../../store/question'
+import * as tagActions from '../../store/tag'
 
 import './EditQuestion.css'
 
@@ -15,12 +16,35 @@ const EditQuestion = () => {
   const history = useHistory()
   const question = useSelector(state => state.questions.singleQuestion)
   const user = useSelector(state => state.session.user)
+  const tags = useSelector(state => state.tags)
   const [title, setTitle] = useState('loading' || question.title)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [titleErrors, setTitleErrors] = useState([])
   const [bodyErrors, setBodyErrors] = useState([])
   const [disableButton, setDisableButton] = useState(true)
   const [loaded, setLoaded] = useState(false)
+  const [tagSearch, setTagSearch] = useState('')
+  const [tagChoice, setTagChoice] = useState('')
+  const [tag1, setTag1] = useState()
+  const [tag2, setTag2] = useState()
+  const [tag3, setTag3] = useState()
+  const [tag4, setTag4] = useState()
+  const [tag5, setTag5] = useState()
+
+  let addTags = async (question) => {
+    let questionId = question.id
+    const tagArray = [tag1, tag2, tag3, tag4, tag5]
+    for (let i = 0; i < tagArray.length; i++) {
+      let tag = tagArray[i]
+      if (tag && tag.newTag) {
+        await dispatch(tagActions.createNewTag(tag))
+        dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+      } else if (tag) {
+        await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+      }
+    }
+    return question.id
+  }
 
   useEffect(() => {
     dispatch(questionActions.fetchSingleQuestion(questionId))
@@ -99,6 +123,54 @@ const EditQuestion = () => {
       setTitle('')
       setEditorState(EditorState.createEmpty())
     }
+  }
+
+  const addTag = async () => {
+    // look at the existing tags set to this question
+    const tagArray = [tag1, tag2, tag3, tag4, tag5]
+    // check to see if the tag you want is in state already
+    let tagToSave = tags.find(tag => tag.tag === tagChoice)
+    if (!tagToSave) {
+    // if it's not, then
+    // check to see if that exact tag is in the database
+      let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
+      if (response.ok) {
+        let data = await response.json()
+        // set tagToSave to that tag in database
+        tagToSave = data
+      }
+      //
+       else {
+        // otherwise, construct a NEW tag from your input in the searchbar,
+        // but don't add it to the database yet
+        tagToSave = {
+          tag: tagSearch.toLowerCase(),
+          description: '',
+          newTag: true
+        }
+      }
+    }
+    // check to see if you already have this tag on the question, and refuse to add if so
+    for (let i = 0; i < tagArray.length; i++) {
+      let tag = tagArray[i]
+      if (tag?.tag === tagToSave.tag) {
+        console.log('You already have this tag, sorry')
+        return
+      }
+    }
+    // go through all the current adds, and set the tag to the first state that's unoccupied
+    if (!tag1) {
+      setTag1(tagToSave)
+    } else if (!tag2) {
+      setTag2(tagToSave)
+    } else if (!tag3) {
+      setTag3(tagToSave)
+    } else if (!tag4) {
+      setTag4(tagToSave)
+    } else if (!tag5) {
+      setTag5(tagToSave)
+    }
+    // ta da!
   }
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'

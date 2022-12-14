@@ -31,13 +31,11 @@ export const getTags = (searchParam) => async dispatch => {
   }
 }
 
-export const createNewTag = (tagName) => async dispatch => {
+export const createNewTag = (tag) => async dispatch => {
   const response = await fetch('/api/tags/', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      tag: tagName
-    })
+    body: JSON.stringify(tag)
   })
 
   const data = await response.json()

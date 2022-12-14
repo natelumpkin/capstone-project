@@ -70,14 +70,27 @@ const CreateQuestion = () => {
     setBodyErrors(errors)
   }
 
-  const handleSubmit = (e) => {
+  let addTags = async (question) => {
+    let questionId = question.id
+    const tagArray = [tag1, tag2, tag3, tag4, tag5]
+    for (let i = 0; i < tagArray.length; i++) {
+      let tag = tagArray[i]
+      if (tag && tag.newTag) {
+        await dispatch(tagActions.createNewTag(tag))
+        dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+      } else if (tag) {
+        await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+      }
+    }
+    return question.id
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     handleBodyErrors()
     handleTitleErrors()
     let questionId;
-
-
 
     if (!bodyErrors.length && !titleErrors.length) {
       const content = editorState.getCurrentContent()
@@ -87,16 +100,9 @@ const CreateQuestion = () => {
         title: title,
         body: bodyToSave
       }
-      dispatch(questionActions.createQuestion(newQuestion))
-        .then(question => {
-          questionId = question.id
-          if (tag1) dispatch(questionActions.addTagToQuestion(question.id, tag1.id))
-          if (tag2) dispatch(questionActions.addTagToQuestion(question.id, tag2.id))
-          if (tag3) dispatch(questionActions.addTagToQuestion(question.id, tag3.id))
-          if (tag4) dispatch(questionActions.addTagToQuestion(question.id, tag4.id))
-          if (tag5) dispatch(questionActions.addTagToQuestion(question.id, tag5.id))
-        })
-        .then(() => history.push(`/questions/${questionId}`))
+      const question = await dispatch(questionActions.createQuestion(newQuestion))
+      const questionId = await addTags(question)
+      history.push(`/questions/${questionId}`)
       setTitle('')
       setEditorState(EditorState.createEmpty())
     }
@@ -113,7 +119,6 @@ const CreateQuestion = () => {
 
 
   const addTag = async () => {
-
     // look at the existing tags set to this question
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
     // check to see if the tag you want is in state already
@@ -138,9 +143,6 @@ const CreateQuestion = () => {
         }
       }
     }
-    console.log(tagToSave)
-    // console.log('tag to save: ', tagToSave)
-    // console.log(tagArray)
     // check to see if you already have this tag on the question, and refuse to add if so
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
@@ -164,17 +166,7 @@ const CreateQuestion = () => {
     // ta da!
   }
 
-  const tagArray = [tag1, tag2, tag3, tag4, tag5]
-  console.log(tagArray)
 
-  const createTag = () => {
-    // check to see if tagname is already in the database
-    // if it is, add that tag to database
-    // otherwise, create a new tag and add it
-    // add contents of searchbar to tag object
-    // display name as the relevant tag (call addTag?)
-
-  }
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   // const bodyPlaceholder = ''
