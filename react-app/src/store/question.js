@@ -101,7 +101,8 @@ export const editQuestion = (questionId, questionBody) => async dispatch => {
   })
   const data = await response.json()
   if (response.ok) {
-    dispatch(updateQuestion(data))
+    dispatch(updateQuestion(data));
+    return data;
   }
   return data
 }

@@ -102,7 +102,14 @@ def edit_question(id):
         question.body = form.data['body']
       question.updated_at = datetime.utcnow()
       db.session.commit()
-      return question.to_dict_single()
+
+      response = question.to_dict_single()
+      response['Tags'] = []
+
+      for tag in question.tags:
+        response['Tags'].append(tag.to_dict())
+
+      return response
     else:
       return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 

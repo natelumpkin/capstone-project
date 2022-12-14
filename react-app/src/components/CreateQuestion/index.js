@@ -110,11 +110,6 @@ const CreateQuestion = () => {
 
   const searchTags = () => {
     dispatch(tagActions.getTags(tagSearch))
-    // const tagChooser = document.body.getElementById('tag-chooser')
-    // const tagChooser = document.getElementById('tag-chooser')
-    // setTagChoice(tagChooser.value)
-
-
   }
 
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
+import AddTagCard from "../AddTagCard";
 import * as questionActions from '../../store/question'
 import * as tagActions from '../../store/tag'
 
@@ -46,6 +47,54 @@ const EditQuestion = () => {
     return question.id
   }
 
+  // console.log(question.Tags)
+
+  const updateTags = async () => {
+    // 1. compare current tag state to tags already on the question
+    // 2. if current tag doesn't exist in tags, add it
+    // 3. if tag on question isn't in current tags, remove it
+    // return question.id
+    let questionId = question.id
+    const tagArray = [tag1, tag2, tag3, tag4, tag5]
+    // console.log('tagArray: ', tagArray)
+    const tagIds = [tag1?.id, tag2?.id, tag3?.id, tag4?.id, tag5?.id]
+    const questionTagIds = []
+    question.Tags.forEach(tag => {
+      questionTagIds.push(tag.id)
+    })
+    // console.log('questionTagIds: ', questionTagIds)
+    // iterate over question's tags
+    for (let i = 0; i < question.Tags.length; i++) {
+      let tag = question.Tags[i]
+
+      // if that tag isn't in tagIds, remove it
+      if (!tagIds.includes(tag.id)) {
+        console.log('removing tag')
+        await dispatch(questionActions.removeTagFromQuestion(questionId, tag.id))
+      }
+    }
+    // iterate over state tags
+    for (let i = 0; i < tagArray.length; i++) {
+      // if current state tag is not in questionTags, add it
+      let tag = tagArray[i]
+      if (tag?.id && !questionTagIds.includes(tag.id)) {
+        if (tag && tag.newTag) {
+          console.log('creating new tag')
+          await dispatch(tagActions.createNewTag(tag))
+          dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+        } else if (tag) {
+          console.log('adding pre-existing tag')
+          await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+        }
+      } else if (tag && tag.newTag) {
+        await dispatch(tagActions.createNewTag(tag))
+        dispatch(questionActions.addTagToQuestion(questionId, tag.id))
+      }
+      //
+    }
+    return questionId;
+  }
+
   useEffect(() => {
     dispatch(questionActions.fetchSingleQuestion(questionId))
       .then(() => setLoaded(true))
@@ -56,6 +105,14 @@ const EditQuestion = () => {
     if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
     if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
     if (stateToDisplay) setEditorState(stateToDisplay)
+
+    if (question.Tags?.length) {
+      setTag1(question.Tags[0])
+      setTag2(question.Tags[1])
+      setTag3(question.Tags[2])
+      setTag4(question.Tags[3])
+      setTag5(question.Tags[4])
+    }
   }, [dispatch, loaded])
 
   useEffect(() => {
@@ -74,21 +131,6 @@ const EditQuestion = () => {
     }
   }, [title, editorState])
 
-  // useEffect(() => {
-  //     let bodyContent;
-  //     let stateToDisplay;
-  //     if (question.title) setTitle(question.title)
-  //   // if (question.body) bodyContent = convertFromRaw(JSON.parse(question.body))
-  //   // if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
-  //   // if (stateToDisplay) setEditorState(stateToDisplay)
-  // }, [])
-
-  // console.log("title var: ", title)
-  // console.log("loaded var: ", loaded)
-
-
-  // console.log(editorState.getCurrentContent().getPlainText().length)
-
   const handleTitleErrors = () => {
     let errors = [];
     if (title.length < 15) errors.push('Title must be at least 15 characters')
@@ -96,7 +138,7 @@ const EditQuestion = () => {
     setTitleErrors(errors)
   }
 
-  const handleBodyErrors = () => {
+  const handleBodyErrors = async () => {
     let errors = [];
     let bodyLength = editorState.getCurrentContent().getPlainText().length;
     if (bodyLength < 30) errors.push('Body must be at least 30 characters')
@@ -104,7 +146,7 @@ const EditQuestion = () => {
     setBodyErrors(errors)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     handleBodyErrors()
@@ -118,11 +160,16 @@ const EditQuestion = () => {
         title: title,
         body: bodyToSave
       }
-      dispatch(questionActions.editQuestion(question.id, newQuestion))
-        .then((question) => history.push(`/questions/${question.id}`))
+      await dispatch(questionActions.editQuestion(question.id, newQuestion))
+      await updateTags()
+      history.push(`/questions/${question.id}`)
       setTitle('')
       setEditorState(EditorState.createEmpty())
     }
+  }
+
+  const searchTags = () => {
+    dispatch(tagActions.getTags(tagSearch))
   }
 
   const addTag = async () => {
@@ -223,6 +270,34 @@ const EditQuestion = () => {
                   <li className="list-errors" key={error}>{error}</li>
                 ))}
               </ul>
+          </div>
+          <div className="form-container">
+            <input type="text" value={tagSearch} onChange={(e) => setTagSearch(e.target.value)}></input>
+            <button type="button" onClick={searchTags}>Search Tags</button>
+            <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
+                  <option value="">Add up to 5 tags</option>
+                  {tags.map(tag => (
+                    <option key={tag.id}>{tag.tag}</option>
+                  ))}
+            </select>
+            <button type="button" onClick={addTag}>Add Tag</button>
+            <div>
+              {tag1 && (
+                <AddTagCard tag={tag1} setTag={setTag1}/>
+              )}
+              {tag2 && (
+                <AddTagCard tag={tag2} setTag={setTag2}/>
+              )}
+              {tag3 && (
+                <AddTagCard tag={tag3} setTag={setTag3}/>
+              )}
+              {tag4 && (
+                <AddTagCard tag={tag4} setTag={setTag4}/>
+              )}
+              {tag5 && (
+                <AddTagCard tag={tag5} setTag={setTag5}/>
+              )}
+            </div>
           </div>
           <div id="create-question-button-container">
             <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Revision</button>
