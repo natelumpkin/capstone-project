@@ -1,0 +1,12 @@
+#tag-dropdown-parent {
+  width: 50%;
+}
+
+#tag-dropdown {
+  border: 1px solid black;
+  background-color: white;
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  width: 59%;
+}

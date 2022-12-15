@@ -2,14 +2,34 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw } from 'draft-js'
+
 import FormEditor from "../FormEditor";
 import AddTagCard from "../AddTagCard";
+import TagNameCard from "../TagNameCard";
+
 import * as questionActions from '../../store/question'
 import * as tagActions from '../../store/tag'
+
 import convertFromEditorToJson from "../../utils/convertFromEditorToJSON";
+
 import './CreateQuestion.css'
+import TagSelectDropdown from "../TagSelectDropdown";
 
 const CreateQuestion = () => {
+
+
+  // Table of Contents :)
+
+  // Hooks
+  // Error Handling Use Effect
+  // Error Handling Functions
+  // addTags function for Submit
+  // handleSubmit
+  // searchTags function
+  // addTag function for selecting tags
+  // Auth protection redirect
+  // Render return
+
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(state => state.session.user)
@@ -35,6 +55,13 @@ const CreateQuestion = () => {
   // when remove button is clicked, setstate to undefined
   // on submit, for each state that is defined, addTagToQuestion with its id
 
+  useEffect(() => {
+    const body = window.document.body;
+    body.classList.add('light-grey')
+    return () => {
+      body.classList.remove('light-grey')
+    }
+  },[])
 
   // console.log(tagChoice)
 
@@ -271,14 +298,19 @@ const CreateQuestion = () => {
               </ul>
           </div>
           <div className="form-container">
+            <label>Tags</label>
+            <p>Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</p>
             <input
+            id="tag-input"
             type="text"
+            maxLength={30}
             value={tagSearch}
             onChange={(e) => {
               setTagSearch(e.target.value)
               searchTags(e.target.value)
             }}
             >
+
             </input>
             {/* <button
               type="button"
@@ -298,6 +330,9 @@ const CreateQuestion = () => {
             )} */}
             <button type="button" onClick={addTag}>Add Tag</button>
             {tagDropdown && (
+              <TagSelectDropdown selectedTags={[tag1, tag2, tag3, tag4, tag5]} setTagSearch={setTagSearch} setTagChoice={setTagChoice} addTag={addTag} setTagDropdown={setTagDropdown} tags={tags}/>
+            )}
+            {/* {tagDropdown && (
               <div>
                     {tags.map(tag => (
                       <div
@@ -312,7 +347,7 @@ const CreateQuestion = () => {
                       </div>
                     ))}
               </div>
-            )}
+            )} */}
             <div id="tag-display">
               {tag1 && (
                 <AddTagCard tag={tag1} setTag={setTag1}/>

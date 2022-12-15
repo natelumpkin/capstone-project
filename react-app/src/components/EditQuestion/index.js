@@ -287,6 +287,7 @@ const EditQuestion = () => {
           <div className="form-container">
           <input
             type="text"
+            maxLength={30}
             value={tagSearch}
             onChange={(e) => {
               setTagSearch(e.target.value)

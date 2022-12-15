@@ -1,5 +1,9 @@
 /* to do: add border radius */
 
+.light-grey {
+  background-color: #f8f9f9;
+}
+
 #create-question-container {
   margin-left: 5%;
   margin-right: 5%;
@@ -59,6 +63,7 @@
 
 .form-container {
   border: 1px solid black;
+  background-color: white;
   margin-top: 15px;
   margin-bottom: 15px;
   padding: 25px;
@@ -187,4 +192,10 @@
 #discard-draft-button:hover {
   background-color: rgba(255, 192, 203, 0.535);
   cursor: pointer;
+}
+
+#tag-input {
+  width: 98%;
+  border: 1px solid black;
+  padding: 8px;
 }
