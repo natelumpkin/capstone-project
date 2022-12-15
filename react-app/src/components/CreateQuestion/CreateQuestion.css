@@ -194,8 +194,22 @@
   cursor: pointer;
 }
 
+#tag-input-holder {
+  width: 100%;
+  display: flex;
+}
+
+#new-tag-button {
+  width: 12%;
+  height: 100%;
+  margin-left: 10px;
+  font-size: 12px;
+  align-self: center;
+}
+
 #tag-input {
-  width: 98%;
+  width: 100%;
+  height: fit-content;
   border: 1px solid black;
   padding: 8px;
 }

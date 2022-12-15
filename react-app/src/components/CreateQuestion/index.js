@@ -216,6 +216,7 @@ const CreateQuestion = () => {
     // console.log('resetting inputs')
     setTagSearch('')
     setTagChoice('')
+    setTagDropdown(false)
     // ta da!
   }
 
@@ -300,18 +301,25 @@ const CreateQuestion = () => {
           <div className="form-container">
             <label>Tags</label>
             <p>Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</p>
-            <input
-            id="tag-input"
-            type="text"
-            maxLength={30}
-            value={tagSearch}
-            onChange={(e) => {
-              setTagSearch(e.target.value)
-              searchTags(e.target.value)
-            }}
-            >
+            <div id="tag-input-holder">
+              <input
+              id="tag-input"
+              type="text"
+              maxLength={30}
+              value={tagSearch}
+              onChange={(e) => {
+                setTagSearch(e.target.value)
+                searchTags(e.target.value)
+              }}
+              >
 
-            </input>
+              </input>
+              <button
+                type="button"
+                id="new-tag-button"
+                disabled={!tagSearch.length}
+                onClick={addTag}>Add Tag</button>
+            </div>
             {/* <button
               type="button"
               onClick={() => {
@@ -328,7 +336,7 @@ const CreateQuestion = () => {
                     ))}
               </select>
             )} */}
-            <button type="button" onClick={addTag}>Add Tag</button>
+
             {tagDropdown && (
               <TagSelectDropdown selectedTags={[tag1, tag2, tag3, tag4, tag5]} setTagSearch={setTagSearch} setTagChoice={setTagChoice} addTag={addTag} setTagDropdown={setTagDropdown} tags={tags}/>
             )}
