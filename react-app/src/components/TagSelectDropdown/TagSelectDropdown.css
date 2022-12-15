@@ -12,9 +12,13 @@
 }
 
 #tag-dropdown {
+  /* border: 1px solid purple; */
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  width: 95%;
-  margin-left: 2%;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 18px;
+  gap: 5px;
 }

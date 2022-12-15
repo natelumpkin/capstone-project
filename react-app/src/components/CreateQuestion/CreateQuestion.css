@@ -220,3 +220,32 @@
   border: 1px solid black;
   padding: 8px;
 }
+
+#tag-display {
+  margin-top: 15px;
+  display: flex;
+}
+
+#tag-display div {
+  font-size: 12px;
+  width: fit-content;
+  height: fit-content;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#tag-display button {
+  border: none;
+  background-color: #deeffc;
+  color:#0a2e47;
+  font-size: 12px;
+  border-radius: 2px;
+  height: 66%;
+  margin-left: 4px;
+}
+
+#tag-display button:hover {
+  background-color: #0a2e47;
+  color: white;
+  cursor: pointer;
+}

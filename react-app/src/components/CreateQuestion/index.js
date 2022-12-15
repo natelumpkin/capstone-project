@@ -5,7 +5,8 @@ import { EditorState, convertToRaw } from 'draft-js'
 
 import FormEditor from "../FormEditor";
 import AddTagCard from "../AddTagCard";
-import TagNameCard from "../TagNameCard";
+import TagSelectDropdown from "../TagSelectDropdown";
+
 
 import * as questionActions from '../../store/question'
 import * as tagActions from '../../store/tag'
@@ -13,7 +14,6 @@ import * as tagActions from '../../store/tag'
 import convertFromEditorToJson from "../../utils/convertFromEditorToJSON";
 
 import './CreateQuestion.css'
-import TagSelectDropdown from "../TagSelectDropdown";
 
 const CreateQuestion = () => {
 
@@ -70,14 +70,14 @@ const CreateQuestion = () => {
   useEffect(() => {
     if (tagSearch.length <= 0) setDisableAddTags(true)
     let currentTags = [tag1, tag2, tag3, tag4, tag5].filter(tag => tag.tag !== undefined)
-    console.log('currentTags: ', currentTags)
+    // console.log('currentTags: ', currentTags)
     if (currentTags.length < 5) setDisableTagInput(false)
     if (tagSearch.length > 0 && currentTags.length < 5) setDisableAddTags(false)
     if (currentTags.length >= 5) {
       setDisableAddTags(true)
       setDisableTagInput(true)
     }
-    console.log(disableAddTags)
+    // console.log(disableAddTags)
   },[tagSearch, tag1, tag2, tag3, tag4, tag5])
 
   // console.log(tagChoice)
@@ -330,7 +330,6 @@ const CreateQuestion = () => {
                 searchTags(e.target.value)
               }}
               >
-
               </input>
               <button
                 className="demo session-button"
@@ -339,6 +338,9 @@ const CreateQuestion = () => {
                 disabled={disableAddTags}
                 onClick={addTag}>Add Tag</button>
             </div>
+            {tagDropdown && (
+              <TagSelectDropdown selectedTags={[tag1, tag2, tag3, tag4, tag5]} setTagSearch={setTagSearch} setTagChoice={setTagChoice} addTag={addTag} setTagDropdown={setTagDropdown} tags={tags}/>
+            )}
             {/* <button
               type="button"
               onClick={() => {
@@ -356,9 +358,6 @@ const CreateQuestion = () => {
               </select>
             )} */}
 
-            {tagDropdown && (
-              <TagSelectDropdown selectedTags={[tag1, tag2, tag3, tag4, tag5]} setTagSearch={setTagSearch} setTagChoice={setTagChoice} addTag={addTag} setTagDropdown={setTagDropdown} tags={tags}/>
-            )}
             {/* {tagDropdown && (
               <div>
                     {tags.map(tag => (

@@ -1,12 +1,14 @@
 
 .tag-info-card {
-  width: 28%;
+  width: 32%;
   padding: 10px;
-  margin: 5px;
+  box-sizing: border-box;
+  /* flex: 1; */
+  /* border: 1px solid red; */
 }
 
 .tag-info-card:hover {
-  background-color: #f8f9f9;
+  background-color: #f3f6f6;
   cursor: pointer;
 }
 

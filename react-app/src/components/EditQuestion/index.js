@@ -4,8 +4,11 @@ import { useHistory, useParams, Redirect } from "react-router-dom";
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import FormEditor from "../FormEditor";
 import AddTagCard from "../AddTagCard";
+import TagSelectDropdown from "../TagSelectDropdown";
+
 import * as questionActions from '../../store/question'
 import * as tagActions from '../../store/tag'
+
 
 import './EditQuestion.css'
 
@@ -32,21 +35,29 @@ const EditQuestion = () => {
   const [tag4, setTag4] = useState()
   const [tag5, setTag5] = useState()
   const [tagDropdown, setTagDropdown] = useState(false)
+  const [disableAddTags, setDisableAddTags] = useState(true)
+  const [disableTagInput, setDisableTagInput] = useState(false)
 
-  let addTags = async (question) => {
-    let questionId = question.id
-    const tagArray = [tag1, tag2, tag3, tag4, tag5]
-    for (let i = 0; i < tagArray.length; i++) {
-      let tag = tagArray[i]
-      if (tag && tag.newTag) {
-        await dispatch(tagActions.createNewTag(tag))
-        dispatch(questionActions.addTagToQuestion(questionId, tag.id))
-      } else if (tag) {
-        await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
-      }
+  useEffect(() => {
+    const body = window.document.body;
+    body.classList.add('light-grey')
+    return () => {
+      body.classList.remove('light-grey')
     }
-    return question.id
-  }
+  },[])
+
+  useEffect(() => {
+    if (tagSearch.length <= 0) setDisableAddTags(true)
+    let currentTags = [tag1, tag2, tag3, tag4, tag5].filter(tag => tag?.tag !== undefined)
+    // console.log('currentTags: ', currentTags)
+    if (currentTags.length < 5) setDisableTagInput(false)
+    if (tagSearch.length > 0 && currentTags.length < 5) setDisableAddTags(false)
+    if (currentTags.length >= 5) {
+      setDisableAddTags(true)
+      setDisableTagInput(true)
+    }
+    // console.log(disableAddTags)
+  },[tagSearch, tag1, tag2, tag3, tag4, tag5])
 
   // console.log(question.Tags)
 
@@ -285,48 +296,30 @@ const EditQuestion = () => {
               </ul>
           </div>
           <div className="form-container">
-          <input
-            type="text"
-            maxLength={30}
-            value={tagSearch}
-            onChange={(e) => {
-              setTagSearch(e.target.value)
-              searchTags(e.target.value)
-            }}
-            >
-            </input>
-            {/* <button
-              type="button"
-              onClick={() => {
-                searchTags()
+          <label>Tags</label>
+            <p>Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</p>
+            <div id="tag-input-holder">
+              <input
+              id="tag-input"
+              type="text"
+              maxLength={30}
+              disabled={disableTagInput}
+              value={tagSearch}
+              onChange={(e) => {
+                setTagSearch(e.target.value)
+                searchTags(e.target.value)
               }}
-            >
-              Search Tags
-            </button> */}
-            {/* {tagDropdown && (
-              <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
-                    <option value="">Add up to 5 tags</option>
-                    {tags.map(tag => (
-                      <option key={tag.id}>{tag.tag}</option>
-                    ))}
-              </select>
-            )} */}
-            <button type="button" onClick={addTag}>Add Tag</button>
+              >
+              </input>
+              <button
+                className="demo session-button"
+                type="button"
+                id="new-tag-button"
+                disabled={disableAddTags}
+                onClick={addTag}>Add Tag</button>
+            </div>
             {tagDropdown && (
-              <div>
-                    {tags.map(tag => (
-                      <div
-                        onClick={() => {
-                          addTag(tag)
-                          // setTagSearch('')
-                          // setTagChoice('')
-                          setTagDropdown(false)
-                        }}
-                        key={tag.id}>
-                          {tag.tag}
-                      </div>
-                    ))}
-              </div>
+              <TagSelectDropdown selectedTags={[tag1, tag2, tag3, tag4, tag5]} setTagSearch={setTagSearch} setTagChoice={setTagChoice} addTag={addTag} setTagDropdown={setTagDropdown} tags={tags}/>
             )}
             <div id="tag-display">
               {tag1 && (
