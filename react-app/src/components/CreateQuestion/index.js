@@ -77,7 +77,7 @@ const CreateQuestion = () => {
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
       if (tag && tag.newTag) {
-        await dispatch(tagActions.createNewTag(tag))
+        tag = await dispatch(tagActions.createNewTag(tag))
         dispatch(questionActions.addTagToQuestion(questionId, tag.id))
       } else if (tag) {
         await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
@@ -109,25 +109,46 @@ const CreateQuestion = () => {
     }
   }
 
-  console.log('tagSearch on render: ', tagSearch)
+  // console.log('tagSearch on render: ', tagSearch)
 
-  const searchTags = () => {
-    console.log('tagSearch in search function: ', tagSearch)
-    dispatch(tagActions.getTags(tagSearch))
-      .then(() => setTagDropdown(true))
+  const searchTags = (searchWord) => {
+    // console.log('tagSearch in search function: ', tagSearch)
+    dispatch(tagActions.getTags(searchWord))
+      .then(() => {
+        if (searchWord) setTagDropdown(true)
+        if (!searchWord) setTagDropdown(false)
+      })
+  }
+
+  const searchForTag = async (searchTerm) => {
+    let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
+    if (response.ok) {
+      let data = await response.json()
+      return data;
+    } else {
+      return false;
+    }
   }
 
 
-  const addTag = async () => {
-    // look at the existing tags set to this question
+  const addTag = async (newTag) => {
+    console.log('tagChoice: ', tagChoice)
+    // create a list of the tags attached to this question
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
-    // check to see if the tag you want is in state already
+    console.log('tagArray: ', tagArray)
+    // check to see if the tag you want is attached to this question
     let tagToSave = tags.find(tag => tag.tag === tagChoice)
-    if (!tagToSave) {
-    // if it's not, then
-    // check to see if that exact tag is in the database
+    // if it's not in attached to this question
+    if (!tagToSave && newTag.id) {
+      // but if you're clicking on a div, we know the tag is in the database
+      // and can just make that tagToSave
+      tagToSave = newTag
+    } else if (!tagToSave) {
+    // otherwise lets check to see if the exact contents of the searchbar
+    // matches a tag in the database
       let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
       if (response.ok) {
+        // if we get a good response
         let data = await response.json()
         // set tagToSave to that tag in database
         tagToSave = data
@@ -146,6 +167,8 @@ const CreateQuestion = () => {
     // check to see if you already have this tag on the question, and refuse to add if so
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
+      // console.log('tag in array: ', tag?.tag)
+      // console.log('tag to save: ', tagToSave.tag)
       if (tag?.tag === tagToSave.tag) {
         console.log('You already have this tag, sorry')
         return
@@ -163,6 +186,7 @@ const CreateQuestion = () => {
     } else if (!tag5) {
       setTag5(tagToSave)
     }
+    // console.log('resetting inputs')
     setTagSearch('')
     setTagChoice('')
     // ta da!
@@ -170,6 +194,9 @@ const CreateQuestion = () => {
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   // const bodyPlaceholder = ''
+
+  let stateTags = [tag1, tag2, tag3, tag4, tag5]
+  console.log(stateTags)
 
   // console.log('title tips: ', showTitleTips)
   // console.log('body tips: ', showBodyTips)
@@ -249,36 +276,39 @@ const CreateQuestion = () => {
             value={tagSearch}
             onChange={(e) => {
               setTagSearch(e.target.value)
+              searchTags(e.target.value)
+
               // console.log(tagSearch)
               // console.log(e.target.value)
               // if (tagSearch === e.target.value) searchTags()
             }}
             >
             </input>
-            <button
+            {/* <button
               type="button"
               onClick={() => {
                 searchTags()
               }}
             >
               Search Tags
-            </button>
-            {tagDropdown && (
+            </button> */}
+            {/* {tagDropdown && (
               <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
                     <option value="">Add up to 5 tags</option>
                     {tags.map(tag => (
                       <option key={tag.id}>{tag.tag}</option>
                     ))}
               </select>
-            )}
-            {/* {tagDropdown && (
+            )} */}
+            <button type="button" onClick={addTag}>Add Tag</button>
+            {tagDropdown && (
               <div>
                     {tags.map(tag => (
                       <div
                         onClick={() => {
-                          setTagChoice(tag)
-                          addTag()
-                          setTagSearch('')
+                          addTag(tag)
+                          // setTagSearch('')
+                          // setTagChoice('')
                           setTagDropdown(false)
                         }}
                         key={tag.id}>
@@ -286,8 +316,7 @@ const CreateQuestion = () => {
                       </div>
                     ))}
               </div>
-            )} */}
-            <button type="button" onClick={addTag}>Add Tag</button>
+            )}
             <div id="tag-display">
               {tag1 && (
                 <AddTagCard tag={tag1} setTag={setTag1}/>
