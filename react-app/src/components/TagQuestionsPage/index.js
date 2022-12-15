@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 
@@ -16,10 +16,18 @@ const TagQuestionsPage = () => {
   const allQuestions = useSelector(state => state.questions.allQuestions)
   const numQuestions = useSelector(state => state.questions.numQuestions)
   const currentUser = useSelector(state => state.session.user)
+  const [tag, setTag] = useState({})
+  const [loaded, setLoaded] = useState(false)
 
-  useEffect(() => {
-    dispatch(questionActions.fetchAllQuestions(tagId));
+  useEffect( async () => {
+    await dispatch(questionActions.fetchAllQuestions(tagId))
+    const response = await fetch(`/api/tags/${tagId}`)
+    const data = await response.json()
+    await setTag(data)
+    setLoaded(true)
+
   }, [dispatch, tagId])
+
 
 
   const questionsArray = [];
@@ -27,11 +35,17 @@ const TagQuestionsPage = () => {
     let question = allQuestions[questionId]
     questionsArray.unshift(question)
   }
+  // let tag;
+  // if (questionsArray.length) tag = questionsArray[0].Tags.find(tag => Number(tagId) === tag.id)
 
-  const tag = questionsArray[0].Tags.find(tag => Number(tagId) === tag.id)
-  console.log('tag in tag-questions: ', tag)
+
+  // console.log('tag in tag-questions: ', tag)
 
   // const numQuestions = questionsArray.length;
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <div id="content-column-two">
@@ -53,9 +67,14 @@ const TagQuestionsPage = () => {
           <p className="tag-description">{tag.description}</p>)}
         </div>
         <div id="all-questions-header-lower">
-          {numQuestions && (
+          {numQuestions ? (
           <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
+          ) : (
+            <h4>0 questions</h4>
           )}
+
+
+
         </div>
       </div>
       {questionsArray.map(question => (

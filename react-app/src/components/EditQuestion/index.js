@@ -341,7 +341,16 @@ const EditQuestion = () => {
           </div>
           <div id="create-question-button-container">
             <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Revision</button>
-            <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Cancel</button>
+            <button
+              id="discard-draft-button"
+              className="ask-question-button"
+              onClick={() => {
+                window.scrollTo(0,0)
+                history.push('/questions')
+              }}
+              >
+                Cancel
+              </button>
           </div>
         </form>
       </div>

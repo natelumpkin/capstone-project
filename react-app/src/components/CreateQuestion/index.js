@@ -69,7 +69,7 @@ const CreateQuestion = () => {
 
   useEffect(() => {
     if (tagSearch.length <= 0) setDisableAddTags(true)
-    let currentTags = [tag1, tag2, tag3, tag4, tag5].filter(tag => tag.tag !== undefined)
+    let currentTags = [tag1, tag2, tag3, tag4, tag5].filter(tag => tag?.tag !== undefined)
     // console.log('currentTags: ', currentTags)
     if (currentTags.length < 5) setDisableTagInput(false)
     if (tagSearch.length > 0 && currentTags.length < 5) setDisableAddTags(false)
@@ -394,7 +394,16 @@ const CreateQuestion = () => {
           </div>
           <div id="create-question-button-container">
             <button id="post-question-button" className="ask-question-button" disabled={disableButton}>Post Your Question</button>
-            <button id="discard-draft-button" className="ask-question-button" onClick={() => history.push('/questions')}>Discard Draft</button>
+            <button
+              id="discard-draft-button"
+              className="ask-question-button"
+              onClick={() => {
+                window.scrollTo(0,0)
+                history.push('/questions')
+              }}
+              >
+              Discard Draft
+              </button>
           </div>
         </form>
         <div id="tips-container">
