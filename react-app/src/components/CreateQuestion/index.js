@@ -28,6 +28,7 @@ const CreateQuestion = () => {
   const [tag3, setTag3] = useState()
   const [tag4, setTag4] = useState()
   const [tag5, setTag5] = useState()
+  const [tagDropdown, setTagDropdown] = useState(false)
 
   // save the tag object to state
   // display the tagCard to the user, displaying its name, with a button to remove
@@ -90,7 +91,7 @@ const CreateQuestion = () => {
 
     handleBodyErrors()
     handleTitleErrors()
-    let questionId;
+
 
     if (!bodyErrors.length && !titleErrors.length) {
       const content = editorState.getCurrentContent()
@@ -108,8 +109,12 @@ const CreateQuestion = () => {
     }
   }
 
+  console.log('tagSearch on render: ', tagSearch)
+
   const searchTags = () => {
+    console.log('tagSearch in search function: ', tagSearch)
     dispatch(tagActions.getTags(tagSearch))
+      .then(() => setTagDropdown(true))
   }
 
 
@@ -158,10 +163,10 @@ const CreateQuestion = () => {
     } else if (!tag5) {
       setTag5(tagToSave)
     }
+    setTagSearch('')
+    setTagChoice('')
     // ta da!
   }
-
-
 
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   // const bodyPlaceholder = ''
@@ -239,16 +244,51 @@ const CreateQuestion = () => {
               </ul>
           </div>
           <div className="form-container">
-            <input type="text" value={tagSearch} onChange={(e) => setTagSearch(e.target.value)}></input>
-            <button type="button" onClick={searchTags}>Search Tags</button>
-            <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
-                  <option value="">Add up to 5 tags</option>
-                  {tags.map(tag => (
-                    <option key={tag.id}>{tag.tag}</option>
-                  ))}
-            </select>
+            <input
+            type="text"
+            value={tagSearch}
+            onChange={(e) => {
+              setTagSearch(e.target.value)
+              // console.log(tagSearch)
+              // console.log(e.target.value)
+              // if (tagSearch === e.target.value) searchTags()
+            }}
+            >
+            </input>
+            <button
+              type="button"
+              onClick={() => {
+                searchTags()
+              }}
+            >
+              Search Tags
+            </button>
+            {tagDropdown && (
+              <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
+                    <option value="">Add up to 5 tags</option>
+                    {tags.map(tag => (
+                      <option key={tag.id}>{tag.tag}</option>
+                    ))}
+              </select>
+            )}
+            {/* {tagDropdown && (
+              <div>
+                    {tags.map(tag => (
+                      <div
+                        onClick={() => {
+                          setTagChoice(tag)
+                          addTag()
+                          setTagSearch('')
+                          setTagDropdown(false)
+                        }}
+                        key={tag.id}>
+                          {tag.tag}
+                      </div>
+                    ))}
+              </div>
+            )} */}
             <button type="button" onClick={addTag}>Add Tag</button>
-            <div>
+            <div id="tag-display">
               {tag1 && (
                 <AddTagCard tag={tag1} setTag={setTag1}/>
               )}
