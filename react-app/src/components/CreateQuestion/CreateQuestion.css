@@ -8,6 +8,7 @@
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 20px;
+  margin-bottom: 300px;
 }
 
 #create-question-container div,
@@ -201,10 +202,16 @@
 
 #new-tag-button {
   width: 12%;
-  height: 100%;
+  height: 36px;
   margin-left: 10px;
   font-size: 12px;
   align-self: center;
+}
+
+#new-tag-button:disabled {
+  background-color: #84a1bd;
+  border: none;
+  cursor: default;
 }
 
 #tag-input {

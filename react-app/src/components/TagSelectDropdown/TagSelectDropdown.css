@@ -2,11 +2,19 @@
   width: 50%;
 }
 
-#tag-dropdown {
+#tag-holder {
   border: 1px solid black;
   background-color: white;
   position: absolute;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   width: 59%;
+}
+
+#tag-dropdown {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 95%;
+  margin-left: 2%;
 }

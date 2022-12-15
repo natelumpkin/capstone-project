@@ -49,11 +49,15 @@ const CreateQuestion = () => {
   const [tag4, setTag4] = useState()
   const [tag5, setTag5] = useState()
   const [tagDropdown, setTagDropdown] = useState(false)
+  const [disableAddTags, setDisableAddTags] = useState(true)
+  const [disableTagInput, setDisableTagInput] = useState(false)
 
   // save the tag object to state
   // display the tagCard to the user, displaying its name, with a button to remove
   // when remove button is clicked, setstate to undefined
   // on submit, for each state that is defined, addTagToQuestion with its id
+
+
 
   useEffect(() => {
     const body = window.document.body;
@@ -62,6 +66,19 @@ const CreateQuestion = () => {
       body.classList.remove('light-grey')
     }
   },[])
+
+  useEffect(() => {
+    if (tagSearch.length <= 0) setDisableAddTags(true)
+    let currentTags = [tag1, tag2, tag3, tag4, tag5].filter(tag => tag.tag !== undefined)
+    console.log('currentTags: ', currentTags)
+    if (currentTags.length < 5) setDisableTagInput(false)
+    if (tagSearch.length > 0 && currentTags.length < 5) setDisableAddTags(false)
+    if (currentTags.length >= 5) {
+      setDisableAddTags(true)
+      setDisableTagInput(true)
+    }
+    console.log(disableAddTags)
+  },[tagSearch, tag1, tag2, tag3, tag4, tag5])
 
   // console.log(tagChoice)
 
@@ -306,6 +323,7 @@ const CreateQuestion = () => {
               id="tag-input"
               type="text"
               maxLength={30}
+              disabled={disableTagInput}
               value={tagSearch}
               onChange={(e) => {
                 setTagSearch(e.target.value)
@@ -315,9 +333,10 @@ const CreateQuestion = () => {
 
               </input>
               <button
+                className="demo session-button"
                 type="button"
                 id="new-tag-button"
-                disabled={!tagSearch.length}
+                disabled={disableAddTags}
                 onClick={addTag}>Add Tag</button>
             </div>
             {/* <button

@@ -7,7 +7,7 @@ import './TagInfoCard.css'
 
 const TagInfoCard = ({tag, setTagSearch, setTagChoice, addTag, setTagDropdown}) => {
 
-  console.log('tag in tagInfoCard: ', tag)
+  // console.log('tag in tagInfoCard: ', tag)
 
   return (
     <div className="tag-info-card"
