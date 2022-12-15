@@ -195,8 +195,8 @@ const CreateQuestion = () => {
   const titlePlaceholder = 'e.g. Is there an R function for finding the index of an element in a vector?'
   // const bodyPlaceholder = ''
 
-  let stateTags = [tag1, tag2, tag3, tag4, tag5]
-  console.log(stateTags)
+  // let stateTags = [tag1, tag2, tag3, tag4, tag5]
+  // console.log(stateTags)
 
   // console.log('title tips: ', showTitleTips)
   // console.log('body tips: ', showBodyTips)
@@ -277,10 +277,6 @@ const CreateQuestion = () => {
             onChange={(e) => {
               setTagSearch(e.target.value)
               searchTags(e.target.value)
-
-              // console.log(tagSearch)
-              // console.log(e.target.value)
-              // if (tagSearch === e.target.value) searchTags()
             }}
             >
             </input>

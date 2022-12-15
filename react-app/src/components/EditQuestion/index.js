@@ -31,6 +31,7 @@ const EditQuestion = () => {
   const [tag3, setTag3] = useState()
   const [tag4, setTag4] = useState()
   const [tag5, setTag5] = useState()
+  const [tagDropdown, setTagDropdown] = useState(false)
 
   let addTags = async (question) => {
     let questionId = question.id
@@ -78,16 +79,16 @@ const EditQuestion = () => {
       // if current state tag is not in questionTags, add it
       let tag = tagArray[i]
       if (tag?.id && !questionTagIds.includes(tag.id)) {
-        if (tag && tag.newTag) {
-          console.log('creating new tag')
-          await dispatch(tagActions.createNewTag(tag))
-          dispatch(questionActions.addTagToQuestion(questionId, tag.id))
-        } else if (tag) {
-          console.log('adding pre-existing tag')
+        // if (tag && tag.newTag) {
+        //   console.log('creating new tag')
+        //   let newTag = await dispatch(tagActions.createNewTag(tag))
+        //   dispatch(questionActions.addTagToQuestion(questionId, newTag.id))
+        // } else if (tag) {
+        //   console.log('adding pre-existing tag')
           await dispatch(questionActions.addTagToQuestion(questionId, tag.id))
-        }
+        // }
       } else if (tag && tag.newTag) {
-        await dispatch(tagActions.createNewTag(tag))
+        tag = await dispatch(tagActions.createNewTag(tag))
         dispatch(questionActions.addTagToQuestion(questionId, tag.id))
       }
       //
@@ -106,7 +107,7 @@ const EditQuestion = () => {
     if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
     if (stateToDisplay) setEditorState(stateToDisplay)
 
-    if (question.Tags?.length) {
+    if (loaded && question.Tags?.length) {
       setTag1(question.Tags[0])
       setTag2(question.Tags[1])
       setTag3(question.Tags[2])
@@ -168,16 +169,26 @@ const EditQuestion = () => {
     }
   }
 
-  const searchTags = () => {
-    dispatch(tagActions.getTags(tagSearch))
+  const searchTags = (searchWord) => {
+    // console.log('tagSearch in search function: ', tagSearch)
+    dispatch(tagActions.getTags(searchWord))
+      .then(() => {
+        if (searchWord) setTagDropdown(true)
+        if (!searchWord) setTagDropdown(false)
+      })
   }
 
-  const addTag = async () => {
+  const addTag = async (newTag) => {
     // look at the existing tags set to this question
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
     // check to see if the tag you want is in state already
     let tagToSave = tags.find(tag => tag.tag === tagChoice)
-    if (!tagToSave) {
+    if (!tagToSave && newTag.id) {
+      // but if you're clicking on a div, we know the tag is in the database
+      // and can just make that tagToSave
+      tagToSave = newTag
+    }
+    else if (!tagToSave) {
     // if it's not, then
     // check to see if that exact tag is in the database
       let response = await fetch(`/api/tags?exactTag=${tagSearch}`)
@@ -217,6 +228,8 @@ const EditQuestion = () => {
     } else if (!tag5) {
       setTag5(tagToSave)
     }
+    setTagSearch('')
+    setTagChoice('')
     // ta da!
   }
 
@@ -272,16 +285,49 @@ const EditQuestion = () => {
               </ul>
           </div>
           <div className="form-container">
-            <input type="text" value={tagSearch} onChange={(e) => setTagSearch(e.target.value)}></input>
-            <button type="button" onClick={searchTags}>Search Tags</button>
-            <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
-                  <option value="">Add up to 5 tags</option>
-                  {tags.map(tag => (
-                    <option key={tag.id}>{tag.tag}</option>
-                  ))}
-            </select>
+          <input
+            type="text"
+            value={tagSearch}
+            onChange={(e) => {
+              setTagSearch(e.target.value)
+              searchTags(e.target.value)
+            }}
+            >
+            </input>
+            {/* <button
+              type="button"
+              onClick={() => {
+                searchTags()
+              }}
+            >
+              Search Tags
+            </button> */}
+            {/* {tagDropdown && (
+              <select id="tag-chooser" value={tagChoice} onChange={(e) => setTagChoice(e.target.value)} name="tag-choices">
+                    <option value="">Add up to 5 tags</option>
+                    {tags.map(tag => (
+                      <option key={tag.id}>{tag.tag}</option>
+                    ))}
+              </select>
+            )} */}
             <button type="button" onClick={addTag}>Add Tag</button>
-            <div>
+            {tagDropdown && (
+              <div>
+                    {tags.map(tag => (
+                      <div
+                        onClick={() => {
+                          addTag(tag)
+                          // setTagSearch('')
+                          // setTagChoice('')
+                          setTagDropdown(false)
+                        }}
+                        key={tag.id}>
+                          {tag.tag}
+                      </div>
+                    ))}
+              </div>
+            )}
+            <div id="tag-display">
               {tag1 && (
                 <AddTagCard tag={tag1} setTag={setTag1}/>
               )}
