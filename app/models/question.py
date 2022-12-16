@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .question_tags import question_tags
 from datetime import datetime
 
 class Question(db.Model):
@@ -16,6 +17,7 @@ class Question(db.Model):
 
   author = db.relationship('User', back_populates="questions")
   answers = db.relationship('Answer', back_populates="question", cascade="all, delete")
+  tags = db.relationship('Tag', secondary=question_tags, back_populates='questions')
 
   def to_dict_single(self):
       return {

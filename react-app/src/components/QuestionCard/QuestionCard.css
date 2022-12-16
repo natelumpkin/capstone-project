@@ -48,10 +48,22 @@
 }
 
 .summary-container {
+  /* display: flex;
+  justify-content: space-between; */
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.tag-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.second-line-summary-container {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
-  margin-bottom: 25px;
 }
 
 .user-data {

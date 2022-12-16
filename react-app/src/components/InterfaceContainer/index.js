@@ -4,6 +4,8 @@ import SingleQuestion from "../SingleQuestion";
 import EditAnswer from "../EditAnswer";
 import LeftNavBar from "../LeftNavbar";
 import AboutPage from "../AboutPage";
+import TagQuestionsPage from "../TagQuestionsPage";
+import TagListPage from "../TagListPage";
 
 import './InterfaceContainer.css'
 
@@ -19,6 +21,12 @@ const InterfaceContainer = () => {
         </Route>
         <Route path='/questions/:questionId'>
           <SingleQuestion/>
+        </Route>
+        <Route path='/tags' exact={true}>
+          <TagListPage/>
+        </Route>
+        <Route path='/tags/:tagId'>
+          <TagQuestionsPage/>
         </Route>
         <Route path='/answers/:answerId/edit'>
           <EditAnswer/>

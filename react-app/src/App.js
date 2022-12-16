@@ -64,6 +64,9 @@ function App() {
         <Route path='/about'>
           <InterfaceContainer/>
         </Route>
+        <Route path='/tags'>
+          <InterfaceContainer/>
+        </Route>
         <Route>
           <h1>Hey this page wasn't found, sorry!</h1>
         </Route>

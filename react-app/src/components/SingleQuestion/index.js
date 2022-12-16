@@ -9,6 +9,7 @@ import * as questionActions from '../../store/question'
 import UserControls from "../UserControls";
 import UserInfoCard from "../UserInfoCard";
 import QuestionAnswers from "../QuestionAnswers";
+import TagNameCard from "../TagNameCard";
 
 import getSpecificTimeAgo from "../../utils/getSpecificTimeAgo.js";
 
@@ -88,6 +89,11 @@ const SingleQuestion = () => {
                   readOnly
                 />
             </div>
+            <div className="tag-container single-question-tags">
+            {currentQuestion.Tags.map(tag => (
+              <TagNameCard key={tag.id} tag={tag}/>
+            ))}
+          </div>
             <div id="single-question-bottom-container">
               <div id="single-question-user-controls-container">
                 {currentUser && currentQuestion.User && (currentUser.id === currentQuestion.User.id) && (

@@ -7,6 +7,7 @@ const ONE_QUESTION = 'questions/one'
 const EDIT_QUESTION = 'questions/edit'
 const ADD_QUESTION = 'questions/create'
 const DELETE_QUESTION = 'questions/delete'
+const ADD_TAG = 'questions/addTag'
 
 
 // Actions
@@ -36,10 +37,24 @@ const removeQuestion = (questionId) => ({
   questionId
 })
 
+const addTag = (questionId, tag) => ({
+  type: ADD_TAG,
+  questionId,
+  tag
+})
+
 // Thunks
 
-export const fetchAllQuestions = () => async dispatch => {
-  const response = await fetch('/api/questions')
+export const fetchAllQuestions = (tagId) => async dispatch => {
+  let response
+  console.log(tagId)
+  if (tagId) {
+    console.log('fetching tags')
+    response = await fetch(`/api/tags/${tagId}/questions`)
+  } else {
+    console.log('fetching all questions')
+    response = await fetch('/api/questions')
+  }
   if (response.ok) {
     const questions = await response.json()
     dispatch(getQuestions(questions))
@@ -86,7 +101,8 @@ export const editQuestion = (questionId, questionBody) => async dispatch => {
   })
   const data = await response.json()
   if (response.ok) {
-    dispatch(updateQuestion(data))
+    dispatch(updateQuestion(data));
+    return data;
   }
   return data
 }
@@ -100,6 +116,39 @@ export const deleteQuestion = (questionId) => async dispatch => {
     dispatch(removeQuestion(questionId))
   }
   return data
+}
+
+export const addTagToQuestion = (questionId, tagId) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}/tags`,{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      tagId
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addTag(questionId, data.Tag))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+// Will have to dispatch single question after dispatching removeTag
+
+export const removeTagFromQuestion = (questionId, tagId) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}/tags/${tagId}`, {
+    method: 'DELETE'
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
 }
 
 
@@ -176,6 +225,26 @@ const questionsReducer = (state = initialState, action) => {
       }
       delete newState.allQuestions[action.questionId]
       return newState
+    }
+    case (ADD_TAG): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {
+          ...state.singleQuestion
+        },
+        numQuestions: state.numQuestions
+      }
+      if (newState.allQuestions[action.questionId]) {
+        newState.allQuestions[action.questionId].Tags = [
+        ...state.allQuestions[action.questionId].Tags, action.tag
+      ]
+      }
+      newState.singleQuestion.Tags = [
+        ...state.singleQuestion.Tags, action.tag
+      ]
+      return newState;
     }
     default: {
       return state

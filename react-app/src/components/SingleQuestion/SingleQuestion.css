@@ -73,6 +73,12 @@
   margin-bottom: 30px;
 }
 
+.tag-container.single-question-tags {
+  margin-bottom: 40px;
+  margin-top: 0;
+  gap: 6px;
+}
+
 #single-question-bottom-container {
   display: flex;
   justify-content: space-between;

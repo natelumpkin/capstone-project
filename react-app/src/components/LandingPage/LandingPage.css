@@ -14,18 +14,30 @@
   text-align: center;
 }
 
+#quote-container {
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+}
+
 #landing-page-orange-quote {
   background-color: #fee3cd;
   padding: 25px;
-  margin-left: 7%;
+  /* margin-left: 7%; */
   margin-top: 40px;
   width: 400px;
-  height: 200px;
+  height: 240px;
   border-radius: 5px 5px 0 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  box-sizing: border-box;
+}
+
+#landing-page-orange-quote.blue-quote {
+  background-color: #cce9fe;
+  border-radius: 5px 5px 5px 0;
 }
 
 #orange-quote-polygon {
@@ -34,14 +46,26 @@
   height: 50px;
   width: 50px;
   position: relative;
-  top: 23px;
-  left: 200px;
+
+  left: 175px;
   border-radius: 5px;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 88% 100%);
 }
 
 .orange {
   color: #f2740d;
+  font-size: 40px;
+}
+
+#orange-quote-polygon.blue-polygon {
+  background-color: #cce9fe;
+  right: 175px;
+  left: -175px;
+  clip-path: polygon(0% 0%, 100% 0%, 12% 100%, 0% 100%);
+}
+
+.blue {
+  color: #27a1fe;
   font-size: 40px;
 }
 
@@ -74,6 +98,14 @@
 
 .orange-button:hover {
   background-color: #bb5909;
+}
+
+.orange-button.blue-button {
+  background-color: #0895fe;
+}
+
+.orange-button.blue-button:hover {
+  background-color: #0064bd;
 }
 
 .slogan-quote {

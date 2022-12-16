@@ -1,0 +1,25 @@
+
+.tag-info-card {
+  width: 32%;
+  padding: 10px;
+  box-sizing: border-box;
+  /* flex: 1; */
+  /* border: 1px solid red; */
+}
+
+.tag-info-card:hover {
+  background-color: #f3f6f6;
+  cursor: pointer;
+}
+
+.tag-info.tag-name-card {
+  width: fit-content;
+  font-size: 12px;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.tag-info-description p {
+  padding-top: 5px;
+  font-size: 12px;
+}
