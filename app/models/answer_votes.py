@@ -4,15 +4,15 @@ from .answer import Answer
 from .user import User
 
 class Answer_Vote(db.Model):
-  __tablename__ = 'question_votes'
+  __tablename__ = 'answer_votes'
 
   if environment == "production":
           __table_args__ = {'schema': SCHEMA}
 
   id = db.Column(db.Integer, primary_key=True)
-  question_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("answers.id")))
-  user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("answers.id")))
-  vote = db.Column(db.Boolean())
+  question_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("answers.id")), nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("answers.id")), nullable=False)
+  vote = db.Column(db.Boolean(), nullable=False)
   created_at = db.Column(db.DateTime(), default=datetime.utcnow())
   updated_at = db.Column(db.DateTime(), default=datetime.utcnow())
 
