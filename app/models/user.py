@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
 
     questions = db.relationship('Question', back_populates="author")
     answers = db.relationship('Answer', back_populates="author")
+    question_votes = db.relationship('Question_Vote', back_populates='user')
+    answer_votes = db.relationship('Answer_Vote', back_populates='user')
 
     @property
     def password(self):

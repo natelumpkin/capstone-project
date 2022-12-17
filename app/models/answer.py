@@ -16,6 +16,7 @@ class Answer(db.Model):
 
   author = db.relationship('User', back_populates="answers")
   question = db.relationship('Question', back_populates="answers")
+  answer_votes = db.relationship('Answer_Vote', back_populates='answer')
 
   def to_dict(self):
       return {
