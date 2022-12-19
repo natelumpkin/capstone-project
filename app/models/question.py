@@ -18,11 +18,11 @@ class Question(db.Model):
   author = db.relationship('User', back_populates="questions")
   answers = db.relationship('Answer', back_populates="question", cascade="all, delete")
   tags = db.relationship('Tag', secondary=question_tags, back_populates='questions')
-  question_votes = db.relationship('Question_Vote', back_populates='question')
+  votes = db.relationship('Question_Vote', back_populates='question')
 
 
   def to_dict_single(self):
-      return {
+      response = {
             "id": self.id,
             "userId": self.user_id,
             "title": self.title,
@@ -35,6 +35,13 @@ class Question(db.Model):
                   "username": self.author.username
             }
       }
+      response['totalScore'] = 0
+      for vote in self.votes:
+            if vote.vote:
+                  response['totalScore'] += 1
+            else:
+                  response['totalScore'] -= 1
+      return response
 
   def to_dict_all(self):
       return {

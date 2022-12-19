@@ -16,5 +16,15 @@ class Question_Vote(db.Model):
   created_at = db.Column(db.DateTime(), default=datetime.utcnow())
   updated_at = db.Column(db.DateTime(), default=datetime.utcnow())
 
-  question = db.relationship('Question', back_populates='question_votes', cascade='all, delete')
+  question = db.relationship('Question', back_populates='votes', cascade='all, delete')
   user = db.relationship('User', back_populates='question_votes', cascade='all, delete')
+
+  def to_dict(self):
+        return {
+                "id": self.id,
+                "question_id": self.question_id,
+                "user_id": self.user_id,
+                "vote": self.vote,
+                "created_at": self.created_at,
+                "updated_at": self.updated_at
+        }

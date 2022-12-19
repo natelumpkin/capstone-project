@@ -12,7 +12,7 @@ question_routes = Blueprint('questions', __name__)
 
 @question_routes.route('')
 def get_all_questions():
-  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags)).all()
+  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).all()
   numQuestions = Question.query.count()
 
   response = {
@@ -23,6 +23,13 @@ def get_all_questions():
   for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
+    # dict_question['totalScore'] = 0
+
+    # for vote in question.votes:
+    #   if vote.vote:
+    #     dict_question['totalScore'] += 1
+    #   else:
+    #     dict_question['totalScore'] -= 1
 
     for tag in question.tags:
       dict_question['Tags'].append(tag.to_dict())
@@ -36,13 +43,20 @@ def get_all_questions():
 @question_routes.route('/<int:id>')
 def get_single_question(id):
   try:
-    question = Question.query.get_or_404(id)
+    question = Question.query.options(joinedload(Question.tags), joinedload(Question.votes)).get_or_404(id)
   except:
     return { "message": "Question couldn't be found"}, 404
 
   response = question.to_dict_single()
 
   response['Tags'] = []
+  # response['totalScore'] = 0
+
+  # for vote in question.votes:
+  #   if vote.vote:
+  #     response['totalScore'] += 1
+  #   else:
+  #     response['totalScore'] -= 1
 
   for tag in question.tags:
     response['Tags'].append(tag.to_dict())
@@ -75,6 +89,7 @@ def post_question():
     db.session.commit()
     dict_question = new_question.to_dict_single()
     dict_question['Tags'] = []
+    # dict_question['totalScore'] = 0
     return dict_question, 201
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
@@ -84,7 +99,7 @@ def post_question():
 @login_required
 def edit_question(id):
   try:
-    question = Question.query.get_or_404(id)
+    question = Question.query.options(joinedload(Question.tags), joinedload(Question.votes)).get_or_404(id)
 
   except:
     return { "message": "Question couldn't be found"}, 404
@@ -105,6 +120,7 @@ def edit_question(id):
 
       response = question.to_dict_single()
       response['Tags'] = []
+
 
       for tag in question.tags:
         response['Tags'].append(tag.to_dict())
@@ -236,3 +252,22 @@ def remove_tag(questionId, tagId):
     return {"message": f"tag {tag.tag} removed from question {question.id}"}
   else:
     return {"message": "Question does not have this tag"}, 400
+
+## Get all votes for a question
+
+@question_routes.route('/<int:id>/votes')
+def get_votes_for_question(id):
+  try:
+    question = Question.query.options(joinedload(Question.votes)).get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  response = {
+    "Votes": [],
+    "totalScore": question.to_dict_single()['totalScore']
+  }
+
+  for vote in question.votes:
+    response['Votes'].append(vote.to_dict())
+
+  return response

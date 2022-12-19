@@ -56,3 +56,22 @@ def delete_answer(id):
   db.session.delete(answer)
   db.session.commit()
   return {"message": "Successfully deleted"}
+
+## Get all votes for an answer
+
+@answer_routes.route('/<int:id>/votes')
+def get_votes_for_answer(id):
+  try:
+    answer = Answer.query.options(joinedload(Answer.votes)).get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  response = {
+    "Votes": [],
+    "totalScore": answer.to_dict()['totalScore']
+  }
+
+  for vote in answer.votes:
+    response['Votes'].append(vote.to_dict())
+
+  return response
