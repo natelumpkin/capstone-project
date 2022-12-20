@@ -4,12 +4,14 @@ import session from './session'
 import answersReducer from './answer';
 import questionsReducer from './question';
 import tagReducer from './tag';
+import voteReducer from './vote';
 
 const rootReducer = combineReducers({
   session,
   questions: questionsReducer,
   answers: answersReducer,
-  tags: tagReducer
+  tags: tagReducer,
+  // votes: voteReducer
 });
 
 

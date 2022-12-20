@@ -13,9 +13,14 @@ answer_routes = Blueprint("answers", __name__)
 @answer_routes.route('/<int:id>')
 def get_answer(id):
   try:
-    answer = Answer.query.get_or_404(id)
+    answer = Answer.query.options(joinedload(Answer.votes)).get_or_404(id)
   except:
     return {"message": "Answer couldn't be found"}, 404
+
+  response = answer.to_dict()
+  response['Votes'] = []
+  for vote in answer.votes:
+    response['Votes'].append(answer.votes)
 
   return answer.to_dict()
 
@@ -24,7 +29,7 @@ def get_answer(id):
 def edit_answer(id):
 
   try:
-    answer = Answer.query.get_or_404(id)
+    answer = Answer.query.options(joinedload(Answer.votes)).get_or_404(id)
   except:
     return { "message": "Answer couldn't be found"}, 404
 
@@ -38,7 +43,13 @@ def edit_answer(id):
     answer.answer = form.data['answer']
     answer.updated_at = datetime.utcnow()
     db.session.commit()
-    return answer.to_dict()
+
+    response = answer.to_dict()
+    response['Votes'] = []
+    for vote in answer.votes:
+      response['Votes'].append(vote.to_dict())
+
+    return response
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 

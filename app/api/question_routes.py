@@ -61,6 +61,10 @@ def get_single_question(id):
   for tag in question.tags:
     response['Tags'].append(tag.to_dict())
 
+  response['Votes'] = []
+  for vote in question.votes:
+    response['Votes'].append(vote.to_dict())
+
   response['User'] = {
       "id": question.author.id,
       "username": question.author.username
@@ -89,6 +93,7 @@ def post_question():
     db.session.commit()
     dict_question = new_question.to_dict_single()
     dict_question['Tags'] = []
+    dict_question['Votes'] = []
     # dict_question['totalScore'] = 0
     return dict_question, 201
   else:
@@ -120,6 +125,9 @@ def edit_question(id):
 
       response = question.to_dict_single()
       response['Tags'] = []
+      response['Votes'] = []
+      for vote in question.votes:
+        response['Votes'].append(vote.to_dict())
 
 
       for tag in question.tags:
@@ -154,7 +162,7 @@ def get_answers_by_question(id):
   except:
     return { "message": "Question couldn't be found"}, 404
 
-  answers = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author)).all()
+  answers = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author), joinedload(Answer.votes)).all()
   # answerCount = Answer.query.filter(Answer.question_id == id).options(joinedload(Answer.author)).count()
 
   response = {
@@ -164,10 +172,16 @@ def get_answers_by_question(id):
 
   for answer in answers:
     dict_answer = answer.to_dict()
+
+    dict_answer['Votes'] = []
+    for vote in answer.votes:
+      dict_answer['Votes'].append(vote.to_dict())
+
     dict_answer['User'] = {
       "id": answer.author.id,
       "username": answer.author.username
     }
+
     response['Answers'].append(dict_answer)
 
   return response
@@ -194,7 +208,9 @@ def add_answer_to_question(id):
     )
     db.session.add(new_answer)
     db.session.commit()
-    return new_answer.to_dict()
+    response = new_answer.to_dict()
+    response['Votes'] = []
+    return response
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
