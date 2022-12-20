@@ -297,6 +297,8 @@ def add_vote_to_question(id):
   form = VoteForm()
   form['csrf_token'].data = request.cookies['csrf_token']
 
+  print(form.data)
+
   if form.validate_on_submit():
     new_vote = Question_Vote(
       question_id=question.id,
@@ -307,4 +309,5 @@ def add_vote_to_question(id):
     db.session.commit()
     return new_vote.to_dict(), 201
   else:
+    print(form.errors)
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
