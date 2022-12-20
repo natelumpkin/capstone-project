@@ -1,6 +1,6 @@
 from flask import Blueprint, request
-from app.models import Question, Answer, User, db, Tag
-from app.forms import AnswerForm, QuestionForm
+from app.models import Question, Answer, User, db, Tag, Question_Vote
+from app.forms import AnswerForm, QuestionForm, VoteForm
 from sqlalchemy.orm import joinedload
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
@@ -271,3 +271,40 @@ def get_votes_for_question(id):
     response['Votes'].append(vote.to_dict())
 
   return response
+
+## Add vote to question
+
+@question_routes.route('/<int:id>/votes', methods=['POST'])
+@login_required
+def add_vote_to_question(id):
+  try:
+    question = Question.query.options(joinedload(Question.votes)).get_or_404(id)
+  except:
+    return { "message": "Question couldn't be found"}, 404
+
+  if current_user.id == question.user_id:
+    return { "message": "Cannot vote on your own question"}, 403
+
+  ## If user already has a vote in question.votes
+  ## return a forbidden message
+
+  voteIds = [ vote.user_id for vote in question.votes ]
+  print("voteIds: ", voteIds)
+  print("currentuserid: ", current_user.id)
+  if current_user.id in voteIds:
+    return { "message": "User has already voted on this question"}, 403
+
+  form = VoteForm()
+  form['csrf_token'].data = request.cookies['csrf_token']
+
+  if form.validate_on_submit():
+    new_vote = Question_Vote(
+      question_id=question.id,
+      user_id=current_user.id,
+      vote=form.data['vote']
+    )
+    db.session.add(new_vote)
+    db.session.commit()
+    return new_vote.to_dict(), 201
+  else:
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400

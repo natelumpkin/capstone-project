@@ -16,7 +16,7 @@ class Answer(db.Model):
 
   author = db.relationship('User', back_populates="answers")
   question = db.relationship('Question', back_populates="answers")
-  votes = db.relationship('Answer_Vote', back_populates='answer')
+  votes = db.relationship('Answer_Vote', back_populates='answer', cascade='all, delete')
 
   def to_dict(self):
       response = {

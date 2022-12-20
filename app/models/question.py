@@ -18,7 +18,7 @@ class Question(db.Model):
   author = db.relationship('User', back_populates="questions")
   answers = db.relationship('Answer', back_populates="question", cascade="all, delete")
   tags = db.relationship('Tag', secondary=question_tags, back_populates='questions')
-  votes = db.relationship('Question_Vote', back_populates='question')
+  votes = db.relationship('Question_Vote', back_populates='question', cascade='all, delete')
 
 
   def to_dict_single(self):
