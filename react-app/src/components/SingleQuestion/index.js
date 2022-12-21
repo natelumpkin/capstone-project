@@ -38,16 +38,22 @@ const SingleQuestion = () => {
     let userVote;
     if (currentQuestion.Votes) {
       userVote = Object.values(currentQuestion?.Votes).find(vote => vote.user_id === currentUser.id)
+      // console.log('uservotes in userVote: ', userVote)
     }
-    console.log(userVote)
+    console.log('disable vote useeffect running')
     if (userVote) {
       if (userVote.vote) {
+        console.log('disabling upvote')
         setDisableUpVote(true)
         setDisableDownVote(false)
       } else {
+        console.log('disabling downvote')
         setDisableUpVote(false)
         setDisableDownVote(true)
       }
+    } else {
+      setDisableDownVote(false)
+      setDisableUpVote(false)
     }
   },[disableUpVote, disableDownVote, currentQuestion])
 
@@ -55,12 +61,13 @@ const SingleQuestion = () => {
     // if user hasn't voted on this question yet, add vote
     let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
     if (!votedList.includes(currentUser.id)) {
+      console.log('adding upvote')
       dispatch(questionActions.addVoteToQuestion(questionId, true))
     } else {
-      // find the vote to update..?
-      console.log('updating vote')
+      // delete their vote
+      console.log('deleting downvote')
       let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
-      dispatch(questionActions.updateQuestionVote(userVote.id, true))
+      dispatch(questionActions.deleteVoteFromQuestion(userVote.id, true))
     }
 
 
@@ -71,11 +78,13 @@ const SingleQuestion = () => {
     // if user hasn't voted on this question yet, add vote
     let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
     if (!votedList.includes(currentUser.id)) {
+      console.log('adding downvote')
       dispatch(questionActions.addVoteToQuestion(questionId, false))
     } else {
-      // find the vote to update..?
+      // delete their vote
+      console.log('deleting upvote')
       let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
-      dispatch(questionActions.updateQuestionVote(userVote.id, false))
+      dispatch(questionActions.deleteVoteFromQuestion(userVote.id, false))
     }
     // if user has voted, updated vote with true
   }

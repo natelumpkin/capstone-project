@@ -9,6 +9,7 @@ const ADD_QUESTION = 'questions/create'
 const DELETE_QUESTION = 'questions/delete'
 const ADD_TAG = 'questions/addTag'
 const ADD_VOTE = 'questions/addVote'
+const DELETE_VOTE = 'questions/deleteVote'
 
 // Actions
 
@@ -45,6 +46,12 @@ const addTag = (questionId, tag) => ({
 
 const addVote = (vote) => ({
   type: ADD_VOTE,
+  vote
+})
+
+const removeVote = (voteId, vote) => ({
+  type: DELETE_VOTE,
+  voteId,
   vote
 })
 
@@ -190,6 +197,20 @@ export const updateQuestionVote = (voteId, vote) => async dispatch => {
   }
 }
 
+export const deleteVoteFromQuestion = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/questionVotes/${voteId}`, {
+    method: "DELETE"
+  })
+  if (response.ok) {
+    let data = await response.json()
+    dispatch(removeVote(voteId, vote))
+    return data
+  } else {
+    let errors = await response.json()
+    return errors
+  }
+}
+
 
 const initialState = {
   allQuestions: {},
@@ -303,6 +324,23 @@ const questionsReducer = (state = initialState, action) => {
       if (action.vote.vote) newState.singleQuestion.totalScore += 1
       if (!action.vote.vote) newState.singleQuestion.totalScore -= 1
       return newState
+    }
+    case (DELETE_VOTE): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {
+          ...state.singleQuestion
+        },
+        numQuestions: state.numQuestions
+      }
+      delete newState.singleQuestion.Votes[action.voteId]
+      console.log('action.vote.vote: ', action.vote)
+      console.log('total score in reducer: ', newState.singleQuestion.totalScore)
+      if (action.vote) newState.singleQuestion.totalScore += 1
+      if (!action.vote) newState.singleQuestion.totalScore -= 1
+      return newState;
     }
     default: {
       return state
