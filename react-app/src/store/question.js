@@ -336,8 +336,7 @@ const questionsReducer = (state = initialState, action) => {
         numQuestions: state.numQuestions
       }
       delete newState.singleQuestion.Votes[action.voteId]
-      console.log('action.vote.vote: ', action.vote)
-      console.log('total score in reducer: ', newState.singleQuestion.totalScore)
+
       if (action.vote) newState.singleQuestion.totalScore += 1
       if (!action.vote) newState.singleQuestion.totalScore -= 1
       return newState;

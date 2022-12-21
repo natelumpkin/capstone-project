@@ -35,37 +35,46 @@ const SingleQuestion = () => {
   },[dispatch, questionId])
 
   useEffect(() => {
-    let userVote;
-    if (currentQuestion.Votes) {
-      userVote = Object.values(currentQuestion?.Votes).find(vote => vote.user_id === currentUser.id)
-      // console.log('uservotes in userVote: ', userVote)
-    }
-    console.log('disable vote useeffect running')
-    if (userVote) {
-      if (userVote.vote) {
-        console.log('disabling upvote')
-        setDisableUpVote(true)
-        setDisableDownVote(false)
-      } else {
-        console.log('disabling downvote')
-        setDisableUpVote(false)
-        setDisableDownVote(true)
-      }
+    // console.log(typeof currentQuestion.userId)
+    // console.log(typeof currentUser.id)
+    if (!currentUser || currentQuestion.userId === currentUser?.id) {
+      setDisableDownVote(true)
+      setDisableUpVote(true)
     } else {
-      setDisableDownVote(false)
-      setDisableUpVote(false)
+      let userVote;
+      if (currentQuestion.Votes) {
+        userVote = Object.values(currentQuestion?.Votes).find(vote => vote.user_id === currentUser.id)
+        // console.log('uservotes in userVote: ', userVote)
+      }
+      // console.log('disable vote useeffect running')
+      if (userVote) {
+        if (userVote.vote) {
+          // console.log('disabling upvote')
+          setDisableUpVote(true)
+          setDisableDownVote(false)
+        } else {
+          // console.log('disabling downvote')
+          setDisableUpVote(false)
+          setDisableDownVote(true)
+        }
+      } else {
+        setDisableDownVote(false)
+        setDisableUpVote(false)
+      }
     }
-  },[disableUpVote, disableDownVote, currentQuestion])
+
+
+  },[disableUpVote, disableDownVote, currentQuestion, currentUser])
 
   const upVote = () => {
     // if user hasn't voted on this question yet, add vote
     let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
     if (!votedList.includes(currentUser.id)) {
-      console.log('adding upvote')
+      // console.log('adding upvote')
       dispatch(questionActions.addVoteToQuestion(questionId, true))
     } else {
       // delete their vote
-      console.log('deleting downvote')
+      // console.log('deleting downvote')
       let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
       dispatch(questionActions.deleteVoteFromQuestion(userVote.id, true))
     }
