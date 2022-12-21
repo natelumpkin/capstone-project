@@ -35,6 +35,17 @@ const SingleQuestion = () => {
   // console.log(notFound)
   // console.log(loaded)
 
+  const upVote = () => {
+    dispatch(questionActions.addVoteToQuestion(questionId, true))
+    .then(dispatch(questionActions.fetchSingleQuestion(questionId)))
+  }
+
+  const downVote = () => {
+
+  }
+
+
+
 
 
   if ((!loaded) && (notFound)) {
@@ -79,7 +90,9 @@ const SingleQuestion = () => {
       <div id="content-column">
         <div id="question-content-container">
           <div className="vote-container">
-
+            <button onClick={upVote} id="upvote"><i class="fa-solid fa-caret-up"></i></button>
+            <h2 id="single-question-score">{currentQuestion.totalScore}</h2>
+            <button onClick={downVote} id="downvote"><i class="fa-solid fa-caret-down"></i></button>
           </div>
           <div id="single-question-content-right">
             <div id="single-question-body">
