@@ -278,6 +278,8 @@ const questionsReducer = (state = initialState, action) => {
         numQuestions: state.numQuestions
       }
       newState.singleQuestion.Votes = [...state.singleQuestion.Votes, action.vote]
+      if (action.vote) newState.singleQuestion.totalScore += 1
+      if (!action.vote) newState.singleQuestion.totalScore -= 1
       return newState
     }
     default: {

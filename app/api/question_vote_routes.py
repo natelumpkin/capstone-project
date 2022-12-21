@@ -11,6 +11,7 @@ question_vote_routes = Blueprint('questionVotes', __name__)
 ## Update question_vote
 
 @question_vote_routes.route('/<int:id>', methods=['PUT'])
+@login_required
 def update_question_vote(id):
   try:
     vote = Question_Vote.query.get_or_404(id)
@@ -33,6 +34,7 @@ def update_question_vote(id):
 ## Delete question_vote
 
 @question_vote_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
 def delete_question_vote(id):
   try:
     vote = Question_Vote.query.get_or_404(id)
