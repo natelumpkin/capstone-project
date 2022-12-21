@@ -172,6 +172,24 @@ export const addVoteToQuestion = (questionId, vote) => async dispatch => {
   }
 }
 
+export const updateQuestionVote = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/questionVotes/${voteId}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
 
 const initialState = {
   allQuestions: {},
@@ -205,7 +223,9 @@ const questionsReducer = (state = initialState, action) => {
         singleQuestion: {},
         numQuestions: state.numQuestions
       }
+      let voteData = normalizeData(action.question.Votes)
       const data = action.question;
+      data.Votes = voteData;
       newState.singleQuestion = data;
       return newState;
     }
@@ -231,6 +251,7 @@ const questionsReducer = (state = initialState, action) => {
         numQuestions: state.numQuestions
       }
       const data = action.updatedQuestion
+      data.Votes = normalizeData(action.updateQuestion.Votes)
       newState.singleQuestion = data
       newState.allQuestions[data.id] = data
       delete newState.allQuestions[data.id].body
@@ -277,9 +298,10 @@ const questionsReducer = (state = initialState, action) => {
         },
         numQuestions: state.numQuestions
       }
-      newState.singleQuestion.Votes = [...state.singleQuestion.Votes, action.vote]
-      if (action.vote) newState.singleQuestion.totalScore += 1
-      if (!action.vote) newState.singleQuestion.totalScore -= 1
+      newState.singleQuestion.Votes = {...state.singleQuestion.Votes}
+      newState.singleQuestion.Votes[action.vote.id] = action.vote
+      if (action.vote.vote) newState.singleQuestion.totalScore += 1
+      if (!action.vote.vote) newState.singleQuestion.totalScore -= 1
       return newState
     }
     default: {

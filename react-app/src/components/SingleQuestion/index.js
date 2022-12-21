@@ -20,6 +20,8 @@ const SingleQuestion = () => {
   const {questionId} = useParams();
   const [loaded, setLoaded] = useState(false)
   const [notFound, setNotFound] = useState(false)
+  const [disableUpVote, setDisableUpVote] = useState(false)
+  const [disableDownVote, setDisableDownVote] = useState(false)
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
 
@@ -32,16 +34,50 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
-  // console.log(notFound)
-  // console.log(loaded)
+  useEffect(() => {
+    let userVote;
+    if (currentQuestion.Votes) {
+      userVote = Object.values(currentQuestion?.Votes).find(vote => vote.user_id === currentUser.id)
+    }
+    console.log(userVote)
+    if (userVote) {
+      if (userVote.vote) {
+        setDisableUpVote(true)
+        setDisableDownVote(false)
+      } else {
+        setDisableUpVote(false)
+        setDisableDownVote(true)
+      }
+    }
+  },[disableUpVote, disableDownVote, currentQuestion])
 
   const upVote = () => {
-    dispatch(questionActions.addVoteToQuestion(questionId, true))
-    .then(dispatch(questionActions.fetchSingleQuestion(questionId)))
+    // if user hasn't voted on this question yet, add vote
+    let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
+    if (!votedList.includes(currentUser.id)) {
+      dispatch(questionActions.addVoteToQuestion(questionId, true))
+    } else {
+      // find the vote to update..?
+      console.log('updating vote')
+      let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
+      dispatch(questionActions.updateQuestionVote(userVote.id, true))
+    }
+
+
+    // if user has voted, update vote with true
   }
 
   const downVote = () => {
-
+    // if user hasn't voted on this question yet, add vote
+    let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
+    if (!votedList.includes(currentUser.id)) {
+      dispatch(questionActions.addVoteToQuestion(questionId, false))
+    } else {
+      // find the vote to update..?
+      let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
+      dispatch(questionActions.updateQuestionVote(userVote.id, false))
+    }
+    // if user has voted, updated vote with true
   }
 
 
@@ -90,9 +126,9 @@ const SingleQuestion = () => {
       <div id="content-column">
         <div id="question-content-container">
           <div className="vote-container">
-            <button onClick={upVote} id="upvote"><i class="fa-solid fa-caret-up"></i></button>
+            <button disabled={disableUpVote} onClick={upVote} id="upvote"><i class="fa-solid fa-caret-up"></i></button>
             <h2 id="single-question-score">{currentQuestion.totalScore}</h2>
-            <button onClick={downVote} id="downvote"><i class="fa-solid fa-caret-down"></i></button>
+            <button disabled={disableDownVote} onClick={downVote} id="downvote"><i class="fa-solid fa-caret-down"></i></button>
           </div>
           <div id="single-question-content-right">
             <div id="single-question-body">
