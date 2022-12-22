@@ -92,11 +92,11 @@ const SingleQuestion = () => {
     // if user hasn't voted on this question yet, add vote
     let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
     if (!votedList.includes(currentUser.id)) {
-      console.log('adding downvote')
+      // console.log('adding downvote')
       dispatch(questionActions.addVoteToQuestion(questionId, false))
     } else {
       // delete their vote
-      console.log('deleting upvote')
+      // console.log('deleting upvote')
       let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
       dispatch(questionActions.deleteVoteFromQuestion(userVote.id, false))
     }

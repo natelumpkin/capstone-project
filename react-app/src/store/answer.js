@@ -47,9 +47,8 @@ const addVote = (vote) => ({
   vote
 })
 
-const removeVote = (voteId, vote) => ({
+const removeVote = (vote) => ({
   type: DELETE_VOTE,
-  voteId,
   vote
 })
 
@@ -150,13 +149,14 @@ export const updateAnswerVote = (voteId, vote) => async dispatch => {
   }
 }
 
-export const deleteVoteFromAnswer = (voteId, vote) => async dispatch => {
-  const response = await fetch(`/api/answerVotes/${voteId}`, {
+export const deleteVoteFromAnswer = (vote) => async dispatch => {
+  // vote for this function has the form of the original vote object
+  const response = await fetch(`/api/answerVotes/${vote.id}`, {
     method: "DELETE"
   })
   if (response.ok) {
     let data = await response.json()
-    dispatch(removeVote(voteId, vote))
+    dispatch(removeVote(vote))
     return data
   } else {
     let errors = await response.json()
@@ -171,8 +171,8 @@ const answersReducer = (state = initialState, action) => {
     case ONE_ANSWER: {
       const newState = { ...state}
       newState[action.answer.id] = action.answer
-      const voteData = normalizeData(action.answer.Votes)
-      newState[action.answer.id] = voteData
+      // const voteData = normalizeData(action.answer.Votes)
+      // newState[action.answer.id] = voteData
       return newState
     }
     case LOAD_ANSWERS: {
@@ -203,12 +203,26 @@ const answersReducer = (state = initialState, action) => {
       delete newState[action.answerId]
       return newState;
     }
-    default: {
-      return state
-    }
     case CLEAR_ANSWERS: {
       const newState = {};
       return newState;
+    }
+    case ADD_VOTE: {
+      const newState = { ...state }
+      newState[action.vote.answer_id].Votes[action.vote.id] = action.vote
+      if (action.vote.vote) newState[action.vote.answer_id].totalScore += 1
+      if (!action.vote.vote) newState[action.vote.answer_id].totalScore -= 1
+      return newState
+    }
+    case DELETE_VOTE: {
+      const newState = { ...state }
+      delete newState[action.vote.answer_id].Votes[action.vote.id]
+      if (action.vote.vote) newState[action.vote.answer_id].totalScore -= 1
+      if (!action.vote.vote) newState[action.vote.answer_id].totalScore += 1
+      return newState
+    }
+    default: {
+      return state
     }
   }
 }
