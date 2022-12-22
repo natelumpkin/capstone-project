@@ -62,7 +62,7 @@
 
 #question-upvote-hover,
 #question-downvote-hover {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   height: 40px;
   display: flex;
   justify-content: center;

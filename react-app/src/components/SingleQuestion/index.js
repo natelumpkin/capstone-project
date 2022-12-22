@@ -109,15 +109,11 @@ const SingleQuestion = () => {
       if (!upvotePopup.classList.contains('mouseAway')) {
         upvotePopup.classList.remove('hidden')
       }
-    }, 500)
-    // [visible, hidden]
-    // [hidden]
-    // [visible]
+    }, 300)
   }
 
   const hideTopPopup = () => {
     // when we mouse away, we want the popup to never show
-    // console.log('hiding popup!')
     let upvotePopup = document.getElementById('question-upvote-popup')
     upvotePopup.classList.add('mouseAway')
     upvotePopup.classList.add('hidden')
@@ -130,7 +126,7 @@ const SingleQuestion = () => {
       if (!upvotePopup.classList.contains('mouseAway')) {
         upvotePopup.classList.remove('hidden')
       }
-    }, 500)
+    }, 300)
   }
 
   const hideBottomPopup = () => {

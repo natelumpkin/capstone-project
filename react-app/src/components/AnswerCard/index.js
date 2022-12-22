@@ -73,22 +73,72 @@ const AnswerCard = ({answer, currentUser}) => {
     }
   }
 
+  const showTopPopup = () => {
+
+    // when we mouse over, we want the popup to show in half a second
+    // but only if the mouse is over it
+    let upvotePopup = document.getElementById(`answer-upvote-popup-${answer.id}`)
+    upvotePopup.classList.remove('mouseAway')
+    setTimeout(() => {
+      if (!upvotePopup.classList.contains('mouseAway')) {
+        upvotePopup.classList.remove('hidden')
+      }
+    }, 300)
+  }
+
+  const hideTopPopup = () => {
+    // when we mouse away, we want the popup to never show
+    let upvotePopup = document.getElementById(`answer-upvote-popup-${answer.id}`)
+    upvotePopup.classList.add('mouseAway')
+    upvotePopup.classList.add('hidden')
+  }
+
+  const showBottomPopup = () => {
+    let upvotePopup = document.getElementById(`answer-downvote-popup-${answer.id}`)
+    upvotePopup.classList.remove('mouseAway')
+    setTimeout(() => {
+      if (!upvotePopup.classList.contains('mouseAway')) {
+        upvotePopup.classList.remove('hidden')
+      }
+    }, 300)
+  }
+
+  const hideBottomPopup = () => {
+    let upvotePopup = document.getElementById(`answer-downvote-popup-${answer.id}`)
+    upvotePopup.classList.add('mouseAway')
+    upvotePopup.classList.add('hidden')
+  }
+
   return (
     <div className='answer-card-container'>
       <div className="vote-container answer-vote">
-            <button
-            disabled={disableUpVote}
-            onClick={upVote}
-            id="upvote"><
-              i class="fa-solid fa-caret-up"></i>
-            </button>
+        <div onMouseEnter={showTopPopup} onMouseLeave={hideTopPopup} className="answer-vote-hover" id={`answer-upvote-hover-${answer.id}`}>
+          <div className='popup-parent'>
+            <div id={`answer-upvote-popup-${answer.id}`} className="question-vote hidden">
+              <p>This answer is useful.</p>
+            </div>
+          </div>
+          <button
+          disabled={disableUpVote}
+          onClick={upVote}
+          id="upvote"><
+            i class="fa-solid fa-caret-up"></i>
+          </button>
+        </div>
             <h2 id="single-question-score">{answer.totalScore}</h2>
-            <button
-            disabled={disableDownVote}
-            onClick={downVote}
-            id="downvote">
-              <i class="fa-solid fa-caret-down">
-            </i></button>
+        <div onMouseEnter={showBottomPopup} onMouseLeave={hideBottomPopup} className="answer-vote-hover" id={`answer-downvote-hover-${answer.id}`}>
+          <div className='popup-parent'>
+            <div id={`answer-downvote-popup-${answer.id}`} className="question-vote hidden">
+              <p>This answer is not useful.</p>
+          </div>
+          </div>
+          <button
+          disabled={disableDownVote}
+          onClick={downVote}
+          id="downvote">
+            <i class="fa-solid fa-caret-down">
+          </i></button>
+        </div>
       </div>
     <div className="answer-card-holder">
       <div className='answer-content-container'>
