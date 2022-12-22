@@ -60,7 +60,8 @@
   height: 100%;
 }
 
-#question-upvote-hover {
+#question-upvote-hover,
+#question-downvote-hover {
   border: 1px solid red;
   height: 40px;
   display: flex;
@@ -68,7 +69,8 @@
   align-items: center;
 }
 
-#question-upvote-hover button {
+#question-upvote-hover button,
+#question-downvote-hover button {
   height: 50%;
 
 }
