@@ -8,6 +8,8 @@ const ADD_ANSWER = 'answers/create'
 const EDIT_ANSWER = 'answers/edit'
 const DELETE_ANSWER = 'answers/delete'
 const CLEAR_ANSWERS = 'answers/clear'
+const ADD_VOTE = 'answers/addVote'
+const DELETE_VOTE = 'answers/deleteVote'
 
 // Actions
 
@@ -38,6 +40,17 @@ const removeAnswer = (answerId) => ({
 
 export const clearAnswers = () => ({
   type: CLEAR_ANSWERS
+})
+
+const addVote = (vote) => ({
+  type: ADD_VOTE,
+  vote
+})
+
+const removeVote = (voteId, vote) => ({
+  type: DELETE_VOTE,
+  voteId,
+  vote
 })
 
 // Thunks
@@ -101,6 +114,56 @@ export const deleteAnswer = (answerId) => async dispatch => {
   return data;
 }
 
+export const addVoteToAnswer = (answerId, vote) => async dispatch => {
+  const response = await fetch(`/api/answers/${answerId}/votes`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const updateAnswerVote = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/answerVotes/${voteId}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const deleteVoteFromAnswer = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/answerVotes/${voteId}`, {
+    method: "DELETE"
+  })
+  if (response.ok) {
+    let data = await response.json()
+    dispatch(removeVote(voteId, vote))
+    return data
+  } else {
+    let errors = await response.json()
+    return errors
+  }
+}
+
 const initialState = {}
 
 const answersReducer = (state = initialState, action) => {
@@ -108,24 +171,31 @@ const answersReducer = (state = initialState, action) => {
     case ONE_ANSWER: {
       const newState = { ...state}
       newState[action.answer.id] = action.answer
+      const voteData = normalizeData(action.answer.Votes)
+      newState[action.answer.id] = voteData
       return newState
     }
     case LOAD_ANSWERS: {
-      const data = normalizeData(action.answers.Answers)
-      // data.numAnswers = action.numAnswers;
-      const newState = data;
+      const answerData = normalizeData(action.answers.Answers)
+      for (let answerId in answerData) {
+        const voteData = normalizeData(answerData[answerId].Votes)
+        answerData[answerId].Votes = voteData
+      }
+      const newState = answerData;
       return newState;
     }
     case ADD_ANSWER: {
       const answer = action.answer;
       const newState = { ...state }
       newState[answer.id] = answer;
+      newState[answer.id].Votes = {}
       return newState;
     }
     case EDIT_ANSWER: {
       const answer = action.answer;
       const newState = { ...state }
       newState[answer.id] = answer;
+      newState[answer.id].Votes = {...state[answer.id].Votes}
       return newState;
     }
     case DELETE_ANSWER: {

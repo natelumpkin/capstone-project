@@ -34,9 +34,14 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
+
+
   useEffect(() => {
-    // console.log(typeof currentQuestion.userId)
-    // console.log(typeof currentUser.id)
+
+    // Track disabling of vote buttons based on:
+    // If the current user does not own this question
+    // If the user has not voted on this question
+
     if (!currentUser || currentQuestion.userId === currentUser?.id) {
       setDisableDownVote(true)
       setDisableUpVote(true)
