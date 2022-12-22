@@ -34,8 +34,6 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
-
-
   useEffect(() => {
 
     // Track disabling of vote buttons based on:
@@ -83,8 +81,6 @@ const SingleQuestion = () => {
       let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
       dispatch(questionActions.deleteVoteFromQuestion(userVote.id, true))
     }
-
-
     // if user has voted, update vote with true
   }
 
@@ -101,6 +97,30 @@ const SingleQuestion = () => {
       dispatch(questionActions.deleteVoteFromQuestion(userVote.id, false))
     }
     // if user has voted, updated vote with true
+  }
+
+  const showTopPopup = () => {
+    console.log('showing popup!')
+    // when we mouse over, we want the popup to show in half a second
+    // but only if the mouse is over it
+    let upvotePopup = document.getElementById('question-upvote-popup')
+    upvotePopup.classList.remove('mouseAway')
+    setTimeout(() => {
+      if (!upvotePopup.classList.contains('mouseAway')) {
+        upvotePopup.classList.remove('hidden')
+      }
+    }, 500)
+    // [visible, hidden]
+    // [hidden]
+    // [visible]
+  }
+
+  const hideTopPopup = () => {
+    // when we mouse away, we want the popup to never show
+    console.log('hiding popup!')
+    let upvotePopup = document.getElementById('question-upvote-popup')
+    upvotePopup.classList.add('mouseAway')
+    upvotePopup.classList.add('hidden')
   }
 
 
@@ -149,9 +169,21 @@ const SingleQuestion = () => {
       <div id="content-column">
         <div id="question-content-container">
           <div className="vote-container">
+            <div onMouseEnter={showTopPopup} onMouseLeave={hideTopPopup} id="question-upvote-hover">
+              <div className="popup-parent">
+              <div id="question-upvote-popup" className="question-vote hidden">
+                <p>This question shows research effort; it is useful and clear.</p>
+              </div>
+              </div>
             <button disabled={disableUpVote} onClick={upVote} id="upvote"><i class="fa-solid fa-caret-up"></i></button>
+            </div>
             <h2 id="single-question-score">{currentQuestion.totalScore}</h2>
+            <div id="question-downvote-hover">
+              <div id="question-downvote-popup" className="question-vote hidden">
+                <p>This question does not show any research effort; it is unclear or not useful</p>
+              </div>
             <button disabled={disableDownVote} onClick={downVote} id="downvote"><i class="fa-solid fa-caret-down"></i></button>
+            </div>
           </div>
           <div id="single-question-content-right">
             <div id="single-question-body">
