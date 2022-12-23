@@ -114,6 +114,7 @@ const SingleQuestion = () => {
 
   const hideTopPopup = () => {
     // when we mouse away, we want the popup to never show
+    // console.log('hiding popup!')
     let upvotePopup = document.getElementById('question-upvote-popup')
     upvotePopup.classList.add('mouseAway')
     upvotePopup.classList.add('hidden')
@@ -181,23 +182,39 @@ const SingleQuestion = () => {
       <div id="content-column">
         <div id="question-content-container">
           <div className="vote-container">
-            <div onMouseEnter={showTopPopup} onMouseLeave={hideTopPopup} id="question-upvote-hover">
+            <button
+              disabled={disableUpVote}
+              onClick={() => {
+              hideTopPopup()
+              upVote()
+            }}
+              onMouseEnter={showTopPopup}
+              onMouseLeave={hideTopPopup}
+              id="question-upvote-hover">
               <div className="popup-parent">
                 <div id="question-upvote-popup" className="question-vote hidden">
                   <p>This question shows research effort; it is useful and clear.</p>
                 </div>
               </div>
-            <button disabled={disableUpVote} onClick={upVote} id="upvote"><i class="fa-solid fa-caret-up"></i></button>
-            </div>
-            <h2 id="single-question-score">{currentQuestion.totalScore}</h2>
-            <div onMouseEnter={showBottomPopup} onMouseLeave={hideBottomPopup} id="question-downvote-hover">
+            <i className="fa-solid fa-caret-up up-icon"></i>
+            </button>
+            <div id="single-question-score">{currentQuestion.totalScore}</div>
+            <button
+              disabled={disableDownVote}
+              onClick={ () => {
+                downVote()
+                hideBottomPopup()
+              }}
+              onMouseEnter={showBottomPopup}
+              onMouseLeave={hideBottomPopup}
+              id="question-downvote-hover">
               <div className="popup-parent">
                 <div id="question-downvote-popup" className="question-vote hidden">
                   <p>This question does not show any research effort; it is unclear or not useful</p>
                 </div>
               </div>
-            <button disabled={disableDownVote} onClick={downVote} id="downvote"><i class="fa-solid fa-caret-down"></i></button>
-            </div>
+            <i class="fa-solid fa-caret-down down-icon"></i>
+            </button>
           </div>
           <div id="single-question-content-right">
             <div id="single-question-body">

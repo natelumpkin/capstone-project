@@ -58,21 +58,68 @@
 .vote-container {
   width: 12%;
   height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #question-upvote-hover,
 #question-downvote-hover {
   /* border: 1px solid red; */
+  width: 50%;
   height: 40px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  color: #51595f;
+  /* border: 1px solid purple; */
+}
+
+#question-upvote-hover:disabled,
+#question-downvote-hover:disabled {
+  color: black;
+  cursor: not-allowed;
+}
+
+#question-upvote-hover:disabled:hover,
+#question-downvote-hover:disabled:hover {
+  color: black;
+  cursor: not-allowed;
+}
+
+#question-upvote-hover:hover,
+#question-downvote-hover:hover {
+  /* border: 1px solid red; */
+  width: 50%;
+  height: 40px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+#question-upvote-hover i,
+#question-downvote-hover i {
+  width: 100%;
+  height: 50%;
+  font-size: 50px;
+  /* border: 1px solid red; */
+}
+
+.up-icon {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#question-upvote-hover button,
-#question-downvote-hover button {
-  height: 50%;
-
+.down-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .question-vote {
@@ -84,6 +131,16 @@
   left: 50px;
   z-index: 1000;
   font-size: 12px;
+}
+
+#single-question-score {
+  /* border: 1px solid blue; */
+  margin: 0;
+  color:#3b4044;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
 }
 
 .popup-parent {
