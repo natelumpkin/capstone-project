@@ -8,7 +8,8 @@ const EDIT_QUESTION = 'questions/edit'
 const ADD_QUESTION = 'questions/create'
 const DELETE_QUESTION = 'questions/delete'
 const ADD_TAG = 'questions/addTag'
-
+const ADD_VOTE = 'questions/addVote'
+const DELETE_VOTE = 'questions/deleteVote'
 
 // Actions
 
@@ -43,16 +44,27 @@ const addTag = (questionId, tag) => ({
   tag
 })
 
+const addVote = (vote) => ({
+  type: ADD_VOTE,
+  vote
+})
+
+const removeVote = (voteId, vote) => ({
+  type: DELETE_VOTE,
+  voteId,
+  vote
+})
+
 // Thunks
 
 export const fetchAllQuestions = (tagId) => async dispatch => {
   let response
-  console.log(tagId)
+  // console.log(tagId)
   if (tagId) {
-    console.log('fetching tags')
+    // console.log('fetching tags')
     response = await fetch(`/api/tags/${tagId}/questions`)
   } else {
-    console.log('fetching all questions')
+    // console.log('fetching all questions')
     response = await fetch('/api/questions')
   }
   if (response.ok) {
@@ -136,8 +148,6 @@ export const addTagToQuestion = (questionId, tagId) => async dispatch => {
   }
 }
 
-// Will have to dispatch single question after dispatching removeTag
-
 export const removeTagFromQuestion = (questionId, tagId) => async dispatch => {
   const response = await fetch(`/api/questions/${questionId}/tags/${tagId}`, {
     method: 'DELETE'
@@ -147,6 +157,56 @@ export const removeTagFromQuestion = (questionId, tagId) => async dispatch => {
     return data
   } else {
     const errors = await response.json()
+    return errors
+  }
+}
+
+export const addVoteToQuestion = (questionId, vote) => async dispatch => {
+  const response = await fetch(`/api/questions/${questionId}/votes`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const updateQuestionVote = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/questionVotes/${voteId}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const deleteVoteFromQuestion = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/questionVotes/${voteId}`, {
+    method: "DELETE"
+  })
+  if (response.ok) {
+    let data = await response.json()
+    dispatch(removeVote(voteId, vote))
+    return data
+  } else {
+    let errors = await response.json()
     return errors
   }
 }
@@ -184,7 +244,9 @@ const questionsReducer = (state = initialState, action) => {
         singleQuestion: {},
         numQuestions: state.numQuestions
       }
+      let voteData = normalizeData(action.question.Votes)
       const data = action.question;
+      data.Votes = voteData;
       newState.singleQuestion = data;
       return newState;
     }
@@ -210,6 +272,7 @@ const questionsReducer = (state = initialState, action) => {
         numQuestions: state.numQuestions
       }
       const data = action.updatedQuestion
+      data.Votes = normalizeData(action.updateQuestion.Votes)
       newState.singleQuestion = data
       newState.allQuestions[data.id] = data
       delete newState.allQuestions[data.id].body
@@ -244,6 +307,38 @@ const questionsReducer = (state = initialState, action) => {
       newState.singleQuestion.Tags = [
         ...state.singleQuestion.Tags, action.tag
       ]
+      return newState;
+    }
+    case (ADD_VOTE): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {
+          ...state.singleQuestion
+        },
+        numQuestions: state.numQuestions
+      }
+      newState.singleQuestion.Votes = {...state.singleQuestion.Votes}
+      newState.singleQuestion.Votes[action.vote.id] = action.vote
+      if (action.vote.vote) newState.singleQuestion.totalScore += 1
+      if (!action.vote.vote) newState.singleQuestion.totalScore -= 1
+      return newState
+    }
+    case (DELETE_VOTE): {
+      const newState = {
+        allQuestions: {
+          ...state.allQuestions
+        },
+        singleQuestion: {
+          ...state.singleQuestion
+        },
+        numQuestions: state.numQuestions
+      }
+      delete newState.singleQuestion.Votes[action.voteId]
+
+      if (action.vote) newState.singleQuestion.totalScore += 1
+      if (!action.vote) newState.singleQuestion.totalScore -= 1
       return newState;
     }
     default: {

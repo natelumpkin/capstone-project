@@ -8,6 +8,8 @@ const ADD_ANSWER = 'answers/create'
 const EDIT_ANSWER = 'answers/edit'
 const DELETE_ANSWER = 'answers/delete'
 const CLEAR_ANSWERS = 'answers/clear'
+const ADD_VOTE = 'answers/addVote'
+const DELETE_VOTE = 'answers/deleteVote'
 
 // Actions
 
@@ -38,6 +40,16 @@ const removeAnswer = (answerId) => ({
 
 export const clearAnswers = () => ({
   type: CLEAR_ANSWERS
+})
+
+const addVote = (vote) => ({
+  type: ADD_VOTE,
+  vote
+})
+
+const removeVote = (vote) => ({
+  type: DELETE_VOTE,
+  vote
 })
 
 // Thunks
@@ -101,6 +113,57 @@ export const deleteAnswer = (answerId) => async dispatch => {
   return data;
 }
 
+export const addVoteToAnswer = (answerId, vote) => async dispatch => {
+  const response = await fetch(`/api/answers/${answerId}/votes`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const updateAnswerVote = (voteId, vote) => async dispatch => {
+  const response = await fetch(`/api/answerVotes/${voteId}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      vote
+    })
+  })
+  if (response.ok) {
+    const data = await response.json()
+    dispatch(addVote(data))
+    return data
+  } else {
+    const errors = await response.json()
+    return errors
+  }
+}
+
+export const deleteVoteFromAnswer = (vote) => async dispatch => {
+  // vote for this function has the form of the original vote object
+  const response = await fetch(`/api/answerVotes/${vote.id}`, {
+    method: "DELETE"
+  })
+  if (response.ok) {
+    let data = await response.json()
+    dispatch(removeVote(vote))
+    return data
+  } else {
+    let errors = await response.json()
+    return errors
+  }
+}
+
 const initialState = {}
 
 const answersReducer = (state = initialState, action) => {
@@ -108,24 +171,31 @@ const answersReducer = (state = initialState, action) => {
     case ONE_ANSWER: {
       const newState = { ...state}
       newState[action.answer.id] = action.answer
+      // const voteData = normalizeData(action.answer.Votes)
+      // newState[action.answer.id] = voteData
       return newState
     }
     case LOAD_ANSWERS: {
-      const data = normalizeData(action.answers.Answers)
-      // data.numAnswers = action.numAnswers;
-      const newState = data;
+      const answerData = normalizeData(action.answers.Answers)
+      for (let answerId in answerData) {
+        const voteData = normalizeData(answerData[answerId].Votes)
+        answerData[answerId].Votes = voteData
+      }
+      const newState = answerData;
       return newState;
     }
     case ADD_ANSWER: {
       const answer = action.answer;
       const newState = { ...state }
       newState[answer.id] = answer;
+      newState[answer.id].Votes = {}
       return newState;
     }
     case EDIT_ANSWER: {
       const answer = action.answer;
       const newState = { ...state }
       newState[answer.id] = answer;
+      newState[answer.id].Votes = {...state[answer.id].Votes}
       return newState;
     }
     case DELETE_ANSWER: {
@@ -133,12 +203,26 @@ const answersReducer = (state = initialState, action) => {
       delete newState[action.answerId]
       return newState;
     }
-    default: {
-      return state
-    }
     case CLEAR_ANSWERS: {
       const newState = {};
       return newState;
+    }
+    case ADD_VOTE: {
+      const newState = { ...state }
+      newState[action.vote.answer_id].Votes[action.vote.id] = action.vote
+      if (action.vote.vote) newState[action.vote.answer_id].totalScore += 1
+      if (!action.vote.vote) newState[action.vote.answer_id].totalScore -= 1
+      return newState
+    }
+    case DELETE_VOTE: {
+      const newState = { ...state }
+      delete newState[action.vote.answer_id].Votes[action.vote.id]
+      if (action.vote.vote) newState[action.vote.answer_id].totalScore -= 1
+      if (!action.vote.vote) newState[action.vote.answer_id].totalScore += 1
+      return newState
+    }
+    default: {
+      return state
     }
   }
 }

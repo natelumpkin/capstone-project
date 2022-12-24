@@ -20,6 +20,8 @@ const SingleQuestion = () => {
   const {questionId} = useParams();
   const [loaded, setLoaded] = useState(false)
   const [notFound, setNotFound] = useState(false)
+  const [disableUpVote, setDisableUpVote] = useState(false)
+  const [disableDownVote, setDisableDownVote] = useState(false)
   const currentUser = useSelector(state => state.session.user)
   const currentQuestion = useSelector(state => state.questions.singleQuestion)
 
@@ -32,8 +34,109 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
-  // console.log(notFound)
-  // console.log(loaded)
+  useEffect(() => {
+
+    // Track disabling of vote buttons based on:
+    // If the current user does not own this question
+    // If the user has not voted on this question
+
+    if (!currentUser || currentQuestion.userId === currentUser?.id) {
+      setDisableDownVote(true)
+      setDisableUpVote(true)
+    } else {
+      let userVote;
+      if (currentQuestion.Votes) {
+        userVote = Object.values(currentQuestion?.Votes).find(vote => vote.user_id === currentUser.id)
+        // console.log('uservotes in userVote: ', userVote)
+      }
+      // console.log('disable vote useeffect running')
+      if (userVote) {
+        if (userVote.vote) {
+          // console.log('disabling upvote')
+          setDisableUpVote(true)
+          setDisableDownVote(false)
+        } else {
+          // console.log('disabling downvote')
+          setDisableUpVote(false)
+          setDisableDownVote(true)
+        }
+      } else {
+        setDisableDownVote(false)
+        setDisableUpVote(false)
+      }
+    }
+
+
+  },[disableUpVote, disableDownVote, currentQuestion, currentUser])
+
+  const upVote = () => {
+    // if user hasn't voted on this question yet, add vote
+    let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
+    if (!votedList.includes(currentUser.id)) {
+      // console.log('adding upvote')
+      dispatch(questionActions.addVoteToQuestion(questionId, true))
+    } else {
+      // delete their vote
+      // console.log('deleting downvote')
+      let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
+      dispatch(questionActions.deleteVoteFromQuestion(userVote.id, true))
+    }
+    // if user has voted, update vote with true
+  }
+
+  const downVote = () => {
+    // if user hasn't voted on this question yet, add vote
+    let votedList = Object.values(currentQuestion.Votes).map(vote => vote.user_id)
+    if (!votedList.includes(currentUser.id)) {
+      // console.log('adding downvote')
+      dispatch(questionActions.addVoteToQuestion(questionId, false))
+    } else {
+      // delete their vote
+      // console.log('deleting upvote')
+      let userVote = Object.values(currentQuestion.Votes).find(vote => vote.user_id === currentUser.id)
+      dispatch(questionActions.deleteVoteFromQuestion(userVote.id, false))
+    }
+    // if user has voted, updated vote with true
+  }
+
+  const showTopPopup = () => {
+
+    // when we mouse over, we want the popup to show in half a second
+    // but only if the mouse is over it
+    let upvotePopup = document.getElementById('question-upvote-popup')
+    upvotePopup.classList.remove('mouseAway')
+    setTimeout(() => {
+      if (!upvotePopup.classList.contains('mouseAway')) {
+        upvotePopup.classList.remove('hidden')
+      }
+    }, 300)
+  }
+
+  const hideTopPopup = () => {
+    // when we mouse away, we want the popup to never show
+    // console.log('hiding popup!')
+    let upvotePopup = document.getElementById('question-upvote-popup')
+    upvotePopup.classList.add('mouseAway')
+    upvotePopup.classList.add('hidden')
+  }
+
+  const showBottomPopup = () => {
+    let upvotePopup = document.getElementById('question-downvote-popup')
+    upvotePopup.classList.remove('mouseAway')
+    setTimeout(() => {
+      if (!upvotePopup.classList.contains('mouseAway')) {
+        upvotePopup.classList.remove('hidden')
+      }
+    }, 300)
+  }
+
+  const hideBottomPopup = () => {
+    let upvotePopup = document.getElementById('question-downvote-popup')
+    upvotePopup.classList.add('mouseAway')
+    upvotePopup.classList.add('hidden')
+  }
+
+
 
 
 
@@ -79,7 +182,44 @@ const SingleQuestion = () => {
       <div id="content-column">
         <div id="question-content-container">
           <div className="vote-container">
+            <button
+              disabled={disableUpVote}
+              onClick={() => {
+              hideTopPopup()
+              upVote()
+            }}
+              onMouseEnter={showTopPopup}
+              onMouseLeave={hideTopPopup}
+              id="question-upvote-hover">
+              <div className="popup-parent">
+                <div id="question-upvote-popup" className="question-vote hidden">
+                  <div className="arrow-parent"><div id="question-upvote-arrow"></div></div>
+                  <p>This question shows research effort; it is useful and clear.</p>
+                </div>
+              </div>
+            <i className="fa-solid fa-caret-up up-icon"></i>
+            </button>
+            <div id="single-question-score">{currentQuestion.totalScore}</div>
+            <button
+              disabled={disableDownVote}
+              onClick={ () => {
+                downVote()
+                hideBottomPopup()
+              }}
+              onMouseEnter={showBottomPopup}
+              onMouseLeave={hideBottomPopup}
+              id="question-downvote-hover">
+              <div className="popup-parent">
 
+                <div id="question-downvote-popup" className="question-vote hidden">
+                <div className="arrow-parent">
+                <div id="question-downvote-arrow"></div>
+                  </div>
+                  <p>This question does not show any research effort; it is unclear or not useful</p>
+                </div>
+              </div>
+            <i class="fa-solid fa-caret-down down-icon"></i>
+            </button>
           </div>
           <div id="single-question-content-right">
             <div id="single-question-body">

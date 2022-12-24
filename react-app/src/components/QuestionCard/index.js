@@ -21,7 +21,8 @@ const QuestionCard = ({question, currentUser}) => {
   return (
     <div className="questioncard-container">
       <div className="metadata-container">
-        <div className="num-answers"><p>{question.numAnswers} {question.numAnswers === 1 ? "answer" : "answers"}</p></div>
+        <div className="num-answers score"><p>{question.totalScore} {question.totalScore === 1 ? "vote" : "votes"}</p></div>
+        <div className="num-answers"><p><span className="black">{question.numAnswers}</span> {question.numAnswers === 1 ? "answer" : "answers"}</p></div>
       </div>
       <div className="maindata-container">
         <div className="info-container">

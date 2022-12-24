@@ -16,9 +16,10 @@ class Answer(db.Model):
 
   author = db.relationship('User', back_populates="answers")
   question = db.relationship('Question', back_populates="answers")
+  votes = db.relationship('Answer_Vote', back_populates='answer', cascade='all, delete')
 
   def to_dict(self):
-      return {
+      response = {
             "id": self.id,
             "userId": self.user_id,
             "questionId": self.question_id,
@@ -30,3 +31,10 @@ class Answer(db.Model):
                   "username": self.author.username
             }
       }
+      response['totalScore'] = 0
+      for vote in self.votes:
+            if vote.vote:
+                  response['totalScore'] += 1
+            else:
+                  response['totalScore'] -= 1
+      return response

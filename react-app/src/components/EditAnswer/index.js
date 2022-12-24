@@ -33,13 +33,11 @@ const EditAnswer = () => {
   // const allAnswers = useSelector(state => state.answers)
   const currentAnswer = useSelector(state => state.answers[answerId])
 
-
-  // console.log(allAnswers)
-
-
-
   let questionId;
-  if (currentAnswer) questionId = currentAnswer.id
+  if (currentAnswer) questionId = currentAnswer.questionId
+
+  console.log('questionId out of useEffect: ', questionId)
+  console.log('currentAnswer: ', currentAnswer)
 
   useEffect(async () => {
     await dispatch(answerActions.getOneAnswer(answerId))
@@ -89,6 +87,8 @@ const EditAnswer = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     handleAnswerErrors();
+
+    console.log('questionId inside handlesubmit: ', questionId)
 
     if (!answerErrors.length) {
       const content = editorState.getCurrentContent()
