@@ -193,6 +193,7 @@ const SingleQuestion = () => {
               id="question-upvote-hover">
               <div className="popup-parent">
                 <div id="question-upvote-popup" className="question-vote hidden">
+                  <div className="arrow-parent"><div id="question-upvote-arrow"></div></div>
                   <p>This question shows research effort; it is useful and clear.</p>
                 </div>
               </div>
@@ -209,7 +210,11 @@ const SingleQuestion = () => {
               onMouseLeave={hideBottomPopup}
               id="question-downvote-hover">
               <div className="popup-parent">
+
                 <div id="question-downvote-popup" className="question-vote hidden">
+                <div className="arrow-parent">
+                <div id="question-downvote-arrow"></div>
+                  </div>
                   <p>This question does not show any research effort; it is unclear or not useful</p>
                 </div>
               </div>
