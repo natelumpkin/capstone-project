@@ -58,7 +58,6 @@
 .vote-container {
   width: 12%;
   height: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,7 +107,6 @@
   /* border: 1px solid red; */
 }
 
-
 .up-icon {
   display: flex;
   flex-direction: column;
@@ -125,6 +123,7 @@
 
 .popup-parent {
   position: absolute;
+  width: 0;
 }
 
 .question-vote {
@@ -137,6 +136,7 @@
   left: 50px;
   z-index: 1000;
   font-size: 12px;
+  border-radius: 5px;
 }
 
 #question-upvote-popup {
@@ -173,10 +173,16 @@
   border-top: none;
   border-right: none;
   transform: rotate(45deg);
+  z-index: -1000;
+}
+
+.question-vote p {
+  z-index: 2000;
 }
 
 #question-downvote-popup {
-  bottom: 30px;
+  bottom: 25px;
+
 }
 
 #single-question-score {
@@ -195,7 +201,7 @@
 }
 
 .hidden.visible {
-  display: inline;
+  /* display: inline; */
 }
 
 #single-question-content-right {

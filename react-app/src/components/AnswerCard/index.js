@@ -28,7 +28,7 @@ const AnswerCard = ({answer, currentUser}) => {
       setDisableUpVote(true)
     } else {
       let userVote;
-      console.log('answer votes in useeffect: ', answer.Votes)
+      // console.log('answer votes in useeffect: ', answer.Votes)
       if (answer.Votes) {
         userVote = Object.values(answer?.Votes).find(vote => vote.user_id === currentUser.id)
       }
@@ -60,15 +60,15 @@ const AnswerCard = ({answer, currentUser}) => {
   }
 
   const downVote = () => {
-    console.log('answer in downvote: ', answer)
+    // console.log('answer in downvote: ', answer)
     let votedList = Object.values(answer.Votes).map(vote => vote.user_id)
-    console.log('voted list in downvote: ', votedList)
+    // console.log('voted list in downvote: ', votedList)
     if (!votedList.includes(currentUser.id)) {
-      console.log('adding downvote to answer')
+      // console.log('adding downvote to answer')
       dispatch(answerActions.addVoteToAnswer(answer.id, false))
     } else {
       let userVote = Object.values(answer.Votes).find(vote => vote.user_id === currentUser.id)
-      console.log('removing downvote: ', userVote)
+      // console.log('removing downvote: ', userVote)
       dispatch(answerActions.deleteVoteFromAnswer(userVote))
     }
   }
@@ -112,33 +112,48 @@ const AnswerCard = ({answer, currentUser}) => {
   return (
     <div className='answer-card-container'>
       <div className="vote-container answer-vote">
-        <div onMouseEnter={showTopPopup} onMouseLeave={hideTopPopup} className="answer-vote-hover" id={`answer-upvote-hover-${answer.id}`}>
+        <button
+          onMouseEnter={showTopPopup}
+          onMouseLeave={hideTopPopup}
+          className="answer-vote-hover"
+          id={`answer-upvote-hover-${answer.id}`}
+          disabled={disableUpVote}
+          onClick={() => {
+            hideTopPopup()
+            upVote()}}>
+
           <div className='popup-parent'>
-            <div id={`answer-upvote-popup-${answer.id}`} className="question-vote hidden">
+            <div id={`answer-upvote-popup-${answer.id}`} className="answer-popup top-popup hidden">
+              <div className="arrow-parent">
+                <div className='answer-upvote-arrow'></div>
+              </div>
               <p>This answer is useful.</p>
             </div>
           </div>
-          <button
-          disabled={disableUpVote}
-          onClick={upVote}
-          id="upvote"><
-            i class="fa-solid fa-caret-up"></i>
-          </button>
-        </div>
-            <h2 id="single-question-score">{answer.totalScore}</h2>
-        <div onMouseEnter={showBottomPopup} onMouseLeave={hideBottomPopup} className="answer-vote-hover" id={`answer-downvote-hover-${answer.id}`}>
+          <i class="fa-solid fa-caret-up"></i>
+        </button>
+            <div id="single-question-score">{answer.totalScore}</div>
+        <button
+          onMouseEnter={showBottomPopup}
+          onMouseLeave={hideBottomPopup}
+          className="answer-vote-hover"
+          id={`answer-downvote-hover-${answer.id}`}
+          disabled={disableDownVote}
+          onClick={() => {
+            downVote()
+            hideBottomPopup()
+            }}>
           <div className='popup-parent'>
-            <div id={`answer-downvote-popup-${answer.id}`} className="question-vote hidden">
+            <div id={`answer-downvote-popup-${answer.id}`} className="answer-popup bottom-popup hidden">
+              <div className="arrow-parent">
+                <div className='answer-upvote-arrow'></div>
+              </div>
               <p>This answer is not useful.</p>
           </div>
           </div>
-          <button
-          disabled={disableDownVote}
-          onClick={downVote}
-          id="downvote">
-            <i class="fa-solid fa-caret-down">
-          </i></button>
-        </div>
+
+          <i class="fa-solid fa-caret-down"></i>
+        </button>
       </div>
     <div className="answer-card-holder">
       <div className='answer-content-container'>
