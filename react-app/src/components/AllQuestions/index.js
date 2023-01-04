@@ -13,7 +13,7 @@ const AllQuestions = () => {
   const currentUser = useSelector(state => state.session.user)
 
   useEffect(() => {
-    console.log('hello from use effect')
+    // console.log('hello from use effect')
     dispatch(questionActions.fetchAllQuestions());
   }, [dispatch])
 

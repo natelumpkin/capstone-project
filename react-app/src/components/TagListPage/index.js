@@ -12,8 +12,8 @@ const TagListPage = () => {
 
   const dispatch = useDispatch()
   const tags = useSelector(state => state.tags)
-  const officialTags = tags.filter(tag => tag.description)
-  console.log(officialTags)
+  // const officialTags = tags.filter(tag => tag.description)
+  // console.log(officialTags)
   // const numQuestions = useSelector(state => state.questions.numQuestions)
   const currentUser = useSelector(state => state.session.user)
 

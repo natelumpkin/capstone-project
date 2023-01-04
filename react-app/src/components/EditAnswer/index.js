@@ -36,8 +36,8 @@ const EditAnswer = () => {
   let questionId;
   if (currentAnswer) questionId = currentAnswer.questionId
 
-  console.log('questionId out of useEffect: ', questionId)
-  console.log('currentAnswer: ', currentAnswer)
+  // console.log('questionId out of useEffect: ', questionId)
+  // console.log('currentAnswer: ', currentAnswer)
 
   useEffect(async () => {
     await dispatch(answerActions.getOneAnswer(answerId))
@@ -88,7 +88,7 @@ const EditAnswer = () => {
     e.preventDefault()
     handleAnswerErrors();
 
-    console.log('questionId inside handlesubmit: ', questionId)
+    // console.log('questionId inside handlesubmit: ', questionId)
 
     if (!answerErrors.length) {
       const content = editorState.getCurrentContent()
