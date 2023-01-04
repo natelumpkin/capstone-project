@@ -81,7 +81,7 @@ const EditQuestion = () => {
 
       // if that tag isn't in tagIds, remove it
       if (!tagIds.includes(tag.id)) {
-        console.log('removing tag')
+        // console.log('removing tag')
         await dispatch(questionActions.removeTagFromQuestion(questionId, tag.id))
       }
     }
@@ -223,7 +223,7 @@ const EditQuestion = () => {
     for (let i = 0; i < tagArray.length; i++) {
       let tag = tagArray[i]
       if (tag?.tag === tagToSave.tag) {
-        console.log('You already have this tag, sorry')
+        // console.log('You already have this tag, sorry')
         return
       }
     }
@@ -241,6 +241,7 @@ const EditQuestion = () => {
     }
     setTagSearch('')
     setTagChoice('')
+    setTagDropdown(false)
     // ta da!
   }
 

@@ -176,10 +176,10 @@ const CreateQuestion = () => {
 
 
   const addTag = async (newTag) => {
-    console.log('tagChoice: ', tagChoice)
+    // console.log('tagChoice: ', tagChoice)
     // create a list of the tags attached to this question
     const tagArray = [tag1, tag2, tag3, tag4, tag5]
-    console.log('tagArray: ', tagArray)
+    // console.log('tagArray: ', tagArray)
     // check to see if the tag you want is attached to this question
     let tagToSave = tags.find(tag => tag.tag === tagChoice)
     // if it's not in attached to this question
@@ -214,7 +214,7 @@ const CreateQuestion = () => {
       // console.log('tag in array: ', tag?.tag)
       // console.log('tag to save: ', tagToSave.tag)
       if (tag?.tag === tagToSave.tag) {
-        console.log('You already have this tag, sorry')
+        // console.log('You already have this tag, sorry')
         return
       }
     }
