@@ -8,3 +8,15 @@
 .tag-info.tag-name-card.all-tags:hover {
   text-decoration: none;
 }
+
+.tag-description-button {
+  background-color: white;
+  color: #0a2e47;
+  border: 1px solid #0a2e47;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.tag-description-button:hover {
+  background-color: #deeffc74;
+}

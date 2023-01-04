@@ -1,0 +1,47 @@
+.submit-tag-description {
+  background-color: #1a73e7;
+  color: white;
+  border: none;
+  border-radius: 3px;
+
+  cursor: pointer;
+
+}
+
+.submit-tag-description:disabled {
+  cursor: not-allowed;
+  background-color: #96bcef8e;
+}
+
+.cancel-modal {
+  background-color: white;
+  color: #1a73e7;
+  border: 1px solid #1a73e7;
+  border-radius: 3px;
+
+  cursor: pointer;
+
+}
+
+.cancel-modal:hover {
+  background-color: #96bcef8e;
+}
+
+.tag-description-input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.delete-button-container.tag-update-container {
+  justify-content: flex-start;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.delete-button-container.tag-update-container button {
+  width: 100%;
+  height: 35px;
+  margin-left: 0;
+}
