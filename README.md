@@ -10,7 +10,7 @@
 
 ## Project Summary
 
-Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers two key features of interaction: questions and answers. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to any programming-related problem they might have.
+Crud Overgrowth is a full-stack, stateful web app that draws functionality and design inspiration from stackoverflow.com. The current build of Crud Overgrowth offers four key features of interaction: questions, answers, tags, and votes. Users are able to sign up, log in, and ask programming-related questions, as well as answer the questions of other users, all with rich text formatting. When logged out, any user is able to view the questions and answers other users have posted, in order to help them find the solution to any programming-related problem they might have.
 
 [Check out the live site!](https://crud-overgrowth.onrender.com)
 
@@ -24,7 +24,13 @@ Users can post programming-related questions for other users to read and respond
 
 Users can answer each other's questions and are guided through the process of responding with a dynamic form. Answers also have rich-text support. Answers can be editted and deleted by the user who created them.
 
+### Tags
 
+When asking a question, users are able to add up to five tags to their question. Users can either choose from a list of tags other users have created, or create one themself on the fly. Users are presented a dynamic dropdown menu which includes the tag name and description, in order to choose the tag which most suits them. Tags can be used to be other users to search for questions they are interested in.
+
+### Votes
+
+When logged in, users are able to add upvotes and downvotes to any question or answer that isn't theirs, in order to show other users which questions and answers were helpful to them. Any user can see a display of each question and answer's total score, in order to determine how helpful the question is. The upvote and downvote interface includes dynamic pop-ups to guide them through the process of voting.
 
 ## **Technologies Used**
 
@@ -55,7 +61,11 @@ Users can answer each other's questions and are guided through the process of re
 
 ### Create Question Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.13.57%20PM.png)
 
+### Tag Search![Alt text](screenshots/Screen%20Shot%202023-01-04%20at%2012.59.33%20PM.png)
+
 ### Create Answer Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.15.30%20PM.png)
+
+### Vote Interface![Alt text](screenshots/Screen%20Shot%202023-01-04%20at%201.02.46%20PM.png)
 
 ### Sign Up Form![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.15.54%20PM.png)
 
