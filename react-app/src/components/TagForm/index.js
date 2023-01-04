@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 
 import * as tagActions from '../../store/tag'
+import './TagForm.css'
 
 const TagForm = ({tag, setShowModal}) => {
 
@@ -48,19 +49,34 @@ const TagForm = ({tag, setShowModal}) => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <input
-      maxLength={500}
-      minLength={10}
-      type="text"
-      value={description}
-      onChange={(e) => setDescription(e.target.value)}></input>
-      <button
-      disabled={disableSubmit}>Submit Description</button>
-      {tagErrors.map(error => (
-        <div key={error}>{error}</div>
-      ))}
-    </form>
+    <div className="delete-modal">
+      <form onSubmit={onSubmit}>
+        <h2>Add a description to tag [{tag.tag}]</h2>
+        <textarea
+        className="tag-description-input"
+        maxLength={500}
+        minLength={10}
+        type="textarea"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}></textarea>
+        <div className="delete-button-container tag-update-container">
+          <button
+            className="cancel-modal"
+            type="button"
+            onClick={() => setShowModal(false)}>
+              Cancel
+            </button>
+          <button
+          className="submit-tag-description"
+          disabled={disableSubmit}>Submit Description</button>
+        </div>
+        <div className="list-errors-parent">
+          {tagErrors.map(error => (
+            <div className="list-errors" key={error}>{error}</div>
+          ))}
+        </div>
+      </form>
+    </div>
   )
 }
 

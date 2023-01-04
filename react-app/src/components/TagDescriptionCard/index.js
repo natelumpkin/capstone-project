@@ -21,7 +21,7 @@ const TagDescriptionCard = ({tag}) => {
     <div className="tag-info-description">
       <p>{tag.description ? tag.description : 'This lonely tag doesn\'t have a description yet!'}</p>
       {!tag.description && (
-        <button onClick={() => setShowModal(true)}>Add description</button>
+        <button className="tag-description-button" onClick={() => setShowModal(true)}>Add description</button>
       )}
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
