@@ -108,3 +108,22 @@ def post_tag():
     return new_tag.to_dict(), 201
   else:
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
+
+## Update a tag
+
+@tag_routes.route('/<int:id>', methods=['PUT'])
+def update_tag(id):
+  try:
+    tag = Tag.query.get_or_404(id)
+  except:
+    return {"message": "Couldn't find tag"}, 404
+
+  form = TagForm()
+  form['csrf_token'].data = request.cookies['csrf_token']
+
+  if form.validate_on_submit():
+    tag.description = form.data['description']
+    db.session.commit()
+    return tag.to_dict()
+  else:
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
