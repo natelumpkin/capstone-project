@@ -272,7 +272,7 @@ const questionsReducer = (state = initialState, action) => {
         numQuestions: state.numQuestions
       }
       const data = action.updatedQuestion
-      data.Votes = normalizeData(action.updateQuestion.Votes)
+      data.Votes = normalizeData(action.updatedQuestion.Votes)
       newState.singleQuestion = data
       newState.allQuestions[data.id] = data
       delete newState.allQuestions[data.id].body

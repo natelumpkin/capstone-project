@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
+import { Modal } from '../../context/Modal'
+import TagForm from "../TagForm";
 import './TagDescriptionCard.css'
 
 const TagDescriptionCard = ({tag}) => {
+  const [showModal, setShowModal] = useState(false)
+
   return (
     <div className="tag-description-card"
     >
@@ -14,7 +19,15 @@ const TagDescriptionCard = ({tag}) => {
 
     </div>
     <div className="tag-info-description">
-      <p>{tag.description}</p>
+      <p>{tag.description ? tag.description : 'This lonely tag doesn\'t have a description yet!'}</p>
+      {!tag.description && (
+        <button onClick={() => setShowModal(true)}>Add description</button>
+      )}
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <TagForm tag={tag} setShowModal={setShowModal}/>
+        </Modal>
+      )}
     </div>
     </div>
   )
