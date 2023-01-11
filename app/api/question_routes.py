@@ -12,12 +12,42 @@ question_routes = Blueprint('questions', __name__)
 
 @question_routes.route('')
 def get_all_questions():
-  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).all()
+
+  page = None
+  size = None
+
+  if request.args.get('page'):
+    page = int(request.args.get('page'))
+
+  if request.args.get('size'):
+    size = int(request.args.get('size'))
+
+  if not page:
+    page = 1
+  elif page <= 0:
+    page = 1
+  else:
+    page = int(page)
+
+  if not size:
+    size = 5
+  elif size <= 0:
+    size = 5
+  else:
+    size = int(size)
+
+  limit = size
+  offset = size * (page - 1)
+
+  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
+
   numQuestions = Question.query.count()
 
   response = {
     "Questions": [],
-    "numQuestions": numQuestions
+    "numQuestions": numQuestions,
+    "Page": page,
+    "Size": size
   }
 
   for question in questions:
