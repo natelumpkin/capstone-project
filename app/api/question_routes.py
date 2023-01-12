@@ -333,7 +333,7 @@ def get_votes_for_question(id):
 
   response = {
     "Votes": [],
-    "totalScore": question.to_dict_single()['totalScore']
+    "totalScore": question.totalScore
   }
 
   for vote in question.votes:
@@ -358,23 +358,41 @@ def add_vote_to_question(id):
   ## return a forbidden message
 
   voteIds = [ vote.user_id for vote in question.votes ]
-  print("voteIds: ", voteIds)
-  print("currentuserid: ", current_user.id)
+  # print("voteIds: ", voteIds)
+  # print("currentuserid: ", current_user.id)
   if current_user.id in voteIds:
     return { "message": "User has already voted on this question"}, 403
 
   form = VoteForm()
   form['csrf_token'].data = request.cookies['csrf_token']
 
-  print(form.data)
+  # print(form.data)
 
   if form.validate_on_submit():
+    # Add new vote
     new_vote = Question_Vote(
       question_id=question.id,
       user_id=current_user.id,
       vote=form.data['vote']
     )
     db.session.add(new_vote)
+    db.session.commit()
+
+    question = Question.query.options(joinedload(Question.votes)).get_or_404(id)
+
+    # Tabulate total votes on question and recalcuate total score
+
+    new_score = 0
+    for vote in question.votes:
+      if (vote.vote):
+        new_score += 1
+      else:
+        new_score -= 1
+
+    # Update total score on question
+    question.totalScore = new_score
+    # print(question.to_dict_single())
+
     db.session.commit()
     return new_vote.to_dict(), 201
   else:

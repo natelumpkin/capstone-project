@@ -26,6 +26,19 @@ def update_question_vote(id):
 
   if form.validate_on_submit():
     vote.vote = form.data['vote']
+
+    question = Question.query.options(joinedload(Question.votes)).get(vote.question_id)
+
+    new_score = 0
+    for vote in question.votes:
+      if (vote.vote):
+        new_score += 1
+      else:
+        new_score -= 1
+
+    # Update total score on question
+    question.totalScore = new_score
+
     db.session.commit()
     return vote.to_dict()
   else:
@@ -45,6 +58,19 @@ def delete_question_vote(id):
     return { "message": "Forbidden"}, 403
 
   db.session.delete(vote)
+
+  question = Question.query.options(joinedload(Question.votes)).get(vote.question_id)
+
+  new_score = 0
+  for vote in question.votes:
+    if (vote.vote):
+      new_score += 1
+    else:
+      new_score -= 1
+
+    # Update total score on question
+  question.totalScore = new_score
+
   db.session.commit()
   # print(vote)
   return { "message": "Successfully deleted"}
