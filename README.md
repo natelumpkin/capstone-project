@@ -53,7 +53,7 @@ When logged in, users are able to add upvotes and downvotes to any question or a
 
 ## App Screenshots
 
-### Splash Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.05%20PM.png)
+### Splash Page![Alt text](screenshots/Screen%20Shot%202023-01-11%20at%2012.51.12%20PM.png)
 
 ### Questions Page![Alt text](screenshots/Screen%20Shot%202022-12-02%20at%202.12.27%20PM.png)
 

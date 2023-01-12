@@ -12,12 +12,65 @@ question_routes = Blueprint('questions', __name__)
 
 @question_routes.route('')
 def get_all_questions():
-  questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).all()
+
+  page = None
+  size = None
+  author = None
+  score = None
+  keywords = None
+  exact_phrase = None
+
+  if request.args.get('page'):
+    page = int(request.args.get('page'))
+
+  if request.args.get('size'):
+    size = int(request.args.get('size'))
+
+  if request.args.get('author'):
+    author = request.args.get(('author'))
+
+  if request.args.get('score'):
+    score = request.args.get(('score'))
+
+  if request.args.get('keywords'):
+    keywords = request.args.get(('keywords'))
+
+  if request.args.get('exact_phrase'):
+    exact_phrase = request.args.get('exact_phrase')
+
+  if not page:
+    page = 1
+  elif page <= 0:
+    page = 1
+  else:
+    page = int(page)
+
+  if not size:
+    size = 100
+  elif size <= 0:
+    size = 5
+  else:
+    size = int(size)
+
+  limit = size
+  offset = size * (page - 1)
+
+  if author and not keywords:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+  elif keywords and not author:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
+  elif keywords and author:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+  else:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
+
   numQuestions = Question.query.count()
 
   response = {
     "Questions": [],
-    "numQuestions": numQuestions
+    "numQuestions": numQuestions,
+    "Page": page,
+    "Size": size
   }
 
   for question in questions:
