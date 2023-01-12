@@ -1,9 +1,13 @@
 #left-navbar {
   display: flex;
+  position: fixed;
   flex-direction: column;
+  height: -moz-fit-content;
   height: fit-content;
+  width: 10%;
   align-items: flex-end;
   margin-top: 19px;
+  /* padding-right: 20px;*/
 }
 
 .left-navlink {
@@ -15,7 +19,9 @@
   align-items: center;
   padding-bottom: 2px;
   padding-left: 10px;
+  padding-right: 70%;
   margin-bottom: 10px;
+
 }
 
 .leftnav-active {

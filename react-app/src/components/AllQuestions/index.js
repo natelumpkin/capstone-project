@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
 import QuestionCard from "../QuestionCard";
+import PageChooser from "../PageChooser";
+
 import * as questionActions from '../../store/question'
+
 import './AllQuestions.css'
 
 const AllQuestions = () => {
@@ -29,28 +33,28 @@ const AllQuestions = () => {
 
   return (
     <div id="content-column-two">
-    <div id="all-questions-container">
-      <div id="all-questions-header">
-        <div id="all-questions-header-upper">
-          <div>
-            <h1>All Questions</h1>
+      <div id="all-questions-container">
+        <div id="all-questions-header">
+          <div id="all-questions-header-upper">
+            <div>
+              <h1>All Questions</h1>
+            </div>
+            <div>
+                <Link to={currentUser ? "questions/new" : "/login"}>
+                  <button className="ask-question-button pointer">Ask Question</button>
+                </Link>
+            </div>
           </div>
-          <div>
-              <Link to={currentUser ? "questions/new" : "/login"}>
-                <button className="ask-question-button pointer">Ask Question</button>
-              </Link>
+          <div id="all-questions-header-lower">
+            {numQuestions && (
+            <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
+            )}
           </div>
         </div>
-        <div id="all-questions-header-lower">
-          {numQuestions && (
-          <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
-          )}
-        </div>
+        {questionsArray.map(question => (
+          <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
+        ))}
       </div>
-      {questionsArray.map(question => (
-        <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
-      ))}
-    </div>
     </div>
   )
 }
