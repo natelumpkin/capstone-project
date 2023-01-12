@@ -30,7 +30,10 @@ def get_all_questions():
     author = request.args.get(('author'))
 
   if request.args.get('score'):
-    score = request.args.get(('score'))
+    try:
+      score = int(request.args.get(('score')))
+    except:
+      score = None
 
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
@@ -52,15 +55,19 @@ def get_all_questions():
   else:
     size = int(size)
 
+  print('score: ', score)
+
   limit = size
   offset = size * (page - 1)
 
-  if author and not keywords:
+  if author and not keywords and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-  elif keywords and not author:
+  elif keywords and not author and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
-  elif keywords and author:
+  elif keywords and author and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+  elif score and not author and not keywords:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.totalScore >= score).limit(limit).offset(offset).all()
   else:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
 
