@@ -38,6 +38,9 @@ const PageChooser = ({ numQuestions, size }) => {
   const { search } = useLocation()
 
   useEffect(() => {
+
+    // adds and removes class from navLink depending on current location
+
     let currentPage = query.get("page")
 
     if (!currentPage) currentPage = 1

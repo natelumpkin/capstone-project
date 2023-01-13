@@ -12,5 +12,7 @@
 }
 
 .page-links-holder a.current-page {
-  border: 1px solid red;
+  border: none;
+  background-color: #f48324;
+  color: white;
 }
