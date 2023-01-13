@@ -1,5 +1,6 @@
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { useMemo } from "react";
 
 const PageChooser = ({ numQuestions, size }) => {
 
@@ -24,10 +25,21 @@ const PageChooser = ({ numQuestions, size }) => {
     pageList.push(i)
   }
 
+  const useQuery = () => {
+    const { search } = useLocation()
+    // console.log(search)
+    return useMemo(() => new URLSearchParams(search), [search])
+  }
+
+  let query = useQuery()
+
 
   return (
     <div>
       <h1>Hello from PageChooser!</h1>
+      {query.get("page") && (
+        <NavLink to={Number(query.get("page")) - 1 > 1 ? `/questions?page=${Number(query.get("page")) - 1}` : '/questions'}>Prev</NavLink>
+      )}
       {pageList.map(pageNumber => (
         <div>
           <NavLink to={pageNumber === 1 ? '/questions' : `/questions?page=${pageNumber}`}>
@@ -35,6 +47,9 @@ const PageChooser = ({ numQuestions, size }) => {
           </NavLink>
         </div>
       ))}
+      {Number(query.get("page")) < numPages && (
+        <NavLink to={`/questions?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
+      )}
     </div>
   )
 }
