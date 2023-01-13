@@ -77,6 +77,21 @@ export const fetchAllQuestions = (tagId) => async dispatch => {
   }
 }
 
+export const fetchFilteredQuestions = (searchParams) => async dispatch => {
+  const { page } = searchParams
+  if (page) {
+    let response = await fetch(`/api/questions?page=${page}`)
+    if (response.ok) {
+      const questions = await response.json()
+      dispatch(getQuestions(questions))
+      return questions
+    } else {
+      const errors = await response.json()
+      return errors
+    }
+  }
+}
+
 export const fetchSingleQuestion = (questionId) => async dispatch => {
   // console.log(questionId)
   const response = await fetch(`/api/questions/${questionId}`)

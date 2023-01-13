@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useLocation } from 'react-router-dom'
 
 import QuestionCard from "../QuestionCard";
 import PageChooser from "../PageChooser";
@@ -12,14 +13,33 @@ import './AllQuestions.css'
 const AllQuestions = () => {
 
   const dispatch = useDispatch()
+  const { search } = useLocation()
+
+  const useQuery = () => {
+    const { search } = useLocation()
+    // console.log(search)
+    return useMemo(() => new URLSearchParams(search), [search])
+  }
+
+  let query = useQuery()
+
+
+  console.log("page: ", query.get("page"))
+
   const allQuestions = useSelector(state => state.questions.allQuestions)
   const numQuestions = useSelector(state => state.questions.numQuestions)
   const currentUser = useSelector(state => state.session.user)
 
   useEffect(() => {
     // console.log('hello from use effect')
-    dispatch(questionActions.fetchAllQuestions());
-  }, [dispatch])
+
+    if (query.get("page")) {
+      dispatch(questionActions.fetchFilteredQuestions({ page: query.get("page")}))
+    } else {
+      dispatch(questionActions.fetchAllQuestions());
+    }
+
+  }, [dispatch, search])
 
 
   const questionsArray = [];
@@ -55,6 +75,7 @@ const AllQuestions = () => {
           <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
         ))}
       </div>
+      <PageChooser numQuestions={numQuestions}/>
     </div>
   )
 }

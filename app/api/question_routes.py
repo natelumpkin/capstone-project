@@ -50,9 +50,9 @@ def get_all_questions():
     page = int(page)
 
   if not size:
-    size = 100
+    size = 5
   elif size <= 0:
-    size = 100
+    size = 5
   else:
     size = int(size)
 
