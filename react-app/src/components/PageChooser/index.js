@@ -1,6 +1,9 @@
 
 import { NavLink, useLocation } from "react-router-dom";
 import { useMemo } from "react";
+import { useEffect } from "react";
+
+import './PageChooser.css'
 
 const PageChooser = ({ numQuestions, size }) => {
 
@@ -32,23 +35,37 @@ const PageChooser = ({ numQuestions, size }) => {
   }
 
   let query = useQuery()
+  const { search } = useLocation()
+
+  useEffect(() => {
+    let currentPage = query.get("page")
+
+    if (!currentPage) currentPage = 1
+
+    let prevNavs = document.getElementsByClassName('current-page')
+    console.log('prevNavs: ', prevNavs)
+    for (let element of prevNavs) {
+      element.classList.remove('current-page')
+    }
+    let activeNav = document.getElementById(`pagelink-${currentPage}`)
+    if (activeNav) activeNav.classList.add('current-page')
+  },[search])
 
 
   return (
-    <div>
-      <h1>Hello from PageChooser!</h1>
+    <div className="page-links-holder">
       {query.get("page") && (
         <NavLink to={Number(query.get("page")) - 1 > 1 ? `/questions?page=${Number(query.get("page")) - 1}` : '/questions'}>Prev</NavLink>
       )}
       {pageList.map(pageNumber => (
-        <div>
-          <NavLink to={pageNumber === 1 ? '/questions' : `/questions?page=${pageNumber}`}>
+        <div key={pageNumber}>
+          <NavLink key={pageNumber} id={`pagelink-${pageNumber}`} to={pageNumber === 1 ? '/questions' : `/questions?page=${pageNumber}`}>
             {pageNumber}
           </NavLink>
         </div>
       ))}
       {Number(query.get("page")) < numPages && (
-        <NavLink to={`/questions?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
+        <NavLink to={!query.get("page") ? '/questions?page=2' : `/questions?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
       )}
     </div>
   )

@@ -1,0 +1,16 @@
+.page-links-holder {
+  display: flex;
+  gap: 5px;
+  padding: 15px;
+}
+
+.page-links-holder a {
+  border: 1px solid black;
+  padding: 5px;
+  color: black;
+  text-decoration: none;
+}
+
+.page-links-holder a.current-page {
+  border: 1px solid red;
+}
