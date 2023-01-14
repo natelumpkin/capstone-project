@@ -34,7 +34,7 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
-  // console.log(currentQuestion.body)
+  console.log(currentQuestion.body)
 
   useEffect(() => {
 
