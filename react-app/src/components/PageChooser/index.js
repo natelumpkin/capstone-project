@@ -18,7 +18,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
   // so we need an array of page numbers
 
-  if (!size) size = 50
+  if (!size) size = 10
 
   let numPages = Math.ceil(numQuestions / size)
 
@@ -69,7 +69,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
             </NavLink>
           </div>
         ))}
-        {Number(query.get("page")) < numPages && (
+        {Number(query.get("page")) < numPages && numPages > 1 && (
           <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
         )}
       </div>

@@ -91,9 +91,9 @@ def get_questions_for_tags(id):
     page = int(page)
 
   if not size:
-    size = 50
+    size = 10
   elif size <= 0:
-    size = 50
+    size = 10
   else:
     size = int(size)
 

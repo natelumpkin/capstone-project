@@ -24,7 +24,7 @@ const AllQuestions = () => {
   let query = useQuery()
 
 
-  console.log("page: ", query.get("page"))
+  // console.log("page: ", query.get("page"))
 
   const allQuestions = useSelector(state => state.questions.allQuestions)
   const numQuestions = useSelector(state => state.questions.numQuestions)
