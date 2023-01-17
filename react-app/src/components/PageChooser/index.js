@@ -1,11 +1,13 @@
 
 import { NavLink, useLocation } from "react-router-dom";
 import { useMemo } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import './PageChooser.css'
 
 const PageChooser = ({ numQuestions, size, location }) => {
+
+  const [ pageList, setPageList ] = useState([])
 
   // what does this thing need to do?
   // it needs to divide numQuestions up by size to get the number of pages
@@ -18,14 +20,15 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
   // so we need an array of page numbers
 
+  useEffect(() => {
+
+  })
+
   if (!size) size = 50
-
   let numPages = Math.ceil(numQuestions / size)
-
-  let pageList = []
-
+  let currPages = []
   for (let i = 1; i < numPages + 1; i++) {
-    pageList.push(i)
+    currPages.push(i)
   }
 
   const useQuery = () => {
