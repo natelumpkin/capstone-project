@@ -1,4 +1,4 @@
-from ..models import Question, User, db, SCHEMA, environment
+from ..models import Question, User, db, SCHEMA, environment, Tag
 from flask import jsonify
 
 def seed_questions():
@@ -32,6 +32,19 @@ def seed_questions():
   question11 = Question(user_id=user3.id, title="DeprecationWarning: Mongoose: the `strictQuery` option will be switched back to `false` by default", body=body11)
   question12 = Question(user_id=user3.id, title="Is it possible in C (not invoking UB) to check if two objects overlap?", body=body12)
 
+  tag1 = Tag.query.filter(Tag.tag == 'python').one()
+  tag2 = Tag.query.filter(Tag.tag == 'javascript').one()
+  tag3 = Tag.query.filter(Tag.tag == 'reactjs').one()
+  tag4 = Tag.query.filter(Tag.tag == 'react-router').one()
+  tag5 = Tag.query.filter(Tag.tag == 'c').one()
+  tag6 = Tag.query.filter(Tag.tag == 'null').one()
+  tag7 = Tag.query.filter(Tag.tag == 'git').one()
+  tag8 = Tag.query.filter(Tag.tag == 'mainframe').one()
+  tag9 = Tag.query.filter(Tag.tag == 'c++').one()
+  tag10 = Tag.query.filter(Tag.tag == 'memory-leaks').one()
+  tag11 = Tag.query.filter(Tag.tag == 'canvas').one()
+  tag12 = Tag.query.filter(Tag.tag == 'arrays').one()
+
   db.session.add(question1)
   db.session.add(question2)
   db.session.add(question3)
@@ -44,6 +57,20 @@ def seed_questions():
   db.session.add(question10)
   db.session.add(question11)
   db.session.add(question12)
+  question1.tags.append(tag9)
+  question2.tags.append(tag12)
+  question4.tags.append(tag5)
+  question4.tags.append(tag6)
+  question5.tags.append(tag1)
+  question5.tags.append(tag2)
+  question6.tags.append(tag7)
+  question7.tags.append(tag5)
+  question8.tags.append(tag9)
+  question8.tags.append(tag8)
+  question9.tags.append(tag12)
+  question10.tags.append(tag11)
+  question11.tags.append(tag10)
+  question12.tags.append(tag3)
   db.session.commit()
 
 def undo_questions():

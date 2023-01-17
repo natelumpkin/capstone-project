@@ -27,9 +27,9 @@ def seed():
         undo_answers()
         undo_votes()
     seed_users()
-    seed_questions()
     seed_tags()
     seed_bulk_questions()
+    seed_questions()
     seed_answers()
     seed_votes()
     # Add other seed functions here

@@ -75,7 +75,7 @@ def get_all_questions():
     num_questions = Question.query.filter(Question.totalScore >= score).count()
   else:
     # questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
-    questions = Question.query.order_by(Question.created_at.asc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
+    questions = Question.query.order_by(Question.id.desc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
     num_questions = Question.query.count()
 
 

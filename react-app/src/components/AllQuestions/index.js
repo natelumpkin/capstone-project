@@ -75,7 +75,7 @@ const AllQuestions = () => {
           <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
         ))}
       </div>
-      <PageChooser numQuestions={numQuestions}/>
+      <PageChooser location={'questions'} numQuestions={numQuestions}/>
     </div>
   )
 }

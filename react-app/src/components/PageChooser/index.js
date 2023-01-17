@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import './PageChooser.css'
 
-const PageChooser = ({ numQuestions, size }) => {
+const PageChooser = ({ numQuestions, size, location }) => {
 
   // what does this thing need to do?
   // it needs to divide numQuestions up by size to get the number of pages
@@ -18,7 +18,7 @@ const PageChooser = ({ numQuestions, size }) => {
 
   // so we need an array of page numbers
 
-  if (!size) size = 5
+  if (!size) size = 50
 
   let numPages = Math.ceil(numQuestions / size)
 
@@ -35,7 +35,9 @@ const PageChooser = ({ numQuestions, size }) => {
   }
 
   let query = useQuery()
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
+
+  console.log('pathname: ', pathname)
 
   useEffect(() => {
 
@@ -55,23 +57,23 @@ const PageChooser = ({ numQuestions, size }) => {
   },[search])
 
 
-  return (
-    <div className="page-links-holder">
-      {query.get("page") && (
-        <NavLink to={Number(query.get("page")) - 1 > 1 ? `/questions?page=${Number(query.get("page")) - 1}` : '/questions'}>Prev</NavLink>
-      )}
-      {pageList.map(pageNumber => (
-        <div key={pageNumber}>
-          <NavLink key={pageNumber} id={`pagelink-${pageNumber}`} to={pageNumber === 1 ? '/questions' : `/questions?page=${pageNumber}`}>
-            {pageNumber}
-          </NavLink>
-        </div>
-      ))}
-      {Number(query.get("page")) < numPages && (
-        <NavLink to={!query.get("page") ? '/questions?page=2' : `/questions?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
-      )}
-    </div>
-  )
+    return (
+      <div className="page-links-holder">
+        {query.get("page") && (
+          <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>Prev</NavLink>
+        )}
+        {pageList.map(pageNumber => (
+          <div key={pageNumber}>
+            <NavLink key={pageNumber} id={`pagelink-${pageNumber}`} to={pageNumber === 1 ? pathname : `${pathname}?page=${pageNumber}`}>
+              {pageNumber}
+            </NavLink>
+          </div>
+        ))}
+        {Number(query.get("page")) < numPages && (
+          <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
+        )}
+      </div>
+    )
 }
 
 export default PageChooser;

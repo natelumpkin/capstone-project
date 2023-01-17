@@ -27,12 +27,13 @@ def seed_bulk_questions():
 
   # question1 = Question(user_id=user1.id, title="How to make_from_tuple on the heap?", body=body1)
 
-  i = 0
+
 
   question_array = []
 
   for user in user_array:
-    while i < 50000:
+    i = 0
+    while i < 100:
       question = Question(
         user_id=user.id,
         title="Lorem ipsum dolor sit amet",

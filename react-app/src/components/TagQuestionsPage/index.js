@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 
 import * as questionActions from '../../store/question'
 import QuestionCard from "../QuestionCard"
+import PageChooser from "../PageChooser"
 import './TagQuestionsPage.css'
 
 const TagQuestionsPage = () => {
@@ -81,6 +82,7 @@ const TagQuestionsPage = () => {
         <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
       ))}
     </div>
+    <PageChooser location={'tags'} numQuestions={numQuestions}/>
     </div>
   )
 }
