@@ -18,7 +18,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
   // so we need an array of page numbers
 
-  if (!size) size = 10
+  if (!size) size = 50
 
   let numPages = Math.ceil(numQuestions / size)
 
@@ -45,18 +45,26 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
     let currentPage = query.get("page")
 
+    // console.log('hello from useeffect')
+
+    // ... only render prev, current selection of 5, last, and next
+
     if (!currentPage) currentPage = 1
 
+    // console.log('currentpage: ', currentPage)
     let prevNavs = document.getElementsByClassName('current-page')
-    console.log('prevNavs: ', prevNavs)
+    // console.log('prevNavs: ', prevNavs)
     for (let element of prevNavs) {
       element.classList.remove('current-page')
     }
     let activeNav = document.getElementById(`pagelink-${currentPage}`)
+    // console.log('active nav on first render: ', activeNav)
     if (activeNav) activeNav.classList.add('current-page')
-  },[search])
+  },[search, numQuestions])
 
-
+  if (numQuestions <= size) {
+    return null
+  } else {
     return (
       <div className="page-links-holder">
         {query.get("page") && (
@@ -74,6 +82,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
         )}
       </div>
     )
+  }
 }
 
 export default PageChooser;

@@ -33,7 +33,7 @@ def seed_bulk_questions():
 
   for user in user_array:
     i = 0
-    while i < 100:
+    while i < 200:
       question = Question(
         user_id=user.id,
         title="Lorem ipsum dolor sit amet",
