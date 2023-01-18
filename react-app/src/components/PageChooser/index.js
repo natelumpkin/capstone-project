@@ -40,14 +40,21 @@ const PageChooser = ({ numQuestions, size, location }) => {
     setLastPage(null)
 
     if (!currentPage) currentPage = 1
+    let currPages = []
 
     if (!size) size = 50
     setNumPages(Math.ceil(numQuestions / size))
     if (currentPage <= 4 && currentPage >= 1) {
-      setPageList([1,2,3,4,5])
-      setLastPage(numPages)
+      if (numPages > 5) {
+        setPageList([1,2,3,4,5])
+        setLastPage(numPages)
+      } else {
+        for (let i = 1; i <= numPages; i++) {
+          currPages.push(i)
+          setPageList(currPages)
+        }
+      }
     } else {
-      let currPages = []
       for (let i = currentPage - 2; i <= currentPage + 2 && i <= numPages; i++) {
         currPages.push(i)
       }
