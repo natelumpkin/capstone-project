@@ -8,6 +8,19 @@ import './PageChooser.css'
 const PageChooser = ({ numQuestions, size, location }) => {
 
   const [ pageList, setPageList ] = useState([])
+  const [ numPages, setNumPages ] = useState(null)
+  const [ lastPage, setLastPage ] = useState(null)
+  const [ firstPage, setFirstPage ] = useState(null)
+
+  const useQuery = () => {
+    const { search } = useLocation()
+    // console.log(search)
+    return useMemo(() => new URLSearchParams(search), [search])
+  }
+
+  let query = useQuery()
+
+  const { search, pathname } = useLocation()
 
   // what does this thing need to do?
   // it needs to divide numQuestions up by size to get the number of pages
@@ -22,23 +35,37 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
   useEffect(() => {
 
-  })
+    let currentPage = Number(query.get("page"))
+    setFirstPage(null)
+    setLastPage(null)
 
-  if (!size) size = 50
-  let numPages = Math.ceil(numQuestions / size)
-  let currPages = []
-  for (let i = 1; i < numPages + 1; i++) {
-    currPages.push(i)
-  }
+    if (!currentPage) currentPage = 1
 
-  const useQuery = () => {
-    const { search } = useLocation()
-    // console.log(search)
-    return useMemo(() => new URLSearchParams(search), [search])
-  }
+    if (!size) size = 50
+    setNumPages(Math.ceil(numQuestions / size))
+    if (currentPage <= 4 && currentPage >= 1) {
+      setPageList([1,2,3,4,5])
+      setLastPage(numPages)
+    } else {
+      let currPages = []
+      for (let i = currentPage - 2; i <= currentPage + 2 && i <= numPages; i++) {
+        currPages.push(i)
+      }
+      setPageList(currPages)
+      if (currPages[0] !== 1) setFirstPage(true)
+      console.log()
+      if (currPages[currPages.length - 1] !== numPages) {
+        setLastPage(numPages)
+      }
+    }
+  },[numQuestions, numPages, search])
 
-  let query = useQuery()
-  const { search, pathname } = useLocation()
+  console.log('first page?: ', firstPage)
+  console.log('last page: ', lastPage)
+  console.log('numPages: ', numPages)
+
+
+
 
   console.log('pathname: ', pathname)
 
@@ -63,7 +90,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
     let activeNav = document.getElementById(`pagelink-${currentPage}`)
     // console.log('active nav on first render: ', activeNav)
     if (activeNav) activeNav.classList.add('current-page')
-  },[search, numQuestions])
+  },[search, numQuestions, pageList])
 
   if (numQuestions <= size) {
     return null
@@ -73,6 +100,12 @@ const PageChooser = ({ numQuestions, size, location }) => {
         {query.get("page") && (
           <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>Prev</NavLink>
         )}
+        {firstPage && (
+          <>
+          <NavLink to={pathname}>1</NavLink>
+          <div>...</div>
+          </>
+        )}
         {pageList.map(pageNumber => (
           <div key={pageNumber}>
             <NavLink key={pageNumber} id={`pagelink-${pageNumber}`} to={pageNumber === 1 ? pathname : `${pathname}?page=${pageNumber}`}>
@@ -80,6 +113,12 @@ const PageChooser = ({ numQuestions, size, location }) => {
             </NavLink>
           </div>
         ))}
+        {lastPage && (
+          <>
+          <div>...</div>
+          <NavLink to={`${pathname}?page=${lastPage}`}>{lastPage}</NavLink>
+          </>
+        )}
         {Number(query.get("page")) < numPages && numPages > 1 && (
           <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
         )}
