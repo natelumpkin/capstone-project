@@ -144,7 +144,7 @@ def get_single_question(id):
 @question_routes.route('', methods=['POST'])
 @login_required
 def post_question():
-  print('hello from post questions')
+  # print('hello from post questions')
   form = QuestionForm()
   form['csrf_token'].data = request.cookies['csrf_token']
 
@@ -410,5 +410,5 @@ def add_vote_to_question(id):
     db.session.commit()
     return new_vote.to_dict(), 201
   else:
-    print(form.errors)
+    # print(form.errors)
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400

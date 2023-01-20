@@ -4,7 +4,7 @@ const getSpecificTimeAgo = (dateString) => {
   const currentTime = new Date();
 
   let timeBetween = currentTime - postTime;
-  console.log('time between: ', timeBetween)
+  // console.log('time between: ', timeBetween)
 
   // console.log('')
   let oneYear = 31556952000;

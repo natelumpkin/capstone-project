@@ -8,7 +8,7 @@ def seed_bulk_votes():
   users = [user1, user2, user3]
   all_questions = Question.query.all()
   # print('----------------------')
-  print(all_questions)
+  # print(all_questions)
   # print('.......................')
   # user1_answers = Answer.query.filter(Answer.user_id == user1.id).all()
   # user2_answers = Answer.query.filter(Answer.user_id == user2.id).all()
