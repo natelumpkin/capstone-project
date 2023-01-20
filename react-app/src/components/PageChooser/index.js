@@ -67,14 +67,14 @@ const PageChooser = ({ numQuestions, size, location }) => {
     }
   },[numQuestions, numPages, search])
 
-  console.log('first page?: ', firstPage)
-  console.log('last page: ', lastPage)
-  console.log('numPages: ', numPages)
+  // console.log('first page?: ', firstPage)
+  // console.log('last page: ', lastPage)
+  // console.log('numPages: ', numPages)
 
 
 
 
-  console.log('pathname: ', pathname)
+  // console.log('pathname: ', pathname)
 
   useEffect(() => {
 
@@ -105,29 +105,43 @@ const PageChooser = ({ numQuestions, size, location }) => {
     return (
       <div className="page-links-holder">
         {query.get("page") && (
-          <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>Prev</NavLink>
+          <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>
+            <div className="paginator-square">
+              Prev
+            </div>
+          </NavLink>
         )}
         {firstPage && (
           <>
-          <NavLink to={pathname}>1</NavLink>
-          <div>...</div>
+          <div className="paginator-square">
+            <NavLink to={pathname}>1</NavLink>
+          </div>
+          <div className="paginator-dots">...</div>
           </>
         )}
         {pageList.map(pageNumber => (
-          <div key={pageNumber}>
-            <NavLink key={pageNumber} id={`pagelink-${pageNumber}`} to={pageNumber === 1 ? pathname : `${pathname}?page=${pageNumber}`}>
-              {pageNumber}
+          <NavLink key={pageNumber} to={pageNumber === 1 ? pathname : `${pathname}?page=${pageNumber}`}>
+              <div id={`pagelink-${pageNumber}`} className="paginator-square" key={pageNumber}>
+                {pageNumber}
+              </div>
             </NavLink>
-          </div>
         ))}
         {lastPage && (
           <>
-          <div>...</div>
-          <NavLink to={`${pathname}?page=${lastPage}`}>{lastPage}</NavLink>
+          <div className="paginator-dots">...</div>
+          <NavLink to={`${pathname}?page=${lastPage}`}>
+            <div className="paginator-square">
+              {lastPage}
+            </div>
+          </NavLink>
           </>
         )}
         {Number(query.get("page")) < numPages && numPages > 1 && (
-          <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>Next</NavLink>
+          <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>
+            <div className="paginator-square">
+              Next
+            </div>
+          </NavLink>
         )}
       </div>
     )
