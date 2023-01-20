@@ -5,6 +5,10 @@ body {
   /* margin-bottom: 100px; */
 }
 
+.bottom-margin {
+  margin-bottom: 100px;
+}
+
 * {
   font-family: "Open Sans";
 }
