@@ -56,6 +56,17 @@ def seed_votes():
   # db.session.add(vote6)
   db.session.commit()
 
+  for question in questions:
+    new_score = 0
+    for vote in question.votes:
+      if vote.vote:
+        new_score += 1
+      else:
+        new_score -= 1
+    question.totalScore = new_score
+
+  db.session.commit()
+
 def undo_votes():
   if environment == "production":
         db.session.execute(f"TRUNCATE table {SCHEMA}.question_votes RESTART IDENTITY CASCADE;")

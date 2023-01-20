@@ -4,6 +4,9 @@ from.questions import seed_questions, undo_questions
 from .answers import seed_answers, undo_answers
 from .tags import seed_tags, undo_tags
 from .votes import seed_votes, undo_votes
+from .bulk_votes import seed_bulk_votes
+from .bulk_questions import seed_bulk_questions, undo_questions
+from .bulk_answers import seed_bulk_answers
 
 from app.models.db import db, environment, SCHEMA
 
@@ -26,10 +29,12 @@ def seed():
         undo_answers()
         undo_votes()
     seed_users()
-    seed_questions()
     seed_tags()
+    seed_bulk_questions()
+    seed_questions()
     seed_answers()
-    seed_votes()
+    seed_bulk_answers()
+    seed_bulk_votes()
     # Add other seed functions here
 
 

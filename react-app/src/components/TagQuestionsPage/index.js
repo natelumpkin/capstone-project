@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useLocation } from "react-router-dom"
 
 import * as questionActions from '../../store/question'
 import QuestionCard from "../QuestionCard"
+import PageChooser from "../PageChooser"
 import './TagQuestionsPage.css'
 
 const TagQuestionsPage = () => {
 
   const { tagId } = useParams();
+  const { search } = useLocation()
 
-  console.log('tagId in tagQuestions page: ', tagId)
+  // console.log('tagId in tagQuestions page: ', tagId)
 
   const dispatch = useDispatch()
   const allQuestions = useSelector(state => state.questions.allQuestions)
@@ -19,14 +21,30 @@ const TagQuestionsPage = () => {
   const [tag, setTag] = useState({})
   const [loaded, setLoaded] = useState(false)
 
-  useEffect( async () => {
-    await dispatch(questionActions.fetchAllQuestions(tagId))
-    const response = await fetch(`/api/tags/${tagId}`)
-    const data = await response.json()
-    await setTag(data)
-    setLoaded(true)
+  const useQuery = () => {
+    const { search } = useLocation()
+    // console.log(search)
+    return useMemo(() => new URLSearchParams(search), [search])
+  }
 
-  }, [dispatch, tagId])
+  let query = useQuery()
+
+  useEffect( async () => {
+
+    if (query.get("page")) {
+      await dispatch(questionActions.fetchAllQuestions(tagId, {page: query.get("page")}))
+      const response = await fetch(`/api/tags/${tagId}`)
+      const data = await response.json()
+      await setTag(data)
+      setLoaded(true)
+    } else {
+      await dispatch(questionActions.fetchAllQuestions(tagId))
+      const response = await fetch(`/api/tags/${tagId}`)
+      const data = await response.json()
+      await setTag(data)
+      setLoaded(true)
+    }
+  }, [dispatch, tagId, search])
 
 
 
@@ -81,6 +99,7 @@ const TagQuestionsPage = () => {
         <QuestionCard key={question.id} question={question} currentUser={currentUser}/>
       ))}
     </div>
+    <PageChooser location={'tags'} numQuestions={numQuestions}/>
     </div>
   )
 }

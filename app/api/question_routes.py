@@ -19,6 +19,7 @@ def get_all_questions():
   score = None
   keywords = None
   exact_phrase = None
+  num_questions = 0
 
   if request.args.get('page'):
     page = int(request.args.get('page'))
@@ -30,7 +31,10 @@ def get_all_questions():
     author = request.args.get(('author'))
 
   if request.args.get('score'):
-    score = request.args.get(('score'))
+    try:
+      score = int(request.args.get(('score')))
+    except:
+      score = None
 
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
@@ -46,29 +50,39 @@ def get_all_questions():
     page = int(page)
 
   if not size:
-    size = 100
+    size = 50
   elif size <= 0:
-    size = 5
+    size = 50
   else:
     size = int(size)
+
+  # print('score: ', score)
 
   limit = size
   offset = size * (page - 1)
 
-  if author and not keywords:
+  if author and not keywords and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-  elif keywords and not author:
+    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).count()
+  elif keywords and not author and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
-  elif keywords and author:
+    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).count
+  elif keywords and author and not score:
     questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).count()
+  elif score and not author and not keywords:
+    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.totalScore >= score).limit(limit).offset(offset).all()
+    num_questions = Question.query.filter(Question.totalScore >= score).count()
   else:
-    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
+    # questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
+    questions = Question.query.order_by(Question.id.desc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
+    num_questions = Question.query.count()
 
-  numQuestions = Question.query.count()
+
 
   response = {
     "Questions": [],
-    "numQuestions": numQuestions,
+    "numQuestions": num_questions,
     "Page": page,
     "Size": size
   }
@@ -130,7 +144,7 @@ def get_single_question(id):
 @question_routes.route('', methods=['POST'])
 @login_required
 def post_question():
-  print('hello from post questions')
+  # print('hello from post questions')
   form = QuestionForm()
   form['csrf_token'].data = request.cookies['csrf_token']
 
@@ -333,7 +347,7 @@ def get_votes_for_question(id):
 
   response = {
     "Votes": [],
-    "totalScore": question.to_dict_single()['totalScore']
+    "totalScore": question.totalScore
   }
 
   for vote in question.votes:
@@ -358,17 +372,18 @@ def add_vote_to_question(id):
   ## return a forbidden message
 
   voteIds = [ vote.user_id for vote in question.votes ]
-  print("voteIds: ", voteIds)
-  print("currentuserid: ", current_user.id)
+  # print("voteIds: ", voteIds)
+  # print("currentuserid: ", current_user.id)
   if current_user.id in voteIds:
     return { "message": "User has already voted on this question"}, 403
 
   form = VoteForm()
   form['csrf_token'].data = request.cookies['csrf_token']
 
-  print(form.data)
+  # print(form.data)
 
   if form.validate_on_submit():
+    # Add new vote
     new_vote = Question_Vote(
       question_id=question.id,
       user_id=current_user.id,
@@ -376,7 +391,24 @@ def add_vote_to_question(id):
     )
     db.session.add(new_vote)
     db.session.commit()
+
+    question = Question.query.options(joinedload(Question.votes)).get_or_404(id)
+
+    # Tabulate total votes on question and recalcuate total score
+
+    new_score = 0
+    for vote in question.votes:
+      if (vote.vote):
+        new_score += 1
+      else:
+        new_score -= 1
+
+    # Update total score on question
+    question.totalScore = new_score
+    # print(question.to_dict_single())
+
+    db.session.commit()
     return new_vote.to_dict(), 201
   else:
-    print(form.errors)
+    # print(form.errors)
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400

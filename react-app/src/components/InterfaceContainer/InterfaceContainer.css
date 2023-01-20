@@ -1,13 +1,19 @@
 #content-container {
   display: flex;
   height: 100%;
+  min-height: 90vh;
 }
 
 #left-column {
   width: 18%;
   border-right: 1px solid black;
+  /* position: fixed; */
+  /* height: fit-content; */
+  display: flex;
+  justify-content: flex-end;
 }
 
 #content-column {
   width: 75%;
+  /* margin-bottom: 100px; */
 }

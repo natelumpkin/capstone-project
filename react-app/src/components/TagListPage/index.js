@@ -26,7 +26,7 @@ const TagListPage = () => {
 
   return (
 
-    <div id="single-question-top-container">
+    <div id="single-question-top-container" className="bottom-margin">
       <div id="single-question-header">
         <div id="single-question-header-top">
           <div id="single-question-title">

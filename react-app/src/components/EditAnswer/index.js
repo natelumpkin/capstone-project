@@ -177,7 +177,7 @@ const EditAnswer = () => {
             </div>
             </div>
           </div>
-            <div id="create-answers-frame">
+            <div id="create-answers-frame" className="bottom-margin">
               <div id="create-answers-container">
               <h4>Edit Your Answer</h4>
               <form onSubmit={handleSubmit}>

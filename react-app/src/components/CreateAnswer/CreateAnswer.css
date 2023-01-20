@@ -1,3 +1,7 @@
+#answers-container {
+  margin-bottom: 100px;
+}
+
 .answer-errors {
   height: 50px;
 }

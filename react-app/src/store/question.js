@@ -57,12 +57,20 @@ const removeVote = (voteId, vote) => ({
 
 // Thunks
 
-export const fetchAllQuestions = (tagId) => async dispatch => {
+export const fetchAllQuestions = (tagId, searchParams) => async dispatch => {
   let response
+  let page
+  if (searchParams) {
+    page = searchParams.page
+  }
   // console.log(tagId)
   if (tagId) {
+    if (searchParams) {
+      response = await fetch(`/api/tags/${tagId}/questions?page=${page}`)
+    } else {
+      response = await fetch(`/api/tags/${tagId}/questions`)
+    }
     // console.log('fetching tags')
-    response = await fetch(`/api/tags/${tagId}/questions`)
   } else {
     // console.log('fetching all questions')
     response = await fetch('/api/questions')
@@ -74,6 +82,21 @@ export const fetchAllQuestions = (tagId) => async dispatch => {
   } else {
     const errors = await response.json()
     return errors
+  }
+}
+
+export const fetchFilteredQuestions = (searchParams) => async dispatch => {
+  const { page } = searchParams
+  if (page) {
+    let response = await fetch(`/api/questions?page=${page}`)
+    if (response.ok) {
+      const questions = await response.json()
+      dispatch(getQuestions(questions))
+      return questions
+    } else {
+      const errors = await response.json()
+      return errors
+    }
   }
 }
 

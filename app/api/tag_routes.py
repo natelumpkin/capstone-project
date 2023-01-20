@@ -1,7 +1,7 @@
 from flask import Blueprint, request
-from app.models import Question, Answer, User, db, Tag
+from app.models import Question, Answer, User, db, Tag, question_tags
 from app.forms import TagForm
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, Session
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
 from datetime import datetime
@@ -68,22 +68,68 @@ def get_questions_for_tags(id):
   except:
     return {"message": "Couldn't find tag"}, 404
 
+  # response = {
+  #   'Tag': tag.to_dict(),
+  #   'Questions': [],
+  #   'numQuestions': 0
+  # }
+
+  page = None
+  size = None
+
+  if request.args.get('page'):
+    page = int(request.args.get('page'))
+
+  if request.args.get('size'):
+    size = int(request.args.get('size'))
+
+  if not page:
+    page = 1
+  elif page <= 0:
+    page = 1
+  else:
+    page = int(page)
+
+  if not size:
+    size = 10
+  elif size <= 0:
+    size = 10
+  else:
+    size = int(size)
+
+  # print('score: ', score)
+
+  limit = size
+  offset = size * (page - 1)
+
+  questions = Question.query.join(question_tags).join(Tag).filter(Tag.id == id).limit(limit).offset(offset).all()
+  # questions = Session.query(Question, Tag).filter(Question.tags.includes(tag)).limit(limit).offset(offset).all()
+  num_questions = Question.query.join(question_tags).join(Tag).filter(Tag.id == id).count()
+
   response = {
-    'Tag': tag.to_dict(),
-    'Questions': [],
-    'numQuestions': 0
+    "numQuestions": num_questions,
+    "Tag": tag.to_dict(),
+    "Questions": [],
+    "Page": page,
+    "Size": size
   }
 
-
-
-  for question in tag.questions:
+  for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
+    response['Questions'].append(dict_question)
     for tag in question.tags:
       dict_question['Tags'].append(tag.to_dict())
-    response['numQuestions'] += 1
 
-    response['Questions'].append(dict_question)
+
+  # for question in tag.questions:
+  #   dict_question = question.to_dict_single()
+  #   dict_question['Tags'] = []
+  #   for tag in question.tags:
+  #     dict_question['Tags'].append(tag.to_dict())
+  #   response['numQuestions'] += 1
+
+  #   response['Questions'].append(dict_question)
 
 
 
