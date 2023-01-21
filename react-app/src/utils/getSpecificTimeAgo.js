@@ -34,7 +34,7 @@ const getSpecificTimeAgo = (dateString) => {
   } else if (timeBetween <= oneDay) {
     let hours = Math.floor(timeBetween / oneHour)
     let minutes = Math.floor((timeBetween - (oneHour * hours)) / oneMinute)
-    hours === 1 ? hourUnit = 'hour' : dayUnit = 'hours'
+    hours === 1 ? hourUnit = 'hour' : hourUnit = 'hours'
     minutes === 1 ? minuteUnit = 'minute' : minuteUnit = 'minutes'
     return `${hours} ${hourUnit}, ${minutes} ${minuteUnit} ago`
   } else if (timeBetween <= oneMonth) {
