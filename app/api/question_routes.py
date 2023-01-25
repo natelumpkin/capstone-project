@@ -15,11 +15,22 @@ def get_all_questions():
 
   page = None
   size = None
+  # author
   author = None
+  # votes
   score = None
+  # phrase in question body, title, or answer
   keywords = None
-  exact_phrase = None
+  # number of answers
+  num_answers = None
+  # order bys:
+  order = None
+    # newest (created_by desc)
+    # no upvoted answers (answers where total_score = 0...?)
+    # score (desc)
   num_questions = 0
+
+  queries = []
 
   if request.args.get('page'):
     page = int(request.args.get('page'))
@@ -27,20 +38,33 @@ def get_all_questions():
   if request.args.get('size'):
     size = int(request.args.get('size'))
 
+  if request.args.get('order') == 'newest':
+    order = Question.created_at.desc()
+  elif request.args.get('order') == 'score':
+    order = Question.totalScore.desc()
+  else:
+    order = Question.id.desc()
+
   if request.args.get('author'):
     author = request.args.get(('author'))
+    queries.append(User.username.ilike(f'%{author}%'))
 
   if request.args.get('score'):
     try:
       score = int(request.args.get(('score')))
     except:
       score = None
+    queries.append(Question.totalScore >= score)
 
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
+    queries.append(Question.body.ilike(f'%{keywords}%'))
+    queries.append(Question.title.ilike(f'%{keywords}%'))
+    # queries.append(Answer.answer.ilike(f'%{keywords}%'))
 
-  if request.args.get('exact_phrase'):
-    exact_phrase = request.args.get('exact_phrase')
+  if request.args.get('num_answers'):
+    num_answers = request.args.get('num_answers')
+    queries.append()
 
   if not page:
     page = 1
@@ -61,22 +85,62 @@ def get_all_questions():
   limit = size
   offset = size * (page - 1)
 
-  if author and not keywords and not score:
-    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).count()
-  elif keywords and not author and not score:
-    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
-    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).count
-  elif keywords and author and not score:
-    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-    num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).count()
-  elif score and not author and not keywords:
-    questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.totalScore >= score).limit(limit).offset(offset).all()
-    num_questions = Question.query.filter(Question.totalScore >= score).count()
+  # print('---------------QUERIES------------------: ',queries)
+
+  if author:
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).count()
+
+  if keywords:
+
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Answer)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Answer)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).count()
+
   else:
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .filter(*queries)\
+      .limit(limit).offset(offset).count()
+
+  # if author and not keywords and not score:
+  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).count()
+  # elif keywords and not author and not score:
+  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
+  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).count
+  # elif keywords and author and not score:
+  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
+  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).count()
+  # elif score and not author and not keywords:
+  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.totalScore >= score).limit(limit).offset(offset).all()
+  #   num_questions = Question.query.filter(Question.totalScore >= score).count()
+  # else:
     # questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
-    questions = Question.query.order_by(Question.id.desc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
-    num_questions = Question.query.count()
+    # questions = Question.query.order_by(Question.id.desc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
+    # num_questions = Question.query.count()
 
 
 
