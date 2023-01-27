@@ -34,6 +34,7 @@ def get_all_questions():
   num_questions = 0
 
   queries = []
+  or_queries = []
 
   if request.args.get('page'):
     page = int(request.args.get('page'))
@@ -61,7 +62,7 @@ def get_all_questions():
 
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
-    queries.append(or_(Question.body.ilike(f'%{keywords}%'), Question.title.ilike(f'%{keywords}%'), Answer.answer.ilike(f'%{keywords}%')))
+    or_queries.append((Question.body.ilike(f'%{keywords}%') | Question.title.ilike(f'%{keywords}%') | Answer.answer.ilike(f'%{keywords}%')))
     ## so I need all the questions where body OR title OR answerbody match keyword
     # queries.append(Question.title.ilike(f'%{keywords}%'))
     # queries.append(Answer.answer.ilike(f'%{keywords}%'))
@@ -91,9 +92,14 @@ def get_all_questions():
 
   # print('---------------QUERIES------------------: ',queries)
 
+  # base = Question.query.order_by(order).options(joinedload(Question.tags))
+  # user_join = base.join(User)
+  # answer_join = base.join(Answer)
 
 
-  if author:
+
+
+  if author and not keywords and not num_answers:
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(User)\
@@ -104,27 +110,53 @@ def get_all_questions():
       .options(joinedload(Question.tags))\
       .join(User)\
       .filter(*queries)\
-      .limit(limit).offset(offset).count()
+      .count()
 
-  elif keywords:
+  elif author and keywords and not num_answers:
+
+    print('---------------RUNNING TWO------------')
+
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User, Answer)\
+      .filter(*or_queries)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User, Answer)\
+      .filter(*or_queries)\
+      .filter(*queries)\
+      .count()
+
+    print('num_questions: ',num_questions)
+
+  elif keywords and not num_answers:
+
+    print('----------------RUNNING THREE--------------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(Answer)\
       .filter(*queries)\
+      .filter(*or_queries)\
       .limit(limit).offset(offset).all()
 
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(Answer)\
       .filter(*queries)\
-      .limit(limit).offset(offset).count()
+      .filter(*or_queries)\
+      .count()
 
   elif num_answers:
 
+    print('RUNNING FOUR')
+
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(Question.answers)\
+      .join(Answer)\
       .group_by(Question.id)\
       .having(func.count(Answer.id) >= num_answers)\
       .filter(*queries)\
@@ -132,13 +164,16 @@ def get_all_questions():
 
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(Question.answers)\
+      .join(Answer)\
       .group_by(Question.id)\
       .having(func.count(Answer.id) >= num_answers)\
       .filter(*queries)\
-      .limit(limit).offset(offset).count()
+      .count()
 
   else:
+
+    print('RUNNING FIVE')
+
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
@@ -147,11 +182,7 @@ def get_all_questions():
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
-      .limit(limit).offset(offset).count()
-
-
-
-
+      .count()
 
   response = {
     "Questions": [],
@@ -163,6 +194,7 @@ def get_all_questions():
   for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
+    # print(question.to_dict_single())
     # dict_question['totalScore'] = 0
 
     # for vote in question.votes:
