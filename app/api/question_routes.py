@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from app.models import Question, Answer, User, db, Tag, Question_Vote
 from app.forms import AnswerForm, QuestionForm, VoteForm
 from sqlalchemy.orm import joinedload
+from sqlalchemy import or_, func
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
 from datetime import datetime
@@ -12,6 +13,8 @@ question_routes = Blueprint('questions', __name__)
 
 @question_routes.route('')
 def get_all_questions():
+
+
 
   page = None
   size = None
@@ -58,13 +61,14 @@ def get_all_questions():
 
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
-    queries.append(Question.body.ilike(f'%{keywords}%'))
-    queries.append(Question.title.ilike(f'%{keywords}%'))
+    queries.append(or_(Question.body.ilike(f'%{keywords}%'), Question.title.ilike(f'%{keywords}%'), Answer.answer.ilike(f'%{keywords}%')))
+    ## so I need all the questions where body OR title OR answerbody match keyword
+    # queries.append(Question.title.ilike(f'%{keywords}%'))
     # queries.append(Answer.answer.ilike(f'%{keywords}%'))
 
   if request.args.get('num_answers'):
-    num_answers = request.args.get('num_answers')
-    queries.append()
+    num_answers = int(request.args.get('num_answers'))
+    print(num_answers)
 
   if not page:
     page = 1
@@ -87,6 +91,8 @@ def get_all_questions():
 
   # print('---------------QUERIES------------------: ',queries)
 
+
+
   if author:
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -100,7 +106,7 @@ def get_all_questions():
       .filter(*queries)\
       .limit(limit).offset(offset).count()
 
-  if keywords:
+  elif keywords:
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -111,6 +117,24 @@ def get_all_questions():
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(Answer)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).count()
+
+  elif num_answers:
+
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Question.answers)\
+      .group_by(Question.id)\
+      .having(func.count(Answer.id) >= num_answers)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Question.answers)\
+      .group_by(Question.id)\
+      .having(func.count(Answer.id) >= num_answers)\
       .filter(*queries)\
       .limit(limit).offset(offset).count()
 
@@ -125,22 +149,7 @@ def get_all_questions():
       .filter(*queries)\
       .limit(limit).offset(offset).count()
 
-  # if author and not keywords and not score:
-  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(User.username.ilike(f'%{author}%')).count()
-  # elif keywords and not author and not score:
-  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).limit(limit).offset(offset).all()
-  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.body.ilike(f'%{keywords}%')).count
-  # elif keywords and author and not score:
-  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).limit(limit).offset(offset).all()
-  #   num_questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).join(User).filter(Question.body.ilike(f'%{keywords}%'), User.username.ilike(f'%{author}%')).count()
-  # elif score and not author and not keywords:
-  #   questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).filter(Question.totalScore >= score).limit(limit).offset(offset).all()
-  #   num_questions = Question.query.filter(Question.totalScore >= score).count()
-  # else:
-    # questions = Question.query.order_by(Question.created_at.desc()).options(joinedload(Question.author), joinedload(Question.answers), joinedload(Question.tags), joinedload(Question.votes)).limit(limit).offset(offset).all()
-    # questions = Question.query.order_by(Question.id.desc()).options(joinedload(Question.tags)).limit(limit).offset(offset).all()
-    # num_questions = Question.query.count()
+
 
 
 
