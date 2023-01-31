@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.models import Question, Answer, User, db, Tag, Question_Vote
+from app.models import Question, Answer, User, db, Tag, Question_Vote, Answer_Vote
 from app.forms import AnswerForm, QuestionForm, VoteForm
 from sqlalchemy.orm import joinedload
 from sqlalchemy import or_, func
@@ -26,11 +26,14 @@ def get_all_questions():
   keywords = None
   # number of answers
   num_answers = None
+  # no upvoted answers
+  unanswered = None
   # order bys:
   order = None
     # newest (created_by desc)
-    # no upvoted answers (answers where total_score = 0...?)
     # score (desc)
+    # no upvoted answers (answers where total_score = 0...?)
+    # group by Question.id / join Answer / join AnswerVote / having sum(AnswerVote.vote) < 0
   num_questions = 0
 
   queries = []
@@ -60,16 +63,17 @@ def get_all_questions():
       score = None
     queries.append(Question.totalScore >= score)
 
+  if request.args.get('unanswered'):
+    unanswered = True
+
+
   if request.args.get('keywords'):
     keywords = request.args.get(('keywords'))
     or_queries.append((Question.body.ilike(f'%{keywords}%') | Question.title.ilike(f'%{keywords}%') | Answer.answer.ilike(f'%{keywords}%')))
-    ## so I need all the questions where body OR title OR answerbody match keyword
-    # queries.append(Question.title.ilike(f'%{keywords}%'))
-    # queries.append(Answer.answer.ilike(f'%{keywords}%'))
 
   if request.args.get('num_answers'):
     num_answers = int(request.args.get('num_answers'))
-    print(num_answers)
+
 
   if not page:
     page = 1
@@ -97,9 +101,49 @@ def get_all_questions():
   # answer_join = base.join(Answer)
 
 
+  if unanswered and not num_answers:
 
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Answer).join(Answer_Vote)\
+      .filter(*queries)\
+      .group_by(Question.id)\
+      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .limit(limit).offset(offset).all()
 
-  if author and not keywords and not num_answers:
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(Answer)\
+      .join(Answer_Vote)\
+      .filter(*queries)\
+      .group_by(Question.id)\
+      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .count()
+
+  elif unanswered and num_answers:
+    questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User, Answer)\
+      .join(Answer_Vote)\
+      .group_by(Question.id)\
+      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .having(func.count(Answer.id) >= num_answers)\
+      .filter(*or_queries)\
+      .filter(*queries)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags))\
+      .join(User, Answer)\
+      .join(Answer_Vote)\
+      .group_by(Question.id)\
+      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .having(func.count(Answer.id) >= num_answers)\
+      .filter(*or_queries)\
+      .filter(*queries)\
+      .count()
+
+  elif author and not keywords and not num_answers:
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(User)\
@@ -150,8 +194,6 @@ def get_all_questions():
 
   elif num_answers:
 
-    print('RUNNING FOUR')
-
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(Answer)\
@@ -169,8 +211,6 @@ def get_all_questions():
       .count()
 
   else:
-
-    print('RUNNING FIVE')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -192,6 +232,8 @@ def get_all_questions():
   for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
+    dict_question["Answers"] = []
+
     # print(question.to_dict_single())
     # dict_question['totalScore'] = 0
 
@@ -203,6 +245,8 @@ def get_all_questions():
 
     for tag in question.tags:
       dict_question['Tags'].append(tag.to_dict())
+    for answer in question.answers:
+      dict_question['Answers'].append(answer.to_dict())
 
     response['Questions'].append(dict_question)
 
