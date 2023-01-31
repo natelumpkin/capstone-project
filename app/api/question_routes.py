@@ -134,8 +134,6 @@ def get_all_questions():
 
   elif keywords and not num_answers:
 
-    print('----------------RUNNING THREE--------------------')
-
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(Answer)\
