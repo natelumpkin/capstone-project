@@ -103,19 +103,22 @@ def get_all_questions():
 
   if unanswered and not num_answers:
 
-    questions = Question.query.order_by(order)\
+    questions = Question.query\
       .options(joinedload(Question.tags))\
-      .join(Answer).join(Answer_Vote)\
+      .join(User, Question.user_id == User.id)\
       .filter(*queries)\
+      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
       .limit(limit).offset(offset).all()
 
-    num_questions = Question.query.order_by(order)\
+    # print(questions)
+
+    num_questions = Question.query\
       .options(joinedload(Question.tags))\
-      .join(Answer)\
-      .join(Answer_Vote)\
+      .join(User, Question.user_id == User.id)\
       .filter(*queries)\
+      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
       .count()
