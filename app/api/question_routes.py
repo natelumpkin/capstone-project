@@ -103,10 +103,12 @@ def get_all_questions():
 
   if unanswered and not num_answers:
 
-    questions = Question.query\
+    # print('RUNNING ONE--------------------------------')
+
+    questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(User, Question.user_id == User.id)\
-      .filter(*queries)\
+      .filter(*queries).filter(*or_queries)\
       .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
@@ -117,36 +119,40 @@ def get_all_questions():
     num_questions = Question.query\
       .options(joinedload(Question.tags))\
       .join(User, Question.user_id == User.id)\
-      .filter(*queries)\
+      .filter(*queries).filter(*or_queries)\
       .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
       .count()
 
   elif unanswered and num_answers:
+
+    # print('RUNNING TWO----------------------------')
+
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(User, Answer)\
-      .join(Answer_Vote)\
+      .join(User, Question.user_id == User.id)\
+      .filter(*queries).filter(*or_queries)\
+      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
       .having(func.count(Answer.id) >= num_answers)\
-      .filter(*or_queries)\
-      .filter(*queries)\
       .limit(limit).offset(offset).all()
 
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(User, Answer)\
-      .join(Answer_Vote)\
+      .join(User, Question.user_id == User.id)\
+      .filter(*queries).filter(*or_queries)\
+      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
       .having(func.sum(Answer_Vote.vote) <= 0)\
       .having(func.count(Answer.id) >= num_answers)\
-      .filter(*or_queries)\
-      .filter(*queries)\
       .count()
 
   elif author and not keywords and not num_answers:
+
+    # print('RUNNING THREE----------------------------')
+
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(User)\
@@ -161,7 +167,7 @@ def get_all_questions():
 
   elif author and keywords and not num_answers:
 
-    print('---------------RUNNING TWO------------')
+    # print('---------------RUNNING FOUR------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -177,9 +183,11 @@ def get_all_questions():
       .filter(*queries)\
       .count()
 
-    print('num_questions: ',num_questions)
+
 
   elif keywords and not num_answers:
+
+    # print('RUNNING FIVE----------------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -197,23 +205,28 @@ def get_all_questions():
 
   elif num_answers:
 
+    # print('-----------LINE 199----------')
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(Answer)\
+      .join(User, Question.user_id == User.id)\
+      .filter(*queries).filter(*or_queries)\
+      .join(Answer, Answer.question_id == Question.id)\
       .group_by(Question.id)\
       .having(func.count(Answer.id) >= num_answers)\
-      .filter(*queries)\
       .limit(limit).offset(offset).all()
 
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(Answer)\
+      .join(User, Question.user_id == User.id)\
+      .filter(*queries).filter(*or_queries)\
+      .join(Answer, Answer.question_id == Question.id)\
       .group_by(Question.id)\
       .having(func.count(Answer.id) >= num_answers)\
-      .filter(*queries)\
       .count()
 
   else:
+
+    # print('-----------LINE 218----------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
