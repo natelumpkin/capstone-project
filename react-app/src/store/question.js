@@ -86,17 +86,39 @@ export const fetchAllQuestions = (tagId, searchParams) => async dispatch => {
 }
 
 export const fetchFilteredQuestions = (searchParams) => async dispatch => {
-  const { page } = searchParams
-  if (page) {
-    let response = await fetch(`/api/questions?page=${page}`)
-    if (response.ok) {
-      const questions = await response.json()
-      dispatch(getQuestions(questions))
-      return questions
-    } else {
-      const errors = await response.json()
-      return errors
-    }
+  const { page,
+    size,
+    author,
+    score,
+    keywords,
+    numAnswers,
+    unanswered,
+    order } = searchParams
+
+  let fetchString = '/api/questions?'
+  let searchArray = []
+
+  if (page) searchArray.push(`page=${page}`)
+  if (size) searchArray.push(`size=${size}`)
+  if (author) searchArray.push(`author=${author}`)
+  if (score) searchArray.push(`score=${score}`)
+  if (keywords) searchArray.push(`keywords=${keywords}`)
+  if (numAnswers) searchArray.push(`num_answers=${numAnswers}`)
+  if (unanswered) searchArray.push(`unanswered=true`)
+  if (order) searchArray.push(`order=${order}`)
+
+  fetchString += searchArray.join('&')
+
+  console.log(fetchString)
+
+  let response = await fetch(fetchString)
+  if (response.ok) {
+    const questions = await response.json()
+    dispatch(getQuestions(questions))
+    return questions
+  } else {
+    const errors = await response.json()
+    return errors
   }
 }
 
