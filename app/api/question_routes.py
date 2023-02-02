@@ -49,8 +49,10 @@ def get_all_questions():
     order = Question.created_at.desc()
   elif request.args.get('order') == 'score':
     order = Question.totalScore.desc()
+  elif request.args.get('order') == 'recent':
+    order = Answer.created_at.desc()
   else:
-    order = Question.id.desc()
+    order = Question.created_at.desc()
 
   if request.args.get('author'):
     author = request.args.get(('author'))
@@ -110,8 +112,8 @@ def get_all_questions():
       .join(User, Question.user_id == User.id)\
       .filter(*queries).filter(*or_queries)\
       .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
-      .group_by(Question.id)\
-      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .group_by(Answer_Vote.id)\
+      .having(or_(func.sum(Answer_Vote.vote) <= 0))\
       .limit(limit).offset(offset).all()
 
     # print(questions)
@@ -122,7 +124,7 @@ def get_all_questions():
       .filter(*queries).filter(*or_queries)\
       .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
       .group_by(Question.id)\
-      .having(func.sum(Answer_Vote.vote) <= 0)\
+      .having(or_(func.sum(Answer_Vote.vote) <= 0))\
       .count()
 
   elif unanswered and num_answers:
@@ -155,14 +157,16 @@ def get_all_questions():
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(User)\
+      .join(User, Question.user_id == User.id)\
       .filter(*queries)\
+      .join(Answer, Answer.question_id == Question.id)\
       .limit(limit).offset(offset).all()
 
     num_questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
-      .join(User)\
+      .join(User, Question.user_id == User.id)\
       .filter(*queries)\
+      .join(Answer, Answer.question_id == Question.id)\
       .count()
 
   elif author and keywords and not num_answers:
@@ -228,14 +232,16 @@ def get_all_questions():
 
     # print('-----------LINE 218----------')
 
-    questions = Question.query.order_by(order)\
+    questions = Question.query\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
+      .order_by(order)\
       .limit(limit).offset(offset).all()
 
-    num_questions = Question.query.order_by(order)\
+    num_questions = Question.query\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
+      .order_by(order)\
       .count()
 
   response = {
