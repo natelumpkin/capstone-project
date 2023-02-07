@@ -25,9 +25,9 @@ def seed_bulk_answers():
 
   answer_body_list = [abody1, abody2, abody3, abody4, abody5, abody6, abody7, abody8, abody9, abody10, abody11, abody12]
 
-  k = 0
   for user in user_array:
-    while k < 3000:
+    k = 0
+    while k < 1000:
       random_question = Question.query.order_by(func.random()).limit(1).one()
       answer = Answer(
         user_id=user.id,
