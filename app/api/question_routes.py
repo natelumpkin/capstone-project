@@ -65,6 +65,7 @@ def get_all_questions():
 
   if request.args.get('unanswered'):
     unanswered = True
+    queries.append(Answer.totalScore <= 0)
 
 
   if request.args.get('keywords'):
@@ -103,51 +104,46 @@ def get_all_questions():
 
   if unanswered and not num_answers:
 
-    # print('RUNNING ONE--------------------------------')
+    print('RUNNING ONE--------------------------------')
 
     questions = Question.query.order_by(order)\
-      .options(joinedload(Question.tags))\
-      .join(User, Question.user_id == User.id)\
+      .options(joinedload(Question.tags), joinedload(Question.answers))\
+      .join(Answer)\
       .filter(*queries).filter(*or_queries)\
-      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
-      .group_by(Answer_Vote.id)\
-      .having(or_(func.sum(Answer_Vote.vote) <= 0))\
       .limit(limit).offset(offset).all()
 
     # print(questions)
 
-    num_questions = Question.query\
-      .options(joinedload(Question.tags))\
-      .join(User, Question.user_id == User.id)\
+    num_questions = Question.query.order_by(order)\
+      .options(joinedload(Question.tags), joinedload(Question.answers))\
+      .join(Answer)\
       .filter(*queries).filter(*or_queries)\
-      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
-      .group_by(Question.id)\
-      .having(or_(func.sum(Answer_Vote.vote) <= 0))\
       .count()
 
   elif unanswered and num_answers:
 
-    # print('RUNNING TWO----------------------------')
+    print('RUNNING TWO----------------------------')
 
     questions = Question.query.order_by(order)\
-      .options(joinedload(Question.tags))\
-      .join(User, Question.user_id == User.id)\
+      .options(joinedload(Question.tags), joinedload(Question.answers))\
+      .join(Answer)\
       .filter(*queries).filter(*or_queries)\
-      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
+      .join(Answer_Vote)\
       .group_by(Question.id)\
-      .having(func.sum(Answer_Vote.vote) <= 0)\
       .having(func.count(Answer.id) >= num_answers)\
       .limit(limit).offset(offset).all()
 
+    # print(questions)
+
     num_questions = Question.query.order_by(order)\
-      .options(joinedload(Question.tags))\
-      .join(User, Question.user_id == User.id)\
+      .options(joinedload(Question.tags), joinedload(Question.answers))\
+      .join(Answer)\
       .filter(*queries).filter(*or_queries)\
-      .join(Answer, Answer.question_id == Question.id).join(Answer_Vote)\
+      .join(Answer_Vote)\
       .group_by(Question.id)\
-      .having(func.sum(Answer_Vote.vote) <= 0)\
       .having(func.count(Answer.id) >= num_answers)\
       .count()
+
 
   elif author and not keywords and not num_answers:
 
