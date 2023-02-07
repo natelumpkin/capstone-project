@@ -8,7 +8,7 @@ from datetime import datetime
 
 answer_vote_routes = Blueprint('answerVotes', __name__)
 
-## Update question_vote
+## Update answer_vote
 
 @answer_vote_routes.route('/<int:id>', methods=['PUT'])
 @login_required
@@ -26,6 +26,18 @@ def update_answer_vote(id):
 
   if form.validate_on_submit():
     vote.vote = form.data['vote']
+
+    answer = Answer.query.options(joinedload(Answer.votes)).get(vote.answer_id)
+
+    new_score = 0
+    for vote in answer.votes:
+      if vote.vote:
+        new_score += 1
+      else:
+        new_score -= 1
+
+    answer.totalScore = new_score
+
     db.session.commit()
     return vote.to_dict()
   else:
@@ -45,6 +57,18 @@ def delete_answer_vote(id):
     return { "message": "Forbidden"}, 403
 
   db.session.delete(vote)
+
+  answer = Answer.query.options(joinedload(Answer.votes)).get(vote.answer_id)
+
+  new_score = 0
+  for vote in answer.votes:
+    if vote.vote:
+      new_score += 1
+    else:
+      new_score -= 1
+
+  answer.totalScore = new_score
+
   db.session.commit()
   # print(vote)
   return { "message": "Successfully deleted"}

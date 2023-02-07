@@ -20,11 +20,23 @@ def seed_bulk_votes():
     for user in users:
       if question.user_id != user.id:
         vote = Question_Vote(user_id=user.id, question_id=question.id, vote=choice([0,1]))
+        score = question.totalScore
+        if vote.vote:
+          score += 1
+        else:
+          score -= 1
+        question.totalScore = score
         db.session.add(vote)
   for answer in all_answers:
     for user in users:
       if answer.user_id != user.id:
         vote = Answer_Vote(user_id=user.id, answer_id=answer.id, vote=choice([0,1]))
+        score = answer.totalScore
+        if vote.vote:
+          score += 1
+        else:
+          score -= 1
+        answer.totalScore = score
         db.session.add(vote)
 
   db.session.commit()

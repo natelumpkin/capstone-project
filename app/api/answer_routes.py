@@ -122,6 +122,17 @@ def add_vote_to_answer(id):
     )
     db.session.add(new_vote)
     db.session.commit()
+
+    new_score = 0
+    for vote in answer.votes:
+      if vote.vote:
+        new_score += 1
+      else:
+        new_score -= 1
+
+    answer.totalScore = new_score
+    db.session.commit()
+
     return new_vote.to_dict(), 201
   else:
     # print(form.errors)

@@ -14,8 +14,6 @@ question_routes = Blueprint('questions', __name__)
 @question_routes.route('')
 def get_all_questions():
 
-
-
   page = None
   size = None
   # author

@@ -13,6 +13,7 @@ class Answer(db.Model):
   answer = db.Column(db.Text())
   created_at = db.Column(db.DateTime(), default=datetime.utcnow())
   updated_at = db.Column(db.DateTime(), default=datetime.utcnow())
+  totalScore = db.Column(db.Integer, default=0)
 
   author = db.relationship('User', back_populates="answers")
   question = db.relationship('Question', back_populates="answers")
@@ -26,15 +27,16 @@ class Answer(db.Model):
             "answer": self.answer,
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,
+            "totalScore": self.totalScore,
             "User": {
                   "id": self.author.id,
                   "username": self.author.username
             }
       }
-      response['totalScore'] = 0
-      for vote in self.votes:
-            if vote.vote:
-                  response['totalScore'] += 1
-            else:
-                  response['totalScore'] -= 1
+      # response['totalScore'] = 0
+      # for vote in self.votes:
+      #       if vote.vote:
+      #             response['totalScore'] += 1
+      #       else:
+      #             response['totalScore'] -= 1
       return response

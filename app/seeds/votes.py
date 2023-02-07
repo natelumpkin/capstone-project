@@ -65,6 +65,15 @@ def seed_votes():
         new_score -= 1
     question.totalScore = new_score
 
+  for user_answers in all_answers:
+      for answer in user_answers:
+        new_score = 0
+        if vote.vote:
+          new_score += 1
+        else:
+          new_score -= 1
+      answer.totalScore = new_score
+
   db.session.commit()
 
 def undo_votes():
