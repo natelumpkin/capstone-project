@@ -115,6 +115,7 @@ export const fetchFilteredQuestions = (searchParams) => async dispatch => {
   if (response.ok) {
     const questions = await response.json()
     dispatch(getQuestions(questions))
+    // console.log(questions)
     return questions
   } else {
     const errors = await response.json()

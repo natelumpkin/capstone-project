@@ -22,6 +22,26 @@ const PageChooser = ({ numQuestions, size, location }) => {
 
   const { search, pathname } = useLocation()
 
+  // we need to redefine pathname to include all the search parameters except for page, so the new page just gets appended at the end
+  // so we basically need to reconstruct a new URL path from the old one?
+  // so we take in all the searchParams
+  // if page exists, remove it
+  // re add them to the pathname
+  console.log(search.split('&'))
+  const constructNewPath = (pathname, search) => {
+    let searchParams = search.split('&')
+    let res = searchParams.filter(el => !el.includes('page'))
+    console.log(res)
+    let newPath = pathname;
+    for (let searchParam of res) {
+      newPath += searchParam
+    }
+    console.log(newPath)
+    return newPath
+  }
+  console.log('new path: ', constructNewPath(pathname,search))
+
+
   // what does this thing need to do?
   // it needs to divide numQuestions up by size to get the number of pages
   // and then have a number of links, each of which fetches the particular page

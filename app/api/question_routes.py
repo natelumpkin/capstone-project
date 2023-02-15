@@ -248,7 +248,7 @@ def get_all_questions():
   for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
-    dict_question["Answers"] = []
+    # dict_question["Answers"] = []
 
     # print(question.to_dict_single())
     # dict_question['totalScore'] = 0
@@ -261,8 +261,8 @@ def get_all_questions():
 
     for tag in question.tags:
       dict_question['Tags'].append(tag.to_dict())
-    for answer in question.answers:
-      dict_question['Answers'].append(answer.to_dict())
+    # for answer in question.answers:
+    #   dict_question['Answers'].append(answer.to_dict())
 
     response['Questions'].append(dict_question)
 
