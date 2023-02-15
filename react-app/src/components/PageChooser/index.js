@@ -11,6 +11,9 @@ const PageChooser = ({ numQuestions, size, location }) => {
   const [ numPages, setNumPages ] = useState(null)
   const [ lastPage, setLastPage ] = useState(null)
   const [ firstPage, setFirstPage ] = useState(null)
+  const [newPath, setNewPath] = useState(null)
+
+  console.log('newpath state: ',newPath)
 
   const useQuery = () => {
     const { search } = useLocation()
@@ -27,19 +30,26 @@ const PageChooser = ({ numQuestions, size, location }) => {
   // so we take in all the searchParams
   // if page exists, remove it
   // re add them to the pathname
-  console.log(search.split('&'))
+  // console.log(search.split('&'))
   const constructNewPath = (pathname, search) => {
     let searchParams = search.split('&')
     let res = searchParams.filter(el => !el.includes('page'))
-    console.log(res)
+    // console.log(res)
     let newPath = pathname;
     for (let searchParam of res) {
       newPath += searchParam
     }
-    console.log(newPath)
+    // console.log(newPath)
     return newPath
   }
   console.log('new path: ', constructNewPath(pathname,search))
+  // the easiest way to do this would be to just add the new page in there
+
+  // questions?page=2 => questions?page=3
+  //questions?tab=newest&page=2 => questions?tab=newest&page=3
+  //questions?tab=newest&page=2 => questions?tab=newest
+
+  //
 
 
   // what does this thing need to do?
@@ -85,6 +95,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
         setLastPage(numPages)
       }
     }
+
+    setNewPath(constructNewPath(pathname,search))
   },[numQuestions, numPages, search])
 
   // console.log('first page?: ', firstPage)
@@ -134,13 +146,13 @@ const PageChooser = ({ numQuestions, size, location }) => {
         {firstPage && (
           <>
           <div className="paginator-square">
-            <NavLink to={pathname}>1</NavLink>
+            <NavLink to={newPath}>1</NavLink>
           </div>
           <div className="paginator-dots">...</div>
           </>
         )}
         {pageList.map(pageNumber => (
-          <NavLink key={pageNumber} to={pageNumber === 1 ? pathname : `${pathname}?page=${pageNumber}`}>
+          <NavLink key={pageNumber} to={pageNumber === 1 ? newPath : `${newPath}&page=${pageNumber}`}>
               <div id={`pagelink-${pageNumber}`} className="paginator-square" key={pageNumber}>
                 {pageNumber}
               </div>
