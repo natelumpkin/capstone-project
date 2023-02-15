@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 import QuestionCard from "../QuestionCard";
 import PageChooser from "../PageChooser";
+import FilterChooser from "../FilterChooser";
 
 import * as questionActions from '../../store/question'
 
@@ -32,14 +33,26 @@ const AllQuestions = () => {
 
   useEffect(() => {
     // console.log('hello from use effect')
-
+    let searchOptions = {}
     if (query.get("page")) {
-      dispatch(questionActions.fetchFilteredQuestions({ page: query.get("page")}))
+      searchOptions.page = query.get("page")
+    }
+    if (query.get("tab")) {
+      searchOptions.order = query.get("tab")
+    }
+    if (query.get("unanswered")) {
+      searchOptions.unanswered = true
+    }
+
+    if (Object.keys(searchOptions).length) {
+      dispatch(questionActions.fetchFilteredQuestions(searchOptions))
     } else {
       dispatch(questionActions.fetchAllQuestions());
     }
 
   }, [dispatch, search])
+
+  console.log(query.get('tab'))
 
 
   const questionsArray = [];
@@ -69,6 +82,9 @@ const AllQuestions = () => {
             {numQuestions && (
             <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
             )}
+            <div className="filter-holder">
+              <FilterChooser/>
+            </div>
           </div>
         </div>
         {questionsArray.map(question => (

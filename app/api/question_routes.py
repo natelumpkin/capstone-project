@@ -229,13 +229,13 @@ def get_all_questions():
     questions = Question.query\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
+      .join(Answer)\
       .order_by(order)\
       .limit(limit).offset(offset).all()
 
     num_questions = Question.query\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
-      .order_by(order)\
       .count()
 
   response = {
