@@ -32,10 +32,10 @@ const PageChooser = ({ numQuestions, size, location }) => {
   // re add them to the pathname
   // console.log(search.split('&'))
   const constructNewPath = (pathname, search) => {
-    let searchParams = search.split('&')
+    let searchParams = search.slice(1,search.length).split('&')
     let res = searchParams.filter(el => !el.includes('page'))
     // console.log(res)
-    let newPath = pathname;
+    let newPath = pathname + '?';
     for (let searchParam of res) {
       newPath += searchParam
     }
@@ -49,7 +49,38 @@ const PageChooser = ({ numQuestions, size, location }) => {
   //questions?tab=newest&page=2 => questions?tab=newest&page=3
   //questions?tab=newest&page=2 => questions?tab=newest
 
-  //
+  const createPageLinkFromNumber = (pageNumber) => {
+    // console.log('inside function: ', search, pathname)
+    let searchParams = search.split('&')
+    console.log('search: ', searchParams)
+    // console.log('split params: ', searchParams)
+    // returns a new valid path
+    let pageParam
+    if (pageNumber > 1) {
+      pageParam = `page=${pageNumber}`
+    }
+    let basePath = constructNewPath(pathname,search)
+    if (!pageParam) {
+      return basePath
+    } else {
+      if (searchParams[0].length) {
+        // if there are other search params
+        return basePath += '&' + pageParam
+      } else {
+        // if there are no other search params
+        return basePath += '?' + pageParam
+      }
+    }
+    // if there are no OTHER search params && pageParam > 1
+      //, append ?page=pageNumber
+      // if !pageParam --> simply return the basepath
+    // if there ARE other search params && pageParam > 1, append &page=pageNumber
+  }
+
+  console.log('page1: ',createPageLinkFromNumber(1))
+  console.log('page 50: ',createPageLinkFromNumber(50))
+
+
 
 
   // what does this thing need to do?
