@@ -35,7 +35,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
     let searchParams = search.slice(1,search.length).split('&')
     let res = searchParams.filter(el => !el.includes('page'))
     // console.log(res)
-    let newPath = pathname + '?';
+    let newPath = pathname;
+    if (searchParams[0].length) newPath += '?'
     for (let searchParam of res) {
       newPath += searchParam
     }
@@ -60,6 +61,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
       pageParam = `page=${pageNumber}`
     }
     let basePath = constructNewPath(pathname,search)
+    console.log('base path:' , basePath)
     if (!pageParam) {
       return basePath
     } else {
