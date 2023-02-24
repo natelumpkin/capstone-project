@@ -36,7 +36,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
     let res = searchParams.filter(el => !el.includes('page'))
     // console.log(res)
     let newPath = pathname;
-    if (searchParams[0].length) newPath += '?'
+    if (res.length) newPath += '?'
     for (let searchParam of res) {
       newPath += searchParam
     }
@@ -53,6 +53,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
   const createPageLinkFromNumber = (pageNumber) => {
     // console.log('inside function: ', search, pathname)
     let searchParams = search.split('&')
+    let res = searchParams.filter(el => !el.includes('page'))
     console.log('search: ', searchParams)
     // console.log('split params: ', searchParams)
     // returns a new valid path
@@ -65,7 +66,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
     if (!pageParam) {
       return basePath
     } else {
-      if (searchParams[0].length) {
+      if (res.length) {
         // if there are other search params
         return basePath += '&' + pageParam
       } else {
@@ -170,7 +171,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
     return (
       <div className="page-links-holder">
         {query.get("page") && (
-          <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>
+          // <NavLink to={Number(query.get("page")) - 1 > 1 ? `${pathname}?page=${Number(query.get("page")) - 1}` : pathname}>
+            <NavLink to={createPageLinkFromNumber(Number(query.get("page")) - 1)}>
             <div className="paginator-square">
               Prev
             </div>
@@ -185,7 +187,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
           </>
         )}
         {pageList.map(pageNumber => (
-          <NavLink key={pageNumber} to={pageNumber === 1 ? newPath : `${newPath}&page=${pageNumber}`}>
+          // <NavLink key={pageNumber} to={pageNumber === 1 ? newPath : `${newPath}&page=${pageNumber}`}>
+            <NavLink key={pageNumber} to={createPageLinkFromNumber(pageNumber)}>
               <div id={`pagelink-${pageNumber}`} className="paginator-square" key={pageNumber}>
                 {pageNumber}
               </div>
@@ -194,7 +197,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
         {lastPage && (
           <>
           <div className="paginator-dots">...</div>
-          <NavLink to={`${pathname}?page=${lastPage}`}>
+          {/* <NavLink to={`${pathname}?page=${lastPage}`}> */}
+          <NavLink to={createPageLinkFromNumber(lastPage)}>
             <div className="paginator-square">
               {lastPage}
             </div>
@@ -202,7 +206,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
           </>
         )}
         {Number(query.get("page")) < numPages && numPages > 1 && (
-          <NavLink to={!query.get("page") ? `${pathname}?page=2` : `${pathname}?page=${Number(query.get("page")) + 1}`}>
+          <NavLink to={!query.get("page") ? createPageLinkFromNumber(2) : createPageLinkFromNumber(Number(query.get("page")) + 1)}>
             <div className="paginator-square">
               Next
             </div>
