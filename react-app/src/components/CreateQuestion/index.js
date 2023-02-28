@@ -218,7 +218,7 @@ const CreateQuestion = () => {
         return
       }
     }
-    // go through all the current adds, and set the tag to the first state that's unoccupied
+    // go through all the current tags, and set the tag to the first state that's unoccupied
     if (!tag1) {
       setTag1(tagToSave)
     } else if (!tag2) {

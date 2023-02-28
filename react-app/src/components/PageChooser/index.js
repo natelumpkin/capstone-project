@@ -43,7 +43,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
     // console.log(newPath)
     return newPath
   }
-  console.log('new path: ', constructNewPath(pathname,search))
+  // console.log('new path: ', constructNewPath(pathname,search))
   // the easiest way to do this would be to just add the new page in there
 
   // questions?page=2 => questions?page=3
@@ -54,7 +54,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
     // console.log('inside function: ', search, pathname)
     let searchParams = search.split('&')
     let res = searchParams.filter(el => !el.includes('page'))
-    console.log('search: ', searchParams)
+    // console.log('search: ', searchParams)
     // console.log('split params: ', searchParams)
     // returns a new valid path
     let pageParam
@@ -62,7 +62,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
       pageParam = `page=${pageNumber}`
     }
     let basePath = constructNewPath(pathname,search)
-    console.log('base path:' , basePath)
+    // console.log('base path:' , basePath)
     if (!pageParam) {
       return basePath
     } else {
@@ -80,8 +80,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
     // if there ARE other search params && pageParam > 1, append &page=pageNumber
   }
 
-  console.log('page1: ',createPageLinkFromNumber(1))
-  console.log('page 50: ',createPageLinkFromNumber(50))
+  // console.log('page1: ',createPageLinkFromNumber(1))
+  // console.log('page 50: ',createPageLinkFromNumber(50))
 
 
 
