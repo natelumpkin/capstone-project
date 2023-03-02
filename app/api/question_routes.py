@@ -84,7 +84,7 @@ def get_all_questions():
     page = int(page)
 
   if not size:
-    size = 50
+    size = 10
   elif size <= 0:
     size = 50
   else:
@@ -147,7 +147,7 @@ def get_all_questions():
 
   elif author and not keywords and not num_answers:
 
-    # print('RUNNING THREE----------------------------')
+    print('RUNNING THREE----------------------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -165,7 +165,7 @@ def get_all_questions():
 
   elif author and keywords and not num_answers:
 
-    # print('---------------RUNNING FOUR------------')
+    print('---------------RUNNING FOUR------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -185,7 +185,7 @@ def get_all_questions():
 
   elif keywords and not num_answers:
 
-    # print('RUNNING FIVE----------------------')
+    print('RUNNING FIVE----------------------')
 
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
@@ -203,7 +203,7 @@ def get_all_questions():
 
   elif num_answers:
 
-    # print('-----------LINE 199----------')
+    print('-----------RUNNING SIX----------')
     questions = Question.query.order_by(order)\
       .options(joinedload(Question.tags))\
       .join(User, Question.user_id == User.id)\
@@ -222,14 +222,25 @@ def get_all_questions():
       .having(func.count(Answer.id) >= num_answers)\
       .count()
 
+  elif request.args.get('order') == 'recent':
+
+    print('---------------RUNNING EIGHT---------------')
+
+    questions = Question.query\
+      .join(Answer)\
+      .order_by(order)\
+      .limit(limit).offset(offset).all()
+
+    num_questions = Question.query\
+      .count()
+
   else:
 
-    # print('-----------LINE 218----------')
+    print('-----------RUNNING SEVEN----------')
 
     questions = Question.query\
       .options(joinedload(Question.tags))\
       .filter(*queries)\
-      .join(Answer)\
       .order_by(order)\
       .limit(limit).offset(offset).all()
 
@@ -248,7 +259,7 @@ def get_all_questions():
   for question in questions:
     dict_question = question.to_dict_single()
     dict_question['Tags'] = []
-    # dict_question["Answers"] = []
+    dict_question["Answers"] = []
 
     # print(question.to_dict_single())
     # dict_question['totalScore'] = 0
@@ -261,8 +272,8 @@ def get_all_questions():
 
     for tag in question.tags:
       dict_question['Tags'].append(tag.to_dict())
-    # for answer in question.answers:
-    #   dict_question['Answers'].append(answer.to_dict())
+    for answer in question.answers:
+      dict_question['Answers'].append(answer.to_dict())
 
     response['Questions'].append(dict_question)
 
