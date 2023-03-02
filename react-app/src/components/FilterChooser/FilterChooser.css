@@ -1,0 +1,31 @@
+#filter-chooser a:hover:not(.active-filter) {
+  background-color: #f8f9f9;
+}
+
+#filter-chooser a:not(.border-right) {
+  color: black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  padding: 10px;
+  font-size: 12px;
+}
+
+#filter-chooser a.active-filter {
+  background-color: #242629;
+  color: white;
+}
+
+.border-right {
+  color: black;
+  border: 1px solid black;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.border-left {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
