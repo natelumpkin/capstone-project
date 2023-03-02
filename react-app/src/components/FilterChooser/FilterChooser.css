@@ -1,3 +1,13 @@
+#filter-chooser {
+  display: flex;
+  flex-direction: row;
+}
+
+#filter-chooser a {
+  display: flex;
+  flex-direction: row;
+}
+
 #filter-chooser a:hover:not(.active-filter) {
   background-color: #f8f9f9;
 }

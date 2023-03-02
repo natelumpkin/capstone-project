@@ -12,12 +12,16 @@
 
 #all-questions-header-lower {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: fit-content;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.filter-holder {
-
+#num-questions {
+  width: 42%;
 }
 
 .ask-question-button {

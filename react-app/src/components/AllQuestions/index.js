@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom'
@@ -14,6 +14,7 @@ import './AllQuestions.css'
 const AllQuestions = () => {
 
   const dispatch = useDispatch()
+  const [currSearchParams, setCurrSearchParams] = useState({})
   const { search } = useLocation()
 
   const useQuery = () => {
@@ -43,6 +44,10 @@ const AllQuestions = () => {
     if (query.get("unanswered")) {
       searchOptions.unanswered = true
     }
+
+    setCurrSearchParams(searchOptions)
+    console.log('search options: ', searchOptions)
+    // console.log('search state: ', currSearchParams)
 
     if (Object.keys(searchOptions).length) {
       dispatch(questionActions.fetchFilteredQuestions(searchOptions))
@@ -80,7 +85,12 @@ const AllQuestions = () => {
           </div>
           <div id="all-questions-header-lower">
             {numQuestions && (
-            <h4>{numQuestions} {numQuestions !== 1 ? "questions" : "question"}</h4>
+            <h4 id="num-questions">
+              {numQuestions}
+              {numQuestions !== 1 ? " questions" : " question"}
+              {currSearchParams.order === 'recent' && ' with recent activity'}
+              {currSearchParams.unanswered && ' with no upvoted answers'}
+              {currSearchParams.order === 'score' && ' ordered by highest score'}</h4>
             )}
             <div className="filter-holder">
               <FilterChooser/>

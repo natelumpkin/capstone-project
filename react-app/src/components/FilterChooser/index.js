@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 
 import './FilterChooser.css'
 
@@ -24,7 +25,7 @@ const FilterChooser = () => {
 
   return (
     <div id="filter-chooser">
-      <NavLink onClick={(e) => toggleActive(e)} className="filter-link border-left" id="newest" to='/questions' exact={true}>Newest</NavLink>
+      <NavLink onClick={(e) => toggleActive(e)} className="filter-link border-left active-filter" id="newest" to='/questions' exact={true}>Newest</NavLink>
       <NavLink onClick={(e) => toggleActive(e)} className="filter-link" id="recent" to='/questions?tab=recent'>Recent Activity</NavLink>
       <NavLink onClick={(e) => toggleActive(e)} className="filter-link" id="unanswered" to='/questions?unanswered=true'>Unanswered</NavLink>
       <NavLink onClick={(e) => toggleActive(e)} id="score" className='border-right filter-link' to='/questions?tab=score'>High Score</NavLink>
