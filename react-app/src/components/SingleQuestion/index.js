@@ -34,8 +34,6 @@ const SingleQuestion = () => {
       });
   },[dispatch, questionId])
 
-  console.log(currentQuestion.body)
-
   useEffect(() => {
 
     // Track disabling of vote buttons based on:

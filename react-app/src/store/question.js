@@ -109,8 +109,6 @@ export const fetchFilteredQuestions = (searchParams) => async dispatch => {
 
   fetchString += searchArray.join('&')
 
-  console.log(fetchString)
-
   let response = await fetch(fetchString)
   if (response.ok) {
     const questions = await response.json()

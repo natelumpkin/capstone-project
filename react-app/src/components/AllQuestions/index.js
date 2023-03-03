@@ -19,21 +19,17 @@ const AllQuestions = () => {
 
   const useQuery = () => {
     const { search } = useLocation()
-    // console.log(search)
     return useMemo(() => new URLSearchParams(search), [search])
   }
 
   let query = useQuery()
 
 
-  // console.log("page: ", query.get("page"))
-
   const allQuestions = useSelector(state => state.questions.allQuestions)
   const numQuestions = useSelector(state => state.questions.numQuestions)
   const currentUser = useSelector(state => state.session.user)
 
   useEffect(() => {
-    // console.log('hello from use effect')
     let searchOptions = {}
     if (query.get("page")) {
       searchOptions.page = query.get("page")
@@ -46,8 +42,6 @@ const AllQuestions = () => {
     }
 
     setCurrSearchParams(searchOptions)
-    console.log('search options: ', searchOptions)
-    // console.log('search state: ', currSearchParams)
 
     if (Object.keys(searchOptions).length) {
       dispatch(questionActions.fetchFilteredQuestions(searchOptions))
@@ -56,8 +50,6 @@ const AllQuestions = () => {
     }
 
   }, [dispatch, search])
-
-  console.log(query.get('tab'))
 
 
   const questionsArray = [];

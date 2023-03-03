@@ -28,7 +28,6 @@ const AnswerCard = ({answer, currentUser}) => {
       setDisableUpVote(true)
     } else {
       let userVote;
-      // console.log('answer votes in useeffect: ', answer.Votes)
       if (answer.Votes) {
         userVote = Object.values(answer?.Votes).find(vote => vote.user_id === currentUser.id)
       }
@@ -47,8 +46,6 @@ const AnswerCard = ({answer, currentUser}) => {
     }
   }, [disableDownVote, disableUpVote, answer.totalScore, currentUser])
 
-  // console.log(answer)
-
   const upVote = () => {
     let votedList = Object.values(answer.Votes).map(vote => vote.user_id)
     if (!votedList.includes(currentUser.id)) {
@@ -60,15 +57,15 @@ const AnswerCard = ({answer, currentUser}) => {
   }
 
   const downVote = () => {
-    // console.log('answer in downvote: ', answer)
+
     let votedList = Object.values(answer.Votes).map(vote => vote.user_id)
-    // console.log('voted list in downvote: ', votedList)
+
     if (!votedList.includes(currentUser.id)) {
-      // console.log('adding downvote to answer')
+
       dispatch(answerActions.addVoteToAnswer(answer.id, false))
     } else {
       let userVote = Object.values(answer.Votes).find(vote => vote.user_id === currentUser.id)
-      // console.log('removing downvote: ', userVote)
+
       dispatch(answerActions.deleteVoteFromAnswer(userVote))
     }
   }

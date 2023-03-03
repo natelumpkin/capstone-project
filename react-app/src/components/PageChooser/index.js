@@ -13,11 +13,8 @@ const PageChooser = ({ numQuestions, size, location }) => {
   const [ firstPage, setFirstPage ] = useState(null)
   const [newPath, setNewPath] = useState(null)
 
-  console.log('newpath state: ',newPath)
-
   const useQuery = () => {
     const { search } = useLocation()
-    // console.log(search)
     return useMemo(() => new URLSearchParams(search), [search])
   }
 
@@ -124,7 +121,7 @@ const PageChooser = ({ numQuestions, size, location }) => {
       }
       setPageList(currPages)
       if (currPages[0] !== 1) setFirstPage(true)
-      console.log()
+      // console.log()
       if (currPages[currPages.length - 1] !== numPages) {
         setLastPage(numPages)
       }

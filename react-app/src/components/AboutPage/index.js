@@ -32,15 +32,11 @@ const AboutPage = () => {
 
   let bodyContent
   let stateToDisplay
-  // console.log(JSON.parse(currentQuestion.body))
   if (currentQuestion.body) bodyContent = convertFromRaw(JSON.parse(currentQuestion.body))
   if (bodyContent) stateToDisplay = EditorState.createWithContent(bodyContent)
 
-  // console.log(currentQuestion.body);
-
 
   if (currentQuestion) {
-    // console.log('currentQuestion in singleQuestion component: ', currentQuestion)
 
   return (
     <div id="single-question-top-container">
